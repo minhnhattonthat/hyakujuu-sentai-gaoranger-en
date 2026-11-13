@@ -22,6 +22,9 @@ Skill: translate-retro-game (Claude Code: plugin, enabled in .claude/settings.js
 - The user's decisions, with the options and reasons: `docs/decisions.md`. Read it before asking the user anything; add each new ruling there the same session.
 - Player bug reports: GitHub issues (`gh issue list --label bug`). Copy the attached save into `work/states/`, reproduce in the emulator, fix, commit with `Fixes #N`, and update `docs/status.md`.
 - Japanese game: confirm is circle (`--mash-key circle`). Real BIOS needed for scene work (OpenBIOS only for smoke).
+- Recon setup in a fresh clone: dump the disc (docs/re/disc.md), then `python -X utf8 tools/unpack_all.py` -> `work/pac/`.
+- `tbl/jp.tbl` is generated: edit the rows in `tools/make_tbl.py`, then run it. Glyphs are BE u16 (docs/re/text.md).
+- Until the file loader is understood, every rebuilt file must keep its LBA and sector count (docs/re/disc.md).
 - Skill gotchas hit here: `docs/skill-gotchas.md`.
 
 ## Status

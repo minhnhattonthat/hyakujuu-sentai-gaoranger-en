@@ -8,8 +8,16 @@ proven, so a later session doesn't build on a guess:
 - **guess** - and why it seems likely (byte pattern, another game, an earlier patch's notes). Promote it to verified
   before code depends on it.
 
-Addresses are for the dump in `rom.sha1` unless a note says otherwise.
+Addresses are for the dump in `rom.sha1` unless a note says otherwise. No earlier fan translation exists (web search
+2026-11-14: none found).
 
 | File | Covers | State |
 |---|---|---|
-| <text.md> | <encoding, control codes, pointer tables> | <verified / partly guessed> |
+| [disc.md](disc.md) | disc layout, files, LBAs, free space; file lookup method unknown | partly verified |
+| [pac.md](pac.md) | PAC "add" archives, "lzs" compression (EXE 0x8002f700) | verified (all blocks decode) |
+| [text.md](text.md) | glyph encoding, control codes, string tables, font geometry, debug menu strings | verified (known lines) |
+| [graphics.md](graphics.md) | graphics-text survey (TIM static sweep) | sweep done; FMV + non-TIM open |
+
+Recon tools (all in `tools/`): `unpack_all.py`, `pac.py`, `catpac.py` (one blob + `where`), `textscan.py`,
+`runscan.py`, `loosetbl.py`, `make_tbl.py`, `fontsheet.py`, `timscan.py`, `vram.py`, `ramfind.py`, `relscan.py`,
+`patscan.py`, `sjis_scan.py`, `disc_lba.py`; Lua probes `tools/lua/readbp.lua`, `seqdump.lua`, `vdump.lua`.
