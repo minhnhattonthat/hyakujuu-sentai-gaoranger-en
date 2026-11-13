@@ -5,6 +5,7 @@
 --   FROM, TO file ids: every sequence-script op "03 00 <FROM>" (load file) found in heap RAM is rewritten to load TO
 --            instead, before it runs. Pick FROM of the same kind as TO (story/menu 0x50xx, action 0x30xx, robo
 --            0x40xx): the script around the op loads the matching overlay. 0 = no swap.
+--   FROM2, TO2 an optional second swap (chains; see swap_ops).
 --   AFTER    chapter to write once TO has been seen loaded (robo scenes start from chapter 6's DS_ST06). 0 = none.
 --   EXPECT   file id whose load proves the warp: logged as LOADED when the loader's CD seek position (CdlLOC
 --            at 0x80063da8 = gp+0x254) reaches that file's LBA (from the file table in RAM, 0x80059b18). 0 = none.
@@ -13,6 +14,8 @@
 --            EXPECT has loaded (the target's own overlay load). 0 = off.
 --   HOLD     frames after EXPECT loads at which mashing (--mash) stops, so the run ends inside the scene (story
 --            boxes wait for a press). 0 = keep mashing.
+--   KEYS     {{frames, 'key'}, ..}: press each key that many frames after the scene settled (SKIPPED, or LOADED
+--            when there is no SKIP); mashing stops at the first one. E.g. {{1500,'start'}} = pause menu.
 --   GOD      1 = refill the player's health (not mapped yet: logs a warning).
 -- Logs: CHAPTER frame F n, SWAP frame F at ADDR, LOADED frame F, SKIPPED frame F.
 local mem = PCSX.getMemPtr()
@@ -24,6 +27,7 @@ EXPECT = EXPECT or 0
 SKIP = SKIP or 0
 HOLD = HOLD or 0
 local loaded_at = nil
+local settled_at = nil
 local CH = 0x9ec28
 local LO, HI = 0x100000, 0x1ff000 -- heap: scripts live in decompressed PAC parts here
 local opening = false -- the opening's chapter switch script has been seen in RAM
@@ -52,13 +56,19 @@ local function find_switch()
   end
 end
 
+-- FROM2/TO2: a second swap for chains, e.g. 5010>5079 (DE_ST07E) then 5008>5007: DE_ST07E's own script then
+-- loads Y_SAVE instead of Y_EDSAVE, from the story context those screens expect.
+local pairs_ = { { FROM, TO } }
+if (FROM2 or 0) > 0 then pairs_[2] = { FROM2, TO2 } end
 local function swap_ops()
-  local fl, fh, tl, th = FROM & 0xff, FROM >> 8, TO & 0xff, TO >> 8
-  for a = LO, HI, 2 do
-    if mem[a + 2] == fl and mem[a + 3] == fh and mem[a] == 3 and mem[a + 1] == 0 then
-      mem[a + 2] = tl; mem[a + 3] = th
-      swaps = swaps + 1
-      L.log(string.format("SWAP frame %d at %08x %04x -> %04x", L.frame, 0x80000000 + a, FROM, TO))
+  for _, p in ipairs(pairs_) do
+    local fl, fh, tl, th = p[1] & 0xff, p[1] >> 8, p[2] & 0xff, p[2] >> 8
+    for a = LO, HI, 2 do
+      if mem[a + 2] == fl and mem[a + 3] == fh and mem[a] == 3 and mem[a + 1] == 0 then
+        mem[a + 2] = tl; mem[a + 3] = th
+        swaps = swaps + 1
+        L.log(string.format("SWAP frame %d at %08x %04x -> %04x", L.frame, 0x80000000 + a, p[1], p[2]))
+      end
     end
   end
 end
@@ -90,6 +100,16 @@ L.on_frame(function(f)
       loaded_at = f
       L.log(string.format("LOADED frame %d id %04x lba %d", f, EXPECT, lba))
       if AFTER > 0 then mem[CH] = AFTER & 0xff; mem[CH + 1] = AFTER >> 8 end
+    end
+  end
+  if KEYS and not settled_at and loaded_at and not skipping then settled_at = f end
+  if KEYS and settled_at then
+    for _, k in ipairs(KEYS) do
+      if f == settled_at + k[1] then
+        MASH = 0
+        L.press(k[2], 6)
+        L.log(string.format("KEY frame %d %s", f, k[2]))
+      end
     end
   end
   if HOLD > 0 and loaded_at and f == loaded_at + HOLD then

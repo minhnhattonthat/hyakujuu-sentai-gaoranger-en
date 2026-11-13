@@ -19,3 +19,9 @@ One line each: the reference file it belongs in, then the fact.
   `L.route_done()` first, and a game may ignore START-to-skip until the cutscene is actually rendering.
 - references/pipeline.md §Recon: search for file names case-insensitively; this EXE's lowercase
   `DATA\o_logo  .pac` table was missed in phase 1 and the disc looked like it had no file lookup.
+- references/emulator-qa.md §Debug tool: PCSX-Redux + real BIOS rewrites memory-card frame 63 (header write test)
+  on any card access, so "did the game save?" must compare the save blocks (offset 8192+), not the whole .mcd.
+- references/emulator-qa.md §Debug tool: a title menu can change once the card holds a save (here the wheel opens
+  on つづきから and gains a minigame item); scene routes that depend on the card must pin the card they start from.
+- references/emulator-qa.md §Debug tool: a stage HUD bar's prim coordinate looks like HP in a RAM search (drops in
+  step with hits) but is a sprite x position; poke-test before trusting it (here it changed nothing).

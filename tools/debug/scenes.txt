@@ -25,7 +25,7 @@ a42       4       3041>3042  0     3042   7000   tools/routes/newgame.txt "chapt
 a51       5       -          0     3051   7000   tools/routes/newgame.txt "chapter 5 action stage 1"
 a52       5       3051>3052  0     3052   7000   tools/routes/newgame.txt "chapter 5 action stage 2"
 a53       5       3051>3053  0     3053   7000   tools/routes/newgame.txt "chapter 5 action stage 3 (boss)"
-ademo     1       3011>3001  0     3001   7000   tools/routes/newgame.txt "A_DEMO action stage (demo/test)"
+ademo     1       3011>3001  0     3001   3900  tools/routes/newgame.txt "A_DEMO action stage (demo/test)"
 ex01      1       3011>3071  0     3071   7000   tools/routes/newgame.txt "extra action stage 1"
 ex02      1       3011>3072  0     3072   7000   tools/routes/newgame.txt "extra action stage 2"
 ex03      1       3011>3073  0     3073   7000   tools/routes/newgame.txt "extra action stage 3"
@@ -37,8 +37,8 @@ ex08      1       3011>3078  0     3078   7000   tools/routes/newgame.txt "extra
 ex09      1       3011>3079  0     3079   7000   tools/routes/newgame.txt "extra action stage 9"
 ex10      1       3011>307a  0     307a   7000   tools/routes/newgame.txt "extra action stage 10"
 bb00b     6       4006>4000  1     4000   7000   tools/routes/newgame.txt "robo scene BB_ST00B"
-bb00c     6       4006>4040  1     4040   7000   tools/routes/newgame.txt "robo scene BB_ST00C"
-b00       6       4006>4080  1     4080   7000   tools/routes/newgame.txt "robo battle B_ST00"
+bb00c     6       4006>4040  1     4040   4500   tools/routes/newgame.txt "robo scene BB_ST00C (demo: rangers, then robo battle; ends at title)"
+b00       6       4006>4080  1     4080   4200   tools/routes/newgame.txt "robo battle B_ST00 (demo; ends at title)"
 bb01a     6       4006>4001  1     4001   7000   tools/routes/newgame.txt "chapter 1 robo scene A"
 bb01b     6       4006>4031  1     4031   7000   tools/routes/newgame.txt "chapter 1 robo scene B"
 bb01c     6       4006>4041  1     4041   7000   tools/routes/newgame.txt "chapter 1 robo scene C"
@@ -64,18 +64,32 @@ b07       6       4006>4007  7     4007   7000   tools/routes/newgame.txt "chapt
 bc07      6       4006>4017  7     4017   7000   tools/routes/newgame.txt "chapter 7 final robo battle"
 ba02      6       4006>4012  0     4012   7000   tools/routes/newgame.txt "robo scene BA_ST02"
 ba03      6       4006>4013  0     4013   7000   tools/routes/newgame.txt "robo scene BA_ST03"
-ba05      6       4006>4015  0     4015   7000   tools/routes/newgame.txt "robo scene BA_ST05"
-de01      0       5010>5018  1     5018   9000   tools/routes/newgame.txt "chapter 1 ending (save prompt)"
-de02      0       5010>5028  2     5028   9000   tools/routes/newgame.txt "chapter 2 ending"
+ba05      6       4006>4015  0     4015   3600   tools/routes/newgame.txt "robo scene BA_ST05 (Orgs cutscene, then chapter story)"
+de01      0       5010>5079,5008>5018  1  5018  9000  tools/routes/newgame.txt "chapter 1 ending (save prompt)"
+de02      0       5010>5079,5008>5028  2  5028  9000  tools/routes/newgame.txt "chapter 2 ending"
 de03      0       5010>5038  3     5038   9000   tools/routes/newgame.txt "chapter 3 ending"
 de04      0       5010>5048  4     5048   9000   tools/routes/newgame.txt "chapter 4 ending"
 de05      0       5010>5058  5     5058   9000   tools/routes/newgame.txt "chapter 5 ending"
 de07      0       5010>5078  7     5078   14000  tools/routes/newgame.txt "final ending and credits"
 de07e     0       5010>5079  7     5079   9000   tools/routes/newgame.txt "the end (おわり)"
-edsave    0       5010>5008  7     5008   8000   tools/routes/newgame.txt "end-of-game save screen (Y_EDSAVE)"
-save      0       5010>5007  1     5007   8000   tools/routes/newgame.txt "save screen (Y_SAVE)"
+edsave    0       5010>5079  7     5008   8000   tools/routes/newgame.txt "end-of-game save screen (Y_EDSAVE, after DE_ST07E)"
+save      0       5010>5079,5008>5007  1  5007  8000  tools/routes/newgame.txt "save screen (Y_SAVE)"
 load      0       5010>5006  0     5006   8000   tools/routes/newgame.txt "load screen (Y_LOAD)"
 option    0       5010>5005  0     5005   8000   tools/routes/newgame.txt "option screen (Y_OPTION)"
-gage      0       5010>5900  0     5900   8000   tools/routes/newgame.txt "Y_GAGE"
-cardms    0       5010>5901  0     5901   8000   tools/routes/newgame.txt "memory card messages (CARDMS)"
-ivent     0       5010>5902  0     5902   8000   tools/routes/newgame.txt "Y_IVENT"
+tnew      0       -          0     -      3000   "1200 -;4 start;300 -;4 start;600 -;4 circle;300 -" "title: new game -> difficulty (かんたん/むずかしい)" nomash
+tcont     0       -          0     5006   3600   "1200 -;4 start;300 -;4 start;600 -;4 down;90 -;4 circle;400 -;4 circle;300 -" "title: continue -> load start, no data on card" nomash
+tload     0       -          0     5006   3600   "1200 -;4 start;300 -;4 start;600 -;4 down;90 -;4 down;90 -;4 circle;400 -;4 circle;300 -" "title: data load, no data on card" nomash
+tsound    0       -          0     5005   3600   "1200 -;4 start;300 -;4 start;600 -;4 down;90 -;4 down;90 -;4 down;90 -;4 circle;600 -" "title: sound option" nomash
+tvib      0       -          0     5005   3600   "1200 -;4 start;300 -;4 start;600 -;4 down;90 -;4 down;90 -;4 down;90 -;4 down;90 -;4 circle;600 -" "title: vibration option" nomash
+# memory card flows (cards the game writes land in work/saves/<scene>.mcd; card= scenes run after the others)
+savedone  0       5010>5079,5008>5007  1  5007  8000  tools/routes/newgame.txt "save screen: save to a blank card (writes work/saves/savedone.mcd)" var="KEYS={{400,'circle'},{700,'down'},{800,'circle'}}"
+saveover  0       5010>5079,5008>5007  1  5007  7000  tools/routes/newgame.txt "save screen: card already has a save (overwrite prompt)" card=work/saves/savedone.mcd var="KEYS={{400,'circle'}}"
+saveunf   0       5010>5079,5008>5007  1  5007  7000  tools/routes/newgame.txt "save screen: unformatted card (format prompt)" card=unformatted var="KEYS={{400,'circle'}}"
+tcontdata 0       -          0     -      3300   "1200 -;4 start;300 -;4 start;600 -;4 circle;400 -" "title: continue with a saved game (card has data: wheel opens on つづきから, adds オルゲットファイト)" nomash card=work/saves/savedone.mcd
+tload2    0       -          0     -      4200   "1200 -;4 start;300 -;4 start;600 -;4 circle;400 -;4 circle;300 -;4 circle;600 -" "title: continue -> load the save -> back in the game" nomash card=work/saves/savedone.mcd
+ofmenu    0       -          0     -      3000   "1200 -;4 start;300 -;4 start;600 -;4 down;90 -;4 circle;400 -" "title: オルゲットファイト minigame menu (ゆったり/ドッキリ)" nomash card=work/saves/savedone.mcd
+ofight    0       -          0     -      4000   "1200 -;4 start;300 -;4 start;600 -;4 down;90 -;4 circle;400 -;4 circle;900 -" "オルゲットファイト minigame (stage)" nomash card=work/saves/savedone.mcd
+# in-stage menus and game over
+pausea    1       -          0     3011   5400   tools/routes/newgame.txt "pause menu in an action stage" var="KEYS={{2500,'start'}}"
+pauseb    6       4006>4081  1     4081   6700   tools/routes/newgame.txt "pause menu in a robo battle" var="KEYS={{3600,'start'}}"
+overb     6       4006>4081  1     4081   15000  tools/routes/newgame.txt "robo battle game over (no input after it loads)" var=HOLD=200

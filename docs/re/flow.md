@@ -25,7 +25,25 @@
 - 0x8009ec28 u16 chapter (1..7), +2 and +4 u16 sub-state (set by script ops 0x29.. at 0x8002aa30), +0xc u16.
 - 0x8002def0 sets chapter 1 (new game); 0x8002deb4 sets chapter 6 and +0x6 = 1 (another mode).
 
+## Script ops around scene changes (verified by disassembly, EXE)
+- 03 id = load file (4 bytes), 04 = wait for the load, 39 = fade out (0x800128cc, 2 bytes), 05 a b = start
+  engine mode b with arg a (0x8001e774, table 0x80058d48; 6 bytes), 06 = wait for that mode, 02 k v = misc set (k 0-3).
+- A screen is entered as `03 id; 39; 05 1 0; 06` from the caller's script (B_ST0n 0x7a5a Y_SAVE, DE_ST07E slot-12
+  script 0xd4 Y_EDSAVE). Story/menu PACs hold up to three D_SYS script slots: 12 (story), 13 (cutscene / option /
+  load), 14 (save). Swapping a file that starts at slot 13 or 14 into the opening's DS_ST01 load hangs (DE_ST01/02,
+  Y_SAVE, Y_EDSAVE); swapping it into DE_ST07E's Y_EDSAVE load (a story context) works.
+
+## Files no script or code loads
+- Y_GAGE (5900, gauge texture, no text), CARDMS (5901: font + a copy of Y_TITLE/21), Y_IVENT (5902: copy of the
+  stage game-over TIM + a small table), O_TITLE (4802; its data is also inside Y_TITLE, which is what the title
+  shows), DEBUG.PRG (stubs). No `03 00 id` op, immediate or table reference found. Give them the same edits as the
+  copies the game shows; no warp scene.
+- Title wheel (Y_TITLE + OPN.PRG): はじめから (-> かんたん/むずかしい), つづきから (Y_LOAD), データのロード (Y_LOAD),
+  サウンド and しんどう (Y_OPTION); DOWN turns it.
+
 ## Debug tool
 `tools/debug/warp.py` + `warp.lua`: new-game route, then the first story load (DS_ST01) is swapped for the
-scene's file id and the chapter is set, so the scene's own script runs from its start. Scene list:
-`tools/debug/scenes.txt`.
+scene's file id and the chapter is set, so the scene's own script runs from its start. Save screens and the
+slot-13/14 endings chain a second swap through DE_ST07E (`5010>5079,5008>TO`). Title items are plain routes.
+Memory cards: a blank formatted card per run (`tools/blankcard.py`); cards the game writes are kept in
+`work/saves/<scene>.mcd` and later scenes start from them (`card=`). Scene list: `tools/debug/scenes.txt`.
