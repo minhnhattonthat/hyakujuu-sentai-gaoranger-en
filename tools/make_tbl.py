@@ -34,5 +34,5 @@ if __name__ == "__main__":
     lines += [f"{code:04X}={ch}" for code, ch in entries()] + CTRL
     out = Path(__file__).resolve().parents[1] / "tbl" / "jp.tbl"
     out.parent.mkdir(exist_ok=True)
-    out.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    out.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
     print(out, len(lines) - 1, "entries")
