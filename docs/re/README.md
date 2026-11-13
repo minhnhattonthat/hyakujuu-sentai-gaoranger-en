@@ -16,6 +16,7 @@ Addresses are for the dump in `rom.sha1` unless a note says otherwise. No earlie
 | [disc.md](disc.md) | disc layout, files, LBAs, free space; file lookup method unknown | partly verified |
 | [pac.md](pac.md) | PAC "add" archives, "lzs" compression (EXE 0x8002f700) | verified (all blocks decode) |
 | [text.md](text.md) | glyph encoding, control codes, string tables, font geometry, debug menu strings | verified (known lines) |
+| [flow.md](flow.md) | file table + loader, sequence script ops, chapter variable, debug tool | verified (traces, warps) |
 | [graphics.md](graphics.md) | graphics-text survey (TIM static sweep) | sweep done; FMV + non-TIM open |
 
 Recon tools (all in `tools/`): `unpack_all.py`, `pac.py`, `catpac.py` (one blob + `where`), `textscan.py`,
