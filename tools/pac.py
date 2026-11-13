@@ -69,6 +69,104 @@ def lzs_decode(d, off):
     return bytes(out[:n]), p
 
 
+def lzs_encode(data, lbits, name=b"000000\0\0", fbits=32):
+    """Greedy LZ (hash chains) in the format lzs_decode reads; returns the whole block (header + stream).
+    Not the original compressor (sizes differ); tests check decode(encode(x)) == x."""
+    maxlen, maxdist = (1 << lbits) - 1 + 3, (1 << (16 - lbits)) - 1
+    fb = fbits // 8
+    out = bytearray()
+    chains = {}
+    i, n = 0, len(data)
+    flags, nflag, fpos = 0, 0, 0
+
+    def item():
+        nonlocal flags, nflag, fpos
+        if nflag == 0:
+            fpos = len(out)
+            out.extend(bytes(fb))
+        nflag += 1
+
+    def flush_flag():
+        out[fpos:fpos + fb] = flags.to_bytes(fb, "little")
+
+    while i < n:
+        best_len, best_dist = 0, 0
+        if i + 3 <= n:
+            key = data[i:i + 3]
+            cands = chains.get(key)
+            if cands:
+                lim = min(maxlen, n - i)
+                for p in reversed(cands[-48:]):
+                    dist = i - p
+                    if dist > maxdist:
+                        break
+                    ln = 3
+                    while ln < lim and data[p + ln] == data[i + ln]:
+                        ln += 1
+                    if ln > best_len:
+                        best_len, best_dist = ln, dist
+                        if ln == lim:
+                            break
+        item()
+        if best_len >= 3:
+            w = (best_dist << lbits) | (best_len - 3)
+            out += bytes((w >> 8, w & 0xFF))
+            step = best_len
+        else:
+            flags |= 1 << (nflag - 1)
+            out.append(data[i])
+            step = 1
+        for j in range(i, min(i + step, n - 2)):
+            chains.setdefault(data[j:j + 3], []).append(j)
+        i += step
+        if nflag == fb * 8:
+            flush_flag()
+            flags, nflag = 0, 0
+    if nflag:
+        flush_flag()
+    head = b"lzs\0" + struct.pack("<II", 0, 1) + bytes(0x14)
+    head += struct.pack("<HHIHHI", 3, 0x18, n, fbits, lbits, 0x38 + len(out)) + name
+    return head + bytes(out)
+
+
+def parse(d, off=0, size=None):
+    """PAC tree for build(): add nodes keep their slot table (empty slots' raw entries too: some carry bytes at +8);
+    lzs and raw leaves keep their bytes. To change a leaf, replace the node, e.g. {"kind": "raw", "raw": b".."} or
+    an lzs node with "payload" (re-encoded with its lbits/name on build)."""
+    size = len(d) - off if size is None else size
+    k = kind(d, off)
+    if k != "add":
+        return {"kind": "lzs" if k == "lzs" else "raw", "raw": d[off:off + size]}
+    count = struct.unpack_from("<I", d, off + 12)[0]
+    node = {"kind": "add", "count": count, "slots": {}, "empty": {}}
+    for i, o, s in add_entries(d, off):
+        if s:
+            node["slots"][i] = parse(d, o, s)
+        else:
+            node["empty"][i] = d[off + 0x20 + 16 * i:off + 0x30 + 16 * i]
+    return node
+
+
+def build(node):
+    if node["kind"] == "lzs" and "payload" in node:
+        h = lzs_header(node["raw"], 0)
+        return lzs_encode(node["payload"], h["lbits"], h["name"], h["fbits"])
+    if node["kind"] != "add":
+        return node["raw"]
+    n = node["count"]
+    table = bytearray(16 * n)
+    body = bytearray()
+    pos = 0x20 + 16 * n
+    for i in range(n):
+        if i in node["slots"]:
+            blob = build(node["slots"][i])
+            struct.pack_into("<II", table, 16 * i, pos + len(body), len(blob))
+            body += blob + bytes(-len(blob) % 4)
+        else:
+            table[16 * i:16 * i + 16] = node["empty"][i]
+    return b"add\0" + struct.pack("<IIII", 4, 0x20, n, 0x10) + bytes(12) + bytes(table) + bytes(body)
+
+
 def walk(d, off, size, path=()):
     """Yields (path, offset, size, kind) for this node and every add descendant (not into lzs payloads)."""
     k = kind(d, off)

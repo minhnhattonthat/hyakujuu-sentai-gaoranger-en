@@ -17,8 +17,17 @@ Tools: `tools/pac.py list|unpack`, `tools/unpack_all.py` (all PACs -> `work/pac/
 - Stream at `+0x20+hdrlen`: flag word little-endian, LSB first, 1 = literal byte; 0 = big-endian u16 w:
   length = (w & (2^L-1)) + 3, distance = w >> L (copy from out[-distance]). Stops when unpacked size is reached.
 - Every stream ends inside its block; BC_ST07.PAC `1_12_3` leaves 0x85 bytes of slack before the next entry.
-- Re-insertion needs a compressor (phase 3/5): any valid stream works; choose L per block (keep the original L), and
-  check the game's load buffer limits per block (unknown yet).
+- Compressor: `pac.lzs_encode(data, L, name)` (greedy, hash chains, keeps the block's L and name; packed size field =
+  whole block). Roundtrips all 2252 blocks; output is 0.8% bigger than the original overall (worst block +10%).
+  Load buffer limits per block still unknown: check when a block grows a lot.
+
+## Repack (verified, tests/test_disc.py)
+- `pac.parse(d)` -> tree, `pac.build(tree)` -> bytes; every PAC rebuilds byte-identical. Rules: entry table right
+  after the 0x20 header, children in slot order, each 4-aligned (offset relative to its add) with zero padding, an
+  add's size includes the padding after its last child, lzs/raw entry sizes are exact. Empty slots have offset/size
+  0 but some carry a value at +8 (1107 of them): `parse` keeps their raw 16 bytes.
+- Change a leaf by replacing its node: `{"kind": "raw", "raw": b".."}`, or set `"payload"` on an lzs node (re-encoded
+  on build). `tools/movetest.py` re-encodes every block of every PAC (the moved-file test, disc.md §Rebuild).
 
 ## Leaf kinds (from unpack_all.py)
 840 TIM (`10 00 00 00`, flags with bit 31 set: `08 00 00 80`), 613 `41 00 00 00` (models/anim, guess), 119 VAB

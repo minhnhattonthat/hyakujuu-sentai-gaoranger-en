@@ -1,0 +1,146 @@
+<iso_project image_name="mkpsxiso.bin" cue_sheet="mkpsxiso.cue">
+    <track type="data" cdvd_style="false">
+        <identifiers system=" " application=" " volume="SLPS_03353" creation_date="0000000000000000+0"/>
+        <license file="tree/license_data.dat"/>
+        <default_attributes gmt_offs="36" xa_attrib="32" xa_perm="1365" xa_gid="0" xa_uid="0"/>
+        <directory_tree source="tree">
+            <file name="SLPS_033.53" type="data" date="20011001054226" order="2"/>
+            <file name="SYSTEM.CNF" type="data" date="20010912141702" order="3"/>
+            <dir name="DATA" date="20011001054322" order="0">
+                <file name="A_BLACK.PAC" type="data" date="20011001053942"/>
+                <file name="A_BLUE.PAC" type="data" date="20011001053942"/>
+                <file name="A_BURU.PAC" type="data" date="20011001054212"/>
+                <file name="A_DEMO.PAC" type="data" date="20011001053942"/>
+                <file name="A_EX01.PAC" type="data" date="20011001053942"/>
+                <file name="A_EX02.PAC" type="data" date="20011001053942"/>
+                <file name="A_EX03.PAC" type="data" date="20011001053942"/>
+                <file name="A_EX04.PAC" type="data" date="20011001053944"/>
+                <file name="A_EX05.PAC" type="data" date="20011001053944"/>
+                <file name="A_EX06.PAC" type="data" date="20011001053944"/>
+                <file name="A_EX07.PAC" type="data" date="20011001053944"/>
+                <file name="A_EX08.PAC" type="data" date="20011001053944"/>
+                <file name="A_EX09.PAC" type="data" date="20011001053944"/>
+                <file name="A_EX10.PAC" type="data" date="20011001053944"/>
+                <file name="A_HANSEN.PAC" type="data" date="20011001054212"/>
+                <file name="A_OGET00.PAC" type="data" date="20011001054212"/>
+                <file name="A_OGET01.PAC" type="data" date="20011001054212"/>
+                <file name="A_OGET10.PAC" type="data" date="20011001054212"/>
+                <file name="A_OGET11.PAC" type="data" date="20011001054212"/>
+                <file name="A_ORUGET.PAC" type="data" date="20011001054212"/>
+                <file name="A_RASE.PAC" type="data" date="20011001054212"/>
+                <file name="A_RED.PAC" type="data" date="20011001053946"/>
+                <file name="A_ROUKI.PAC" type="data" date="20011001054214"/>
+                <file name="A_ST010.PAC" type="data" date="20011001053946"/>
+                <file name="A_ST11.PAC" type="data" date="20011001053946"/>
+                <file name="A_ST12.PAC" type="data" date="20011001053946"/>
+                <file name="A_ST21.PAC" type="data" date="20011001053946"/>
+                <file name="A_ST22.PAC" type="data" date="20011001053946"/>
+                <file name="A_ST31.PAC" type="data" date="20011001053946"/>
+                <file name="A_ST32.PAC" type="data" date="20011001053946"/>
+                <file name="A_ST41.PAC" type="data" date="20011001053946"/>
+                <file name="A_ST42.PAC" type="data" date="20011001053946"/>
+                <file name="A_ST51.PAC" type="data" date="20011001053946"/>
+                <file name="A_ST52.PAC" type="data" date="20011001053946"/>
+                <file name="A_ST53.PAC" type="data" date="20011001053948"/>
+                <file name="A_SYS.PRG" type="data" date="20011001054156"/>
+                <file name="A_SYUTEN.PAC" type="data" date="20011001054214"/>
+                <file name="A_TSUE2.PAC" type="data" date="20011001054214"/>
+                <file name="A_WHITE.PAC" type="data" date="20011001053948"/>
+                <file name="A_YABA.PAC" type="data" date="20011001054214"/>
+                <file name="A_YELLOW.PAC" type="data" date="20011001053948"/>
+                <file name="BA_ST01.PAC" type="data" date="20011001054216"/>
+                <file name="BA_ST01B.PAC" type="data" date="20011001054216"/>
+                <file name="BA_ST02.PAC" type="data" date="20011001054216"/>
+                <file name="BA_ST03.PAC" type="data" date="20011001054216"/>
+                <file name="BA_ST05.PAC" type="data" date="20011001054216"/>
+                <file name="BB_ST00B.PAC" type="data" date="20011001054216"/>
+                <file name="BB_ST00C.PAC" type="data" date="20011001053952"/>
+                <file name="BB_ST01A.PAC" type="data" date="20011001054216"/>
+                <file name="BB_ST01B.PAC" type="data" date="20011001054218"/>
+                <file name="BB_ST01C.PAC" type="data" date="20011001053952"/>
+                <file name="BB_ST02A.PAC" type="data" date="20011001054218"/>
+                <file name="BB_ST02B.PAC" type="data" date="20011001054218"/>
+                <file name="BB_ST02C.PAC" type="data" date="20011001053952"/>
+                <file name="BB_ST03B.PAC" type="data" date="20011001054218"/>
+                <file name="BB_ST03C.PAC" type="data" date="20011001053954"/>
+                <file name="BB_ST04B.PAC" type="data" date="20011001054218"/>
+                <file name="BB_ST04C.PAC" type="data" date="20011001053954"/>
+                <file name="BB_ST05B.PAC" type="data" date="20011001054218"/>
+                <file name="BB_ST05C.PAC" type="data" date="20011001053954"/>
+                <file name="BB_ST06A.PAC" type="data" date="20011001053954"/>
+                <file name="BB_ST06B.PAC" type="data" date="20011001054218"/>
+                <file name="BB_ST06C.PAC" type="data" date="20011001053954"/>
+                <file name="BC_ST07.PAC" type="data" date="20011001053954"/>
+                <file name="B_SND01.PAC" type="data" date="20011001053948"/>
+                <file name="B_SND02.PAC" type="data" date="20011001053948"/>
+                <file name="B_SND03.PAC" type="data" date="20011001053948"/>
+                <file name="B_SND04.PAC" type="data" date="20011001053948"/>
+                <file name="B_SND05.PAC" type="data" date="20011001053948"/>
+                <file name="B_SND06.PAC" type="data" date="20011001053948"/>
+                <file name="B_SND07.PAC" type="data" date="20011001053950"/>
+                <file name="B_ST00.PAC" type="data" date="20011001054214"/>
+                <file name="B_ST01.PAC" type="data" date="20011001054214"/>
+                <file name="B_ST02.PAC" type="data" date="20011001054214"/>
+                <file name="B_ST03.PAC" type="data" date="20011001054214"/>
+                <file name="B_ST04.PAC" type="data" date="20011001054216"/>
+                <file name="B_ST05.PAC" type="data" date="20011001054216"/>
+                <file name="B_ST06.PAC" type="data" date="20011001054216"/>
+                <file name="B_ST07.PAC" type="data" date="20011001054216"/>
+                <file name="B_SYS.PRG" type="data" date="20011001054156"/>
+                <file name="CARDMS.PAC" type="data" date="20011001053938"/>
+                <file name="DEBUG.PRG" type="data" date="20011001054156"/>
+                <file name="DE_ST01.PAC" type="data" date="20011001053938"/>
+                <file name="DE_ST02.PAC" type="data" date="20011001053938"/>
+                <file name="DE_ST03.PAC" type="data" date="20011001053940"/>
+                <file name="DE_ST04.PAC" type="data" date="20011001053940"/>
+                <file name="DE_ST05.PAC" type="data" date="20011001053940"/>
+                <file name="DE_ST07.PAC" type="data" date="20011001053940"/>
+                <file name="DE_ST07E.PAC" type="data" date="20011001053940"/>
+                <file name="DS_ST01.PAC" type="data" date="20011001053940"/>
+                <file name="DS_ST02.PAC" type="data" date="20011001053940"/>
+                <file name="DS_ST03.PAC" type="data" date="20011001053940"/>
+                <file name="DS_ST04.PAC" type="data" date="20011001053940"/>
+                <file name="DS_ST05.PAC" type="data" date="20011001053940"/>
+                <file name="DS_ST06.PAC" type="data" date="20011001053940"/>
+                <file name="DS_ST07.PAC" type="data" date="20011001053940"/>
+                <file name="D_SYS.PRG" type="data" date="20011001054156"/>
+                <file name="MAIN.PRG" type="data" date="20011001054156"/>
+                <file name="OPN.PRG" type="data" date="20011001054156"/>
+                <file name="O_LOGO.PAC" type="data" date="20011001053954"/>
+                <file name="O_START.PAC" type="data" date="20011001053954"/>
+                <file name="O_TITLE.PAC" type="data" date="20011001053954"/>
+                <file name="O_XAHEAD.PAC" type="data" date="20011001053954"/>
+                <file name="Y_EDSAVE.PAC" type="data" date="20011001053940"/>
+                <file name="Y_GAGE.PAC" type="data" date="20011001053940"/>
+                <file name="Y_IVENT.PAC" type="data" date="20011001053940"/>
+                <file name="Y_LOAD.PAC" type="data" date="20011001053942"/>
+                <file name="Y_OPTION.PAC" type="data" date="20011001053942"/>
+                <file name="Y_SAVE.PAC" type="data" date="20011001053942"/>
+                <file name="Y_TITLE.PAC" type="data" date="20011001053942"/>
+            </dir>
+            <dir name="XA" date="20010824040944" order="4">
+                <file name="CDXA00.XA" type="mixed" date="20010924154516"/>
+                <file name="CDXA01.XA" type="mixed" date="20010926181440"/>
+                <file name="CDXA02.XA" type="mixed" date="20010927185250"/>
+                <file name="OP0.STR" type="mixed" date="20010930122310"/>
+                <file name="RB0.STR" type="mixed" date="20010919181014"/>
+                <file name="RB1.STR" type="mixed" date="20010831123116"/>
+                <file name="RB1_B.STR" type="mixed" date="20010831123140"/>
+                <file name="RB2.STR" type="mixed" date="20010929161738"/>
+                <file name="RB3.STR" type="mixed" date="20010929161906"/>
+                <file name="RB4.STR" type="mixed" date="20010929162140"/>
+                <file name="RB5.STR" type="mixed" date="20010930125800"/>
+                <file name="RN0.STR" type="mixed" date="20010904121808"/>
+                <file name="RN0_B.STR" type="mixed" date="20010831123240"/>
+                <file name="RN1.STR" type="mixed" date="20010928163244"/>
+                <file name="RN2.STR" type="mixed" date="20010831123450"/>
+                <file name="RN2_B.STR" type="mixed" date="20010831123512"/>
+            </dir>
+            <file name="DUMMY.DA" trackid="02" type="da" date="19970217130224" order="1"/>
+            <dummy sectors="150" type="32"/>
+        </directory_tree>
+    </track>
+    <track type="audio" trackid="02" source="tree/DUMMY.WAV">
+        <pregap duration="00:02:00"/>
+    </track>
+</iso_project>

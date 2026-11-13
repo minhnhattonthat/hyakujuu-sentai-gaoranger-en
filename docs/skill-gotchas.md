@@ -25,3 +25,8 @@ One line each: the reference file it belongs in, then the fact.
   on つづきから and gains a minigame item); scene routes that depend on the card must pin the card they start from.
 - references/emulator-qa.md §Debug tool: a stage HUD bar's prim coordinate looks like HP in a RAM search (drops in
   step with hits) but is a sprite x position; poke-test before trusting it (here it changed nothing).
+- references/platform-ps1.md (Rebuild): dumpsxiso + mkpsxiso 2.30 did not rebuild this 2001 disc 1:1. Needed: a
+  committed layout with `cdvd_style="false"`, blank `system`/`application` ids (else "PLAYSTATION"), a 150-sector
+  `<dummy type="32">` postgap, and a post-pass for the PVD submode (0x08), a 1901 root-dir date, postgap subheaders,
+  and a cue `PREGAP` the .bin doesn't store (dumpsxiso wrote `<pregap 00:04:00>`: wrong). Paths in the xml resolve
+  relative to the xml's folder. Python EDC/ECC for form-1 sectors: tools/mkdisc.py (checked on original sectors).

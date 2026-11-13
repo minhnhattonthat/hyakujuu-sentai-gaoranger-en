@@ -2,7 +2,8 @@
 
 Updated at the end of every session. Keep it to what the next session needs; history is in git.
 
-- **Phase:** 3. Identity build next (phase 2 debug tool done 2026-11-14: 87/87 scenes from a cold boot). Last build: none yet.
+- **Phase:** 4. Extract next (phase 3 identity build done 2026-11-14). Last build: `build/gaoranger_en.bin`
+  2026-11-14, no edits, SHA-1 20df603f... = original (identity).
 - **Done:**
   - Step 0: repo setup (PCSX-Redux nightly + SCPH-5500 BIOS in tools/, mkpsxiso 2.30, armips 0.11.0, pre-commit
     hook runs `tools/check.py`, guard hook verified, rom.sha1). Original boots: `work/qa/smoke-orig`.
@@ -21,9 +22,14 @@ Updated at the end of every session. Keep it to what the next session needs; his
     (action, robo), robo game over. Each run gets its own blank card (`tools/blankcard.py`).
   - Files with no loader (no warp scene needed, give them the same edits as the shown copies): Y_GAGE (no text),
     CARDMS (= Y_TITLE/21 + font), Y_IVENT (= stage game-over TIM), O_TITLE (its data sits inside Y_TITLE), DEBUG.PRG.
-- **Next (phase 3):** identity rebuild with mkpsxiso from `work/disc/layout.xml` (byte-identical .bin as a test),
-  then a moved/grown-file test (lookup is by name: prove a moved PAC still loads, e.g. warp a scene on that build).
-  PAC repack (add + lzs compressor) roundtrip as part of it or phase 4.
+  - Phase 3 (`docs/re/disc.md` §Rebuild, `pac.md` §Repack): `tools/build.py` -> `tools/mkdisc.py` (mkpsxiso from
+    committed `disc/layout.xml` + `fix_image` for 4 mastering quirks) gives a byte-identical .bin with an empty
+    overlay (`build/overlay/`, same paths as the tree; changed files go there). `pac.parse/build` repacks every PAC
+    byte-identical; `pac.lzs_encode` roundtrips all 2252 blocks. Moved-file test (`tools/movetest.py`: every block
+    re-encoded, 65 PACs resized, files moved): all 87 warps OK, files loaded from new LBAs. Tests: `tests/test_disc.py`.
+- **Next (phase 4):** extract every string table (text.md: 22 tables, 307 strings; EXE + PAC leaves incl. `_z_`
+  payloads) to `script/*.json` via `tbl/jp.tbl`, roundtrip test (re-encode == original bytes) and coverage test.
+  Insertion will write changed leaves through `pac.parse` -> replace node -> `pac.build` into `build/overlay/DATA/`.
 - **Open questions (non-blocking):**
   - Action-stage game over not in the scene list: player HP not found (0x8007c6f8 is a sprite x, not HP; idle 15000
     frames barely dents the bar). It uses the same game-over texture as the robo one (scene overb). Find HP for
