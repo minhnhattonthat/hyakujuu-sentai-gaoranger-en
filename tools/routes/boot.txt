@@ -1,0 +1,6 @@
+# cold boot, press start through logos/title
+1200 -
+4 start
+300 -
+4 start
+600 -

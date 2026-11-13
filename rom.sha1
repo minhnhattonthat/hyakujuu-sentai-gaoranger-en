@@ -1,2 +1,3 @@
 # SHA-1 of the supported dump, in sha1sum format (`sha1sum -c rom.sha1` works too). One line per file for discs.
-<sha1>  rom/<file>
+20df603f974150fa3f9198d11b17f54afeeb4cd4  rom/Hyakujuu Sentai GaoRanger (Japan).bin
+58df6ad2db8fde7d32e6ccc6999616cabb92a8e8  rom/Hyakujuu Sentai GaoRanger (Japan).cue
