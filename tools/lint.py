@@ -22,6 +22,8 @@ from tbl import Table  # noqa: E402
 BUDGETS = {
     **{f"ds0{i}": (2, 232, "work/qa/width/w1,w2") for i in range(1, 8)},
     **{t: ("jp", 232, "work/qa/mk/saveunf, tcont, option: same box, x 38") for t in ("save", "load", "option")},
+    # GUESS: no tour showed a card-table box (Y_TITLE/21, CARDMS/0); same messages as save/load, same limits
+    "card": ("jp", 232, "guess"),
 }
 JP = re.compile(r"[぀-ヿ一-鿿]")
 CTRL = re.compile(r"\{(?!n\})[^}]*\}")

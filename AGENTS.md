@@ -8,6 +8,7 @@ Skill: translate-retro-game (Claude Code: plugin, enabled in .claude/settings.js
 - Check:    `python -X utf8 tools/check.py`  (tests + lint; the pre-commit hook runs this)
 - Smoke:    `python -X utf8 $SKILL/scripts/emu.py build/gaoranger_en.cue --out work/qa/smoke --route tools/routes/boot.txt --smoke`
 - Warp:     `python -X utf8 tools/debug/warp.py <scene>.. [--cue build/gaoranger_en.cue] [--state]` -> `work/qa/warp/<scene>/` (`--list`; `--all` regenerates every scene, exit 1 on a miss; scenes: `tools/debug/scenes.txt`; never ask the user to play to a scene)
+- Text:     `tools/lint.py` (budgets), `tools/jpleft.py` (Japanese left), `build.py --marker | --qa ID=TEXT`; coverage: `warp.py .. --script tools/lua/textptr.lua --var HOLD=0` + `tools/textcov.py DIR`
 - Release:  `python -X utf8 tools/release.py` (xdelta vs the .bin + verify; never publish without the user)
 - Clean:    `python -X utf8 tools/clean.py` (published projects: lists rebuildable/downloadable files; `--yes` deletes)
 

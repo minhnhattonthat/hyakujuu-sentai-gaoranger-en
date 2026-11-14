@@ -69,6 +69,21 @@
 | Box | Tables | Lines | px per line | Proof |
 |---|---|---|---|---|
 | story dialogue (layout 0) | ds01-07 | 2 | 232 (x 38..270; the ▼ arrow starts at ~276) | work/qa/width/w1, w2: 232 px line clears the arrow, 239 px touches it |
+| save / load / option messages | save, load, option | 2, or 3 where the jp has 3 (layout 1) | 232 (same x 38) | work/qa/mk/saveunf (3 lines), tcont, option |
+| memory-card messages | card | as save | 232 **guess** | no tour showed this table (Y_TITLE/21, CARDMS/0) |
+
+Glyph torture line (all ASCII glyphs, double spaces): work/qa/width/w1, w2 - every glyph drawn, no gaps or overlap.
+
+## Marker build and coverage (phase 5)
+- `python -X utf8 tools/build.py --marker` -> every Japanese string is `[id] The quick brown fox...` (40 chars per
+  line). 31-scene tour `work/qa/mk/` (finals: `_finals*.png`): every box shows its id, nothing Japanese left in a
+  text window; menu choices (はい/いいえ, ステレオ/モノラル), pause menus and title wheel items are graphics.
+- Coverage: `warp.py SCENES --script tools/lua/textptr.lua --var HOLD=0` then `tools/textcov.py LOGDIR [--marker]`.
+  2026-11-14 (work/qa/cov): all 23 story strings and the common save/load/option boxes shown. Not reached yet (need
+  phase-8 scenes): no-card messages (save-008a, load-00a2), card check (save-005a, load-0072), format progress /
+  done / failed, not enough space, save/load failed, corrupted data, option-0092/00e6/0116, the whole card table.
+- Non-text / unreachable, kept Japanese (`script/keep_jp.txt`): debug (O_TITLE/1) and system (O_TITLE/2): O_TITLE
+  is never loaded; title (Y_TITLE/20) and title_debug (Y_TITLE/22): debug menu labels, dev names, ruler, hex digits.
 
 ## Open
 - 85 xx meaning; the zero padding after FF.

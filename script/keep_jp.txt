@@ -1,0 +1,77 @@
+# ids that stay Japanese on purpose: <id> <reason>. tools/lint.py and tools/jpleft.py read it.
+debug-0416 O_TITLE.PAC debug menu: O_TITLE is never loaded (docs/re/flow.md)
+debug-044a O_TITLE.PAC debug menu: O_TITLE is never loaded (docs/re/flow.md)
+debug-0456 O_TITLE.PAC debug menu: O_TITLE is never loaded (docs/re/flow.md)
+debug-0466 O_TITLE.PAC debug menu: O_TITLE is never loaded (docs/re/flow.md)
+debug-0472 O_TITLE.PAC debug menu: O_TITLE is never loaded (docs/re/flow.md)
+debug-054a O_TITLE.PAC debug menu: O_TITLE is never loaded (docs/re/flow.md)
+system-01a2 O_TITLE.PAC system messages: O_TITLE is never loaded (docs/re/flow.md); the shown copies are card/save/load
+system-0302 O_TITLE.PAC system messages: O_TITLE is never loaded (docs/re/flow.md); the shown copies are card/save/load
+system-032a O_TITLE.PAC system messages: O_TITLE is never loaded (docs/re/flow.md); the shown copies are card/save/load
+system-0366 O_TITLE.PAC system messages: O_TITLE is never loaded (docs/re/flow.md); the shown copies are card/save/load
+system-038e O_TITLE.PAC system messages: O_TITLE is never loaded (docs/re/flow.md); the shown copies are card/save/load
+system-03de O_TITLE.PAC system messages: O_TITLE is never loaded (docs/re/flow.md); the shown copies are card/save/load
+system-0436 O_TITLE.PAC system messages: O_TITLE is never loaded (docs/re/flow.md); the shown copies are card/save/load
+system-045e O_TITLE.PAC system messages: O_TITLE is never loaded (docs/re/flow.md); the shown copies are card/save/load
+system-048a O_TITLE.PAC system messages: O_TITLE is never loaded (docs/re/flow.md); the shown copies are card/save/load
+system-04ba O_TITLE.PAC system messages: O_TITLE is never loaded (docs/re/flow.md); the shown copies are card/save/load
+system-04f6 O_TITLE.PAC system messages: O_TITLE is never loaded (docs/re/flow.md); the shown copies are card/save/load
+system-0536 O_TITLE.PAC system messages: O_TITLE is never loaded (docs/re/flow.md); the shown copies are card/save/load
+system-0576 O_TITLE.PAC system messages: O_TITLE is never loaded (docs/re/flow.md); the shown copies are card/save/load
+system-05ba O_TITLE.PAC system messages: O_TITLE is never loaded (docs/re/flow.md); the shown copies are card/save/load
+system-0616 O_TITLE.PAC system messages: O_TITLE is never loaded (docs/re/flow.md); the shown copies are card/save/load
+system-0636 O_TITLE.PAC system messages: O_TITLE is never loaded (docs/re/flow.md); the shown copies are card/save/load
+system-065e O_TITLE.PAC system messages: O_TITLE is never loaded (docs/re/flow.md); the shown copies are card/save/load
+system-0686 O_TITLE.PAC system messages: O_TITLE is never loaded (docs/re/flow.md); the shown copies are card/save/load
+system-06de O_TITLE.PAC system messages: O_TITLE is never loaded (docs/re/flow.md); the shown copies are card/save/load
+system-06fe O_TITLE.PAC system messages: O_TITLE is never loaded (docs/re/flow.md); the shown copies are card/save/load
+system-0726 O_TITLE.PAC system messages: O_TITLE is never loaded (docs/re/flow.md); the shown copies are card/save/load
+system-076a O_TITLE.PAC system messages: O_TITLE is never loaded (docs/re/flow.md); the shown copies are card/save/load
+system-0792 O_TITLE.PAC system messages: O_TITLE is never loaded (docs/re/flow.md); the shown copies are card/save/load
+system-07e6 O_TITLE.PAC system messages: O_TITLE is never loaded (docs/re/flow.md); the shown copies are card/save/load
+system-083a O_TITLE.PAC system messages: O_TITLE is never loaded (docs/re/flow.md); the shown copies are card/save/load
+system-087e O_TITLE.PAC system messages: O_TITLE is never loaded (docs/re/flow.md); the shown copies are card/save/load
+system-08c2 O_TITLE.PAC system messages: O_TITLE is never loaded (docs/re/flow.md); the shown copies are card/save/load
+system-08ee O_TITLE.PAC system messages: O_TITLE is never loaded (docs/re/flow.md); the shown copies are card/save/load
+system-092a O_TITLE.PAC system messages: O_TITLE is never loaded (docs/re/flow.md); the shown copies are card/save/load
+system-093a O_TITLE.PAC system messages: O_TITLE is never loaded (docs/re/flow.md); the shown copies are card/save/load
+system-094a O_TITLE.PAC system messages: O_TITLE is never loaded (docs/re/flow.md); the shown copies are card/save/load
+system-0966 O_TITLE.PAC system messages: O_TITLE is never loaded (docs/re/flow.md); the shown copies are card/save/load
+system-0976 O_TITLE.PAC system messages: O_TITLE is never loaded (docs/re/flow.md); the shown copies are card/save/load
+system-09d2 O_TITLE.PAC system messages: O_TITLE is never loaded (docs/re/flow.md); the shown copies are card/save/load
+system-0a2e O_TITLE.PAC system messages: O_TITLE is never loaded (docs/re/flow.md); the shown copies are card/save/load
+system-0a5e O_TITLE.PAC system messages: O_TITLE is never loaded (docs/re/flow.md); the shown copies are card/save/load
+system-0a8e O_TITLE.PAC system messages: O_TITLE is never loaded (docs/re/flow.md); the shown copies are card/save/load
+system-0ac2 O_TITLE.PAC system messages: O_TITLE is never loaded (docs/re/flow.md); the shown copies are card/save/load
+title-0092 Y_TITLE debug menu labels and dev user names: no title flow shows them (work/qa/cov, 2026-11-14)
+title-00a2 Y_TITLE debug menu labels and dev user names: no title flow shows them (work/qa/cov, 2026-11-14)
+title-00b2 Y_TITLE debug menu labels and dev user names: no title flow shows them (work/qa/cov, 2026-11-14)
+title-00c2 Y_TITLE debug menu labels and dev user names: no title flow shows them (work/qa/cov, 2026-11-14)
+title-00d6 Y_TITLE debug menu labels and dev user names: no title flow shows them (work/qa/cov, 2026-11-14)
+title-00de Y_TITLE debug menu labels and dev user names: no title flow shows them (work/qa/cov, 2026-11-14)
+title-00f2 Y_TITLE debug menu labels and dev user names: no title flow shows them (work/qa/cov, 2026-11-14)
+title-0102 Y_TITLE debug menu labels and dev user names: no title flow shows them (work/qa/cov, 2026-11-14)
+title-010e Y_TITLE debug menu labels and dev user names: no title flow shows them (work/qa/cov, 2026-11-14)
+title-011e Y_TITLE debug menu labels and dev user names: no title flow shows them (work/qa/cov, 2026-11-14)
+title-0132 Y_TITLE debug menu labels and dev user names: no title flow shows them (work/qa/cov, 2026-11-14)
+title-013e Y_TITLE debug menu labels and dev user names: no title flow shows them (work/qa/cov, 2026-11-14)
+title-014a Y_TITLE debug menu labels and dev user names: no title flow shows them (work/qa/cov, 2026-11-14)
+title-0156 Y_TITLE debug menu labels and dev user names: no title flow shows them (work/qa/cov, 2026-11-14)
+title-0162 Y_TITLE debug menu labels and dev user names: no title flow shows them (work/qa/cov, 2026-11-14)
+title-016e Y_TITLE debug menu labels and dev user names: no title flow shows them (work/qa/cov, 2026-11-14)
+title-01c2 Y_TITLE debug menu labels and dev user names: no title flow shows them (work/qa/cov, 2026-11-14)
+title-01ce Y_TITLE debug menu labels and dev user names: no title flow shows them (work/qa/cov, 2026-11-14)
+title-01d6 Y_TITLE debug menu labels and dev user names: no title flow shows them (work/qa/cov, 2026-11-14)
+title-01de Y_TITLE debug menu labels and dev user names: no title flow shows them (work/qa/cov, 2026-11-14)
+title-01e6 Y_TITLE debug menu labels and dev user names: no title flow shows them (work/qa/cov, 2026-11-14)
+title-01f2 Y_TITLE debug menu labels and dev user names: no title flow shows them (work/qa/cov, 2026-11-14)
+title-01fa Y_TITLE debug menu labels and dev user names: no title flow shows them (work/qa/cov, 2026-11-14)
+title_debug-00a2 Y_TITLE debug user/save labels: no title flow shows them (work/qa/cov, 2026-11-14)
+title_debug-00b6 Y_TITLE debug user/save labels: no title flow shows them (work/qa/cov, 2026-11-14)
+title_debug-00c6 Y_TITLE debug user/save labels: no title flow shows them (work/qa/cov, 2026-11-14)
+title_debug-00d2 Y_TITLE debug user/save labels: no title flow shows them (work/qa/cov, 2026-11-14)
+title_debug-00da Y_TITLE debug user/save labels: no title flow shows them (work/qa/cov, 2026-11-14)
+title_debug-00e2 Y_TITLE debug user/save labels: no title flow shows them (work/qa/cov, 2026-11-14)
+title_debug-00ea Y_TITLE debug user/save labels: no title flow shows them (work/qa/cov, 2026-11-14)
+title_debug-00f6 Y_TITLE debug user/save labels: no title flow shows them (work/qa/cov, 2026-11-14)
+title_debug-00fe Y_TITLE debug user/save labels: no title flow shows them (work/qa/cov, 2026-11-14)

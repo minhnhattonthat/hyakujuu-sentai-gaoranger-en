@@ -2,8 +2,9 @@
 
 Updated at the end of every session. Keep it to what the next session needs; history is in git.
 
-- **Phase:** 5. Engine spike and marker build next (phase 4 extract done 2026-11-14). Last build:
-  `build/gaoranger_en.bin` 2026-11-14, no edits, SHA-1 20df603f... = original (identity).
+- **Phase:** 6. Translate next (phase 5 engine + marker build done 2026-11-14). Last build:
+  `build/gaoranger_en.bin` 2026-11-14, English font + VWF hook, text still Japanese (no `en` yet), SHA-1 87a077df...,
+  smoke ok (`work/qa/smoke`).
 - **Done:**
   - Step 0: repo setup (PCSX-Redux nightly + SCPH-5500 BIOS in tools/, mkpsxiso 2.30, armips 0.11.0, pre-commit
     hook runs `tools/check.py`, guard hook verified, rom.sha1). Original boots: `work/qa/smoke-orig`.
@@ -30,11 +31,18 @@ Updated at the end of every session. Keep it to what the next session needs; his
   - Phase 4 (`docs/re/text.md` §Extraction): `tools/extract.py` -> `script/*.json` (15 unique tables in 22 files,
     280 strings; no text in the EXE/PRGs). Rebuild from jp == original for every file; coverage tests
     (`tests/test_extract.py`).
-- **Next (phase 5):** English font/encoding decision (12 px cells; half-width / VWF / digraph glyphs; font TIM
-  copies listed in text.md), insertion: `extract.build(json, "en")` -> replace the leaf (`pac.parse` -> node with
-  `payload` for lzs leaves, `_z_` paths through the payload's add) -> `pac.build` into `build/overlay/DATA/` for
-  every file in the JSON's `files`. Marker build `[id] ...`, warp tour, mark non-text (debug tables, ruler, hex
-  digits), measure box widths per variant (story box ~2 x 17 glyphs, save/load/card boxes, title labels).
+  - Phase 5 (`docs/re/text.md` §Renderer, §English font and VWF, §Box budgets, §Marker build): VWF hook in the EXE
+    cell renderer (`asm/vwf.asm`, armips via build.py with original-byte checks), width table in dead PCdrv code,
+    story box 20 -> 48 columns; font `fonts/vwf.txt` (Dual Orb MIT font + shadow) into all 19 font TIM copies
+    (`tools/font.py`, writes `tbl/en.tbl`); insertion `tools/insert.py` (pads rebuilt blocks: a block moving earlier
+    broke the de01 cloud colours, docs/re/pac.md). `build.py --marker` / `--qa ID=TEXT`. Lint `tools/lint.py`
+    (px budgets, lines, control codes; check.py runs it), `tools/jpleft.py` (Japanese left in built PAC tables),
+    coverage probe `tools/lua/textptr.lua` + `tools/textcov.py`. Marker tour `work/qa/mk` (31 scenes, all boxes
+    show ids), coverage `work/qa/cov`. Budgets: story 2 lines x 232 px; save/load/option same box, 3 lines where
+    the jp has 3; card table guess. Debug/unreachable tables kept Japanese: `script/keep_jp.txt` (76 ids).
+- **Next (phase 6):** translate the 77 strings (ds01-07, save, load, option, card) in `script/*.json` `en`
+  (glossary.md, decisions D1-D4; lint budgets). Small script: one or two translator batches, then reviewer pass.
+  Space = normal ASCII space (VWF glyph); never `{sp81}` (0x81 takes no width under the VWF).
 - **Open questions (non-blocking):**
   - Action-stage game over not in the scene list: player HP not found (0x8007c6f8 is a sprite x, not HP; idle 15000
     frames barely dents the bar). It uses the same game-over texture as the robo one (scene overb). Find HP for
@@ -44,5 +52,10 @@ Updated at the end of every session. Keep it to what the next session needs; his
   - FMV burned-in Japanese not checked yet (`XA/*.STR`: OP0, RB0-5, RN0-2).
   - Title logo: keep Japanese unless an official English logo exists (D5) - check in phase 8.
   - Graphics are the bulk of the work (menus, name plates, banners, game over, credits); dialogue text is small.
+  - Card table (Y_TITLE/21, CARDMS/0) never shown by any tour: its 232 px budget is a guess; find its screen in
+    phase 8 (maybe no-card / minigame high-score flows).
+  - Coverage gaps for phase 8 scenes: no card, card check, format progress/done/failed, not enough space,
+    save/load failed, corrupted data, option-0092/00e6/0116 (docs/re/text.md §Marker build and coverage).
+  - Debug menu tables left Japanese (unreachable); they would draw as garbage now that hiragana cells hold English.
 - **Open bugs:** none.
 - **Waiting on the user:** nothing.
