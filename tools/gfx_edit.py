@@ -228,6 +228,10 @@ def patched_leaves():
             assert t.px == orig.px, f"{path}+{off:x} is not the image {sha}"
             t.px = new.px
             leaves[path] = t.encode()
+    import credits  # staff roll: rebuilt atlases + sprite layout (tools/credits.py)
+    for path, data in credits.leaves().items():
+        assert path not in leaves, f"{path}: both a TIM edit and the credits"
+        leaves[path] = data
     return leaves
 
 

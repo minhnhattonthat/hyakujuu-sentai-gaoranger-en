@@ -75,7 +75,7 @@ de05      0       5010>5058  5     5058   9000   tools/routes/newgame.txt "chapt
 de03s     0       5010>5079,5008>5038  3  5038  9000  tools/routes/newgame.txt "chapter 3 ending (save prompt)"
 de04s     0       5010>5079,5008>5048  4  5048  9000  tools/routes/newgame.txt "chapter 4 ending (save prompt)"
 de05s     0       5010>5079,5008>5058  5  5058  9000  tools/routes/newgame.txt "chapter 5 ending (save prompt)"
-de07      0       5010>5078  7     5078   14000  tools/routes/newgame.txt "final ending and credits"
+de07      0       5010>5078  7     5078   14500  tools/routes/newgame.txt "final ending and credits (© lines at ~14100)"
 de07e     0       5010>5079  7     5079   9000   tools/routes/newgame.txt "the end (おわり)"
 edsave    0       5010>5079  7     5008   8000   tools/routes/newgame.txt "end-of-game save screen (Y_EDSAVE, after DE_ST07E)"
 save      0       5010>5079,5008>5007  1  5007  8000  tools/routes/newgame.txt "save screen (Y_SAVE)"

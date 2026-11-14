@@ -21,6 +21,11 @@ Binding for every translator and reviewer. Agents propose additions in reports; 
 | JP | EN | max | notes | Avoid |
 |---|---|---|---|---|
 | テトム | Tetomu | | Gao shrine maiden; never named in the game text | Tetom |
+| ガオレッド / イエロー / ブルー / ブラック / ホワイト | Gao Red / Yellow / Blue / Black / White | | credits (D14) | GaoRed |
+| ガオマジロ | Gao Madillo | | credits | |
+| ヤバイバ / ツエツエ | Yabaiba / TsueTsue | | Duke Orgs, credits | Tsuetsue |
+| シュテン / ロウキ / ラセツ | Shuten / Rouki / Rasetsu | | Highness Duke Orgs, plates + credits | Roki |
+| キングオルグ | King Org | | plate KING ORG, credits | |
 | ガオレンジャー | GaoRanger(s) | | team: plural when addressed, singular as an adjective ("GaoRanger save file") | Gaorangers, Gaoranger |
 | ガオのせんし | warriors of Gao | | | Gao soldiers |
 

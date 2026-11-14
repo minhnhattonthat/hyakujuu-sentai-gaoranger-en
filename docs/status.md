@@ -2,8 +2,8 @@
 
 Updated at the end of every session. Keep it to what the next session needs; history is in git.
 
-- **Phase:** 8. QA in the emulator in progress: graphics text done except the credits (2026-11-14).
-  Last build: `build/gaoranger_en.bin` SHA-1 719afaa056fd..., build+verify exit 0, smoke ok, check.py green.
+- **Phase:** 8. QA in the emulator in progress: all graphics text English incl. credits (2026-11-14).
+  Last build: `build/gaoranger_en.bin` SHA-1 2379bb2cc655..., build+verify exit 0, smoke ok, check.py green.
   THE END seen in game on it (warp de07e, work/qa/p8/w6/de07e/f006000.png). **warp.py's default --cue is the
   original disc: always pass `--cue build/gaoranger_en.cue` for English shots.**
 - **Done:**
@@ -71,9 +71,11 @@ Updated at the end of every session. Keep it to what the next session needs; his
   - Phase 8 session 2: TIM 136 story banners (composites; layout from the 12_17 sprite groups), 154 THE END,
     5 ORGETTE HUD label, 77 好機 -> CHANCE!; hit kanji 4/6/8 kept (D13). `tools/sprgroups.py` decodes 12_17
     sprite-group leaves (credits, banners); `warp.py --shot-every N`.
-- **Next (phase 8):** credits (TIMs 142/148-150): build the credits redraw per docs/re/graphics.md §Credits layout
-  (rewrite 12_17 sprite u/v/w/h + new English strips; cast romanisation D2, staff readings guessed -> docs/polish.md).
-  In-game shots still missing for banners (no trigger found in ds01/ds04/de03-05 within 12000 frames: try the
+  - Phase 8 session 3: credits rebuilt in English (`tools/credits.py` + `gfx/credits_en.py`: new atlas strips +
+    rewritten DE_ST07 12_17 groups; D14; guessed readings in docs/polish.md, unticked for the user/phase 9), every
+    page seen in game (work/qa/p8/credits_en, © lines credits_en2 ~f14100). tests/test_credits.py. de07 now 14500
+    frames. Glossary: Gao colours, Yabaiba/TsueTsue, Shuten/Rouki/Rasetsu, King Org.
+- **Next (phase 8):** In-game shots still missing for banners (no trigger found in ds01/ds04/de03-05 within 12000 frames: try the
   robo-battle/robo-scene files after those chapters, or the 12_18 script ops that pick 12_17 groups), ORGETTE
   (HUD shows it only in some state: not on screen in a11's first 9000 frames), CHANCE! (robo battle prompt).
   Then: QA tour of

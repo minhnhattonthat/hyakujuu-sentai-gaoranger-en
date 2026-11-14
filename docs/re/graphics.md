@@ -55,7 +55,7 @@ Preview: `python -X utf8 tools/gfx.py preview` (original | English per image, wo
 | 5 | English: ORGETTE (HUD label) | action stage |
 | 77 | English: 好機 -> CHANCE! (robo battle prompt); rest of the sheet is effects | robo battle, when the prompt fires |
 | 4, 6, 8 | kept: brush impact kanji 斬 / 破削烈魂滅痛砕 / 牙吹 滅鬼 shown on hits (sound-effect-like decoration, glossary: no sound effects in text); D13 | - |
-| 142, 148, 149, 150 | TODO credits: see §Credits layout | de07 (work/qa/p8/credits, shots every 30 frames) |
+| 142, 148, 149, 150 | English: whole staff roll rebuilt (tools/credits.py, lines in gfx/credits_en.py, §Credits layout) | de07 (`--shot-every 30`): work/qa/p8/credits_en (cast, staff, thanks, companies), © lines at ~f14100 (work/qa/p8/credits_en2) |
 
 ## Credits layout (DE_ST07)
 `python -X utf8 tools/sprgroups.py DE_ST07.PAC/12_17 --tpage-x 9,10,11,12` lists every credits sprite (u32 offset
@@ -67,3 +67,11 @@ renders each group's English line(s) as new strips packed into the 4 atlases (16
 rewrites each sprite's u/v/w/h (and x for centring) in 12_17, keeping every group's sprite count (unused sprites ->
 w 0). Romanisation per D2 (official cast spellings; staff readings Hepburn, guessed readings listed in
 docs/polish.md for the user). Same 12_17 format holds the story banners (DS/DE story PACs, tpage x 9).
+
+Built (`tools/credits.py`, `render` draws every group as on screen: `--jp` for the original): the four atlases are
+cleared (g20's 96x24 スタッフ title relabelled in place as STAFF), each English line is one 16 px strip (Liberation
+Sans Bold 13, index 15 core, index 1 rim; every CLUT row is a 0-15 ramp, so white/orange is only the sprite's CLUT:
+name 7c48 / role 7cc8 in TIM 148, 7c00 / 7c80 in the others), shelf-packed, identical lines share a strip. Spare
+sprites get w = h = 0 (draw nothing, seen in game). **The roll draws quads with u+w and v+h as u8**: a strip whose
+right edge is u 256 came out mirrored or sheared, so strips keep u+w and v+h <= 255 (tests/test_credits.py). Groups
+slide and fade as a whole, so the English keeps each group's x/y and the motion matches the original.
