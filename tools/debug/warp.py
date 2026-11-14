@@ -58,7 +58,7 @@ def load_scenes():
     return scenes
 
 
-def run(sc, cue, out, frames, state, mash, trace, skip=True, card=None):
+def run(sc, cue, out, frames, state, mash, trace, skip=True, card=None, scripts=(), extra_vars=()):
     out = out or os.path.join(ROOT, "work", "qa", "warp", sc["name"])
     os.makedirs(out, exist_ok=True)
     mash = mash and not sc["nomash"]
@@ -86,12 +86,14 @@ def run(sc, cue, out, frames, state, mash, trace, skip=True, card=None):
             cmd += ["--var", f"SKIP={ovl:#x}"]
         if sc["expect"] >> 12 == 5 and mash:  # story/menu: stop pressing once it loads, end on its first box
             cmd += ["--var", "HOLD=1"]
-    for v in sc["vars"]:  # last, so they override the defaults above
+    for v in list(sc["vars"]) + list(extra_vars):  # last, so they override the defaults above
         cmd += ["--var", v]
     r = sc["route"]
     cmd += ["--route", os.path.join(ROOT, r)] if r.endswith(".txt") else ["--route-str", r]
     if mash:
         cmd += ["--mash", "60", "--mash-key", "circle"]
+    for s in scripts:
+        cmd += ["--script", os.path.abspath(s)]
     if trace:
         cmd += ["--debugger", "--script", os.path.join(ROOT, "tools", "lua", "cdlog.lua")]
     if state:
@@ -133,6 +135,9 @@ def main():
     ap.add_argument("--no-skip", action="store_true", help="watch the opening and earlier story instead of "
                     "tapping START through them")
     ap.add_argument("--jobs", type=int, default=3)
+    ap.add_argument("--script", action="append", default=[], help="extra Lua probe (e.g. tools/lua/textptr.lua)")
+    ap.add_argument("--var", action="append", default=[], help="extra warp.lua/probe global NAME=LUA (wins over "
+                    "scenes.txt), e.g. HOLD=0 to keep pressing circle through every story box")
     a = ap.parse_args()
     scenes = load_scenes()
     if a.list:
@@ -151,7 +156,7 @@ def main():
     for batch in ([s for s in todo if not s["card"]], [s for s in todo if s["card"]]):
         with concurrent.futures.ThreadPoolExecutor(a.jobs) as ex:
             res += ex.map(lambda s: run(s, a.cue, None if a.all else out(s), a.frames, a.state, not a.no_mash,
-                                        a.trace, not a.no_skip, a.card), batch)
+                                        a.trace, not a.no_skip, a.card, a.script, a.var), batch)
     if a.all:  # one overview of every scene's last frame: work/qa/warp/finals*.png
         fin = os.path.join(ROOT, "work", "qa", "warp", "_finals")
         shutil.rmtree(fin, ignore_errors=True)
