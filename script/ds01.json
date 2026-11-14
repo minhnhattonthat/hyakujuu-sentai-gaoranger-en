@@ -29,7 +29,7 @@
     16
    ],
    "jp": "「あつまってもらったのは{n}ほかでもありません。」",
-   "en": "",
+   "en": "\"I have gathered you here{n}for one reason alone.\"",
    "pad": 4,
    "notes": ""
   },
@@ -39,7 +39,7 @@
     17
    ],
    "jp": "「はんせんオルグがあらわれて{n}ひとびとをくるしめています。」",
-   "en": "",
+   "en": "\"Boat Org has appeared, and{n}it is tormenting the people.\"",
    "pad": 4,
    "notes": ""
   },
@@ -49,7 +49,7 @@
     18
    ],
    "jp": "「ガオのせんしたちよ。」",
-   "en": "",
+   "en": "\"Warriors of Gao!\"",
    "pad": 3,
    "notes": ""
   },
@@ -59,7 +59,7 @@
     19
    ],
    "jp": "「ちきゅうのいのちをまもるため{n}じゃあくなおにを、ほろぼすのです！！」",
-   "en": "",
+   "en": "\"To protect life on Earth,{n}you must destroy the wicked ogres!!\"",
    "pad": 2,
    "notes": ""
   }

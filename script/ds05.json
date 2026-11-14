@@ -29,7 +29,7 @@
     16
    ],
    "jp": "「あらたな、ハイネスデュークオルグの{n}しゅつげんです。」",
-   "en": "",
+   "en": "\"Another Highness Duke Org{n}has appeared.\"",
    "pad": 4,
    "notes": ""
   },
@@ -39,7 +39,7 @@
     17
    ],
    "jp": "「ガオのせいれいは{n}いつでもあなたたちのみかた。」",
-   "en": "",
+   "en": "\"The spirits of Gao{n}are always on your side.\"",
    "pad": 2,
    "notes": ""
   },
@@ -49,7 +49,7 @@
     18
    ],
    "jp": "「どんなてきだって{n}きっとたおせるはずよ！」",
-   "en": "",
+   "en": "\"No matter the enemy,{n}I know you can defeat it!\"",
    "pad": 4,
    "notes": ""
   }

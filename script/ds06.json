@@ -29,7 +29,7 @@
     16
    ],
    "jp": "「いよいよ{n}さいごのたたかいです。」",
-   "en": "",
+   "en": "\"At last, the time has come{n}for the final battle.\"",
    "pad": 4,
    "notes": ""
   },
@@ -39,7 +39,7 @@
     17
    ],
    "jp": "「ちきゅうのうんめいは{n}あなたたちに、かかってるわ！」",
-   "en": "",
+   "en": "\"The fate of the Earth{n}rests in your hands!\"",
    "pad": 2,
    "notes": ""
   },
@@ -49,7 +49,7 @@
     18
    ],
    "jp": "「せいぎのこころで、じゃあくなたましいを{n}うちくだくのです！！」",
-   "en": "",
+   "en": "\"With your hearts of justice,{n}shatter that wicked soul!!\"",
    "pad": 4,
    "notes": ""
   }

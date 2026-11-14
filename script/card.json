@@ -48,7 +48,7 @@
     16
    ],
    "jp": "セーブしますか？",
-   "en": "",
+   "en": "Save the game?",
    "pad": 3,
    "notes": ""
   },
@@ -58,7 +58,7 @@
     17
    ],
    "jp": " ○しない  する",
-   "en": "",
+   "en": " ○No    Yes",
    "pad": 4,
    "notes": ""
   },
@@ -68,7 +68,7 @@
     18
    ],
    "jp": "  しない ○する",
-   "en": "",
+   "en": "    No ○Yes",
    "pad": 4,
    "notes": ""
   },
@@ -78,7 +78,7 @@
     19
    ],
    "jp": "  しない  する",
-   "en": "",
+   "en": "    No    Yes",
    "pad": 1,
    "notes": ""
   },
@@ -88,7 +88,7 @@
     20
    ],
    "jp": "  する ○しない",
-   "en": "",
+   "en": "    Yes ○No",
    "pad": 4,
    "notes": ""
   },
@@ -98,7 +98,7 @@
     21
    ],
    "jp": " ○する  しない",
-   "en": "",
+   "en": " ○Yes    No",
    "pad": 4,
    "notes": ""
   },
@@ -108,7 +108,7 @@
     22
    ],
    "jp": "  する  しない",
-   "en": "",
+   "en": "    Yes    No",
    "pad": 1,
    "notes": ""
   },
@@ -118,7 +118,7 @@
     23
    ],
    "jp": "メモリーカードのチェックをしています。",
-   "en": "",
+   "en": "Now checking the Memory Card.",
    "pad": 1,
    "notes": ""
   },
@@ -128,7 +128,7 @@
     24
    ],
    "jp": "メモリーカードがセットされていません。",
-   "en": "",
+   "en": "No Memory Card has been inserted.",
    "pad": 1,
    "notes": ""
   },
@@ -139,7 +139,7 @@
     32
    ],
    "jp": "セーブしますか？",
-   "en": "",
+   "en": "Save the game?",
    "pad": 3,
    "notes": ""
   },
@@ -149,7 +149,7 @@
     33
    ],
    "jp": "メモリーカードがセットされていません。",
-   "en": "",
+   "en": "No Memory Card has been inserted.",
    "pad": 1,
    "notes": ""
   },
@@ -159,7 +159,7 @@
     34
    ],
    "jp": "メモリーカードがフォーマット{n}されていません。{n}フォーマットしてよろしいですか？",
-   "en": "",
+   "en": "The Memory Card{n}is not formatted.{n}Is it OK to format it?",
    "pad": 1,
    "notes": ""
   },
@@ -169,7 +169,7 @@
     35
    ],
    "jp": "フォーマットをしています。{n}メモリーカードやコントローラを{n}ぬきさし しないでください。",
-   "en": "",
+   "en": "Formatting.{n}Please do not remove or insert{n}the Memory Card or controller.",
    "pad": 2,
    "notes": ""
   },
@@ -179,7 +179,7 @@
     36
    ],
    "jp": "せいじょうにフォーマットされました。",
-   "en": "",
+   "en": "The Memory Card was formatted.",
    "pad": 3,
    "notes": ""
   },
@@ -189,7 +189,7 @@
     37
    ],
    "jp": "せいじょうにフォーマット{n}できませんでした。",
-   "en": "",
+   "en": "The Memory Card{n}could not be formatted.",
    "pad": 4,
    "notes": ""
   },
@@ -199,7 +199,7 @@
     38
    ],
    "jp": "セーブするあきようりょうが{n}ふそくしています。",
-   "en": "",
+   "en": "There is not enough{n}free space to save.",
    "pad": 2,
    "notes": ""
   },
@@ -209,7 +209,7 @@
     39
    ],
    "jp": "あたらしくファイルをさくせいします。{n}よろしいですか？",
-   "en": "",
+   "en": "A new file will be created.{n}Is that OK?",
    "pad": 2,
    "notes": ""
   },
@@ -219,7 +219,7 @@
     40
    ],
    "jp": "すでにファイルがあります。{n}うわがきしてもよろしいですか？",
-   "en": "",
+   "en": "A file already exists.{n}Is it OK to overwrite it?",
    "pad": 2,
    "notes": ""
   },
@@ -229,7 +229,7 @@
     41
    ],
    "jp": "データのセーブをしています。{n}メモリーカードやコントローラを{n}ぬきさし しないでください。",
-   "en": "",
+   "en": "Saving data.{n}Please do not remove or insert{n}the Memory Card or controller.",
    "pad": 4,
    "notes": ""
   },
@@ -239,7 +239,7 @@
     42
    ],
    "jp": "せいじょうにセーブしました。",
-   "en": "",
+   "en": "Save complete.",
    "pad": 3,
    "notes": ""
   },
@@ -249,7 +249,7 @@
     43
    ],
    "jp": "せいじょうにセーブできませんでした。",
-   "en": "",
+   "en": "The data could not be saved.",
    "pad": 3,
    "notes": ""
   },
@@ -260,7 +260,7 @@
     48
    ],
    "jp": "いままでのオルグとたたかった{n}きろくをよむわ",
-   "en": "",
+   "en": "I'll read your records of{n}battles against the Orgs.",
    "pad": 4,
    "notes": ""
   },
@@ -270,7 +270,7 @@
     49
    ],
    "jp": "データのロードをしています。{n}メモリーカードやコントローラを{n}ぬきさし しないで下さい。",
-   "en": "",
+   "en": "Loading data.{n}Please do not remove or insert{n}the Memory Card or controller.",
    "pad": 2,
    "notes": ""
   },
@@ -280,7 +280,7 @@
     50
    ],
    "jp": "せいじょうにロードしました。",
-   "en": "",
+   "en": "Load complete.",
    "pad": 3,
    "notes": ""
   },
@@ -290,7 +290,7 @@
     51
    ],
    "jp": "せいじょうにロードできませんでした。",
-   "en": "",
+   "en": "The data could not be loaded.",
    "pad": 3,
    "notes": ""
   },
@@ -300,7 +300,7 @@
     52
    ],
    "jp": "データがはそんしています。{n}せいじょうにロードできませんでした。",
-   "en": "",
+   "en": "The data is corrupted.{n}It could not be loaded.",
    "pad": 4,
    "notes": ""
   },
@@ -310,7 +310,7 @@
     53
    ],
    "jp": "メモリーカードにガオレンジャーの{n}セーブファイルがありません。",
-   "en": "",
+   "en": "There is no GaoRanger save file{n}on this Memory Card.",
    "pad": 2,
    "notes": ""
   }

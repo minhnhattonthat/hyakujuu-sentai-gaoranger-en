@@ -48,7 +48,7 @@
     31
    ],
    "jp": "「メモリーカードの{n}チェックをしています。」",
-   "en": "",
+   "en": "\"Now checking{n}the Memory Card.\"",
    "pad": 4,
    "notes": ""
   },
@@ -58,7 +58,7 @@
     24
    ],
    "jp": "「メモリーカードが{n}セットされていません。」",
-   "en": "",
+   "en": "\"No Memory Card{n}has been inserted.\"",
    "pad": 4,
    "notes": ""
   },
@@ -69,7 +69,7 @@
     32
    ],
    "jp": "「ゲームデータをセーブしますか？」",
-   "en": "",
+   "en": "\"Save your game data?\"",
    "pad": 1,
    "notes": ""
   },
@@ -79,7 +79,7 @@
     33
    ],
    "jp": "「メモリーカードが{n}フォーマットされていません。{n}フォーマットしてよろしいですか？」",
-   "en": "",
+   "en": "\"The Memory Card{n}is not formatted.{n}Is it OK to format it?\"",
    "pad": 1,
    "notes": ""
   },
@@ -89,7 +89,7 @@
     34
    ],
    "jp": "「フォーマットをしています。{n}メモリーカードやコントローラを{n}ぬきさし しないでください。」",
-   "en": "",
+   "en": "\"Formatting.{n}Please do not remove or insert{n}the Memory Card or controller.\"",
    "pad": 2,
    "notes": ""
   },
@@ -99,7 +99,7 @@
     35
    ],
    "jp": "「せいじょうにフォーマットされました。」",
-   "en": "",
+   "en": "\"The Memory Card was formatted.\"",
    "pad": 3,
    "notes": ""
   },
@@ -109,7 +109,7 @@
     36
    ],
    "jp": "「せいじょうに{n}フォーマットできませんでした。」",
-   "en": "",
+   "en": "\"The Memory Card{n}could not be formatted.\"",
    "pad": 4,
    "notes": ""
   },
@@ -119,7 +119,7 @@
     37
    ],
    "jp": "「セーブするあきようりょうが{n}ふそくしています。」",
-   "en": "",
+   "en": "\"There is not enough{n}free space to save.\"",
    "pad": 2,
    "notes": ""
   },
@@ -129,7 +129,7 @@
     38
    ],
    "jp": "「あたらしくファイルをさくせいします。{n}よろしいですか？」",
-   "en": "",
+   "en": "\"A new file will be created.{n}Is that OK?\"",
    "pad": 2,
    "notes": ""
   },
@@ -139,7 +139,7 @@
     39
    ],
    "jp": "「すでにファイルがあります。{n}うわがきしてもよろしいですか？」",
-   "en": "",
+   "en": "\"A file already exists.{n}Is it OK to overwrite it?\"",
    "pad": 2,
    "notes": ""
   },
@@ -149,7 +149,7 @@
     40
    ],
    "jp": "「データのセーブをしています。{n}メモリーカードやコントローラを{n}ぬきさし しないでください。」",
-   "en": "",
+   "en": "\"Saving game data.{n}Please do not remove or insert{n}the Memory Card or controller.\"",
    "pad": 4,
    "notes": ""
   },
@@ -159,7 +159,7 @@
     41
    ],
    "jp": "「セーブかんりょうよ。」",
-   "en": "",
+   "en": "\"Save complete!\"",
    "pad": 3,
    "notes": ""
   },
@@ -169,7 +169,7 @@
     42
    ],
    "jp": "「せいじょうにセーブできませんでした。」",
-   "en": "",
+   "en": "\"The data could not be saved.\"",
    "pad": 3,
    "notes": ""
   }

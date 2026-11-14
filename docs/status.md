@@ -2,9 +2,10 @@
 
 Updated at the end of every session. Keep it to what the next session needs; history is in git.
 
-- **Phase:** 6. Translate next (phase 5 engine + marker build done 2026-11-14). Last build:
-  `build/gaoranger_en.bin` 2026-11-14, English font + VWF hook, text still Japanese (no `en` yet), SHA-1 87a077df...,
-  smoke ok (`work/qa/smoke`).
+- **Phase:** 7. Insert, fit, check next (phase 6 translation done 2026-11-14). Last build:
+  `build/gaoranger_en.bin` 2026-11-14, all 77 strings English, SHA-1 f1d4c05d..., smoke ok (`work/qa/smoke`),
+  `jpleft` 0, lint 0 errors / 0 untranslated. Spot warps ds01, ds07, saveunf, option render the English
+  (`work/qa/warp/<scene>/p6sheet*.png`).
 - **Done:**
   - Step 0: repo setup (PCSX-Redux nightly + SCPH-5500 BIOS in tools/, mkpsxiso 2.30, armips 0.11.0, pre-commit
     hook runs `tools/check.py`, guard hook verified, rom.sha1). Original boots: `work/qa/smoke-orig`.
@@ -40,8 +41,16 @@ Updated at the end of every session. Keep it to what the next session needs; his
     coverage probe `tools/lua/textptr.lua` + `tools/textcov.py`. Marker tour `work/qa/mk` (31 scenes, all boxes
     show ids), coverage `work/qa/cov`. Budgets: story 2 lines x 232 px; save/load/option same box, 3 lines where
     the jp has 3; card table guess. Debug/unreachable tables kept Japanese: `script/keep_jp.txt` (76 ids).
-- **Next (phase 6):** translate the 77 strings (ds01-07, save, load, option, card) in `script/*.json` `en`
-  (glossary.md, decisions D1-D4; lint budgets). Small script: one or two translator batches, then reviewer pass.
+  - Phase 6: all 77 player-visible strings translated in one batch by the worker itself (Orca brief: no
+    subagents): `work/tl/p6.tsv` -> `tools/merge.py` (id<TAB>en -> script/*.json, refuses unknown ids/escapes;
+    `tests/test_merge.py`). Glossary filled (Tetomu voice, Org names: Boat Org = はんせん(帆船)オルグ, Highness Duke
+    Org, Memory Card wording, card choice spacing). Independent review: `codex exec --sandbox read-only` on
+    `work/tl/p6_pairs.txt`: 0 Critical, 1 Important (card-0446, waived: glossary rule was wrong, JP is Tetomu's
+    voice), 3 Minors fixed now (`docs/polish.md`, all ticked). Widest line 192/232 px.
+- **Next (phase 7):** insert/fit/check: `romdiff.py` against allowed ranges with the build's write log (does
+  build.py/insert.py emit one?), control-code check (lint does it), measure the card table's real box (budget is a
+  guess) if reachable. Then phase 8: QA tour of every text scene with visual-QA verdicts, graphics text (the bulk).
+  Story boxes beyond the first page of each ds scene were not shot yet (warps stop at the first box).
   Space = normal ASCII space (VWF glyph); never `{sp81}` (0x81 takes no width under the VWF).
 - **Open questions (non-blocking):**
   - Action-stage game over not in the scene list: player HP not found (0x8007c6f8 is a sprite x, not HP; idle 15000

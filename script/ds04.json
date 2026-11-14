@@ -29,7 +29,7 @@
     16
    ],
    "jp": "「またオルグはんのうよ！」",
-   "en": "",
+   "en": "\"Another Org reading!\"",
    "pad": 1,
    "notes": ""
   },
@@ -39,7 +39,7 @@
     17
    ],
    "jp": "「ただ、なにか{n}うらみのような、きをかんじる…。」",
-   "en": "",
+   "en": "\"But I can sense something...{n}an aura full of resentment...\"",
    "pad": 2,
    "notes": ""
   },
@@ -49,7 +49,7 @@
     18
    ],
    "jp": "「このむなさわぎ{n}きのせいだったら、いいんだけど。」",
-   "en": "",
+   "en": "\"I hope this uneasy feeling{n}is only my imagination.\"",
    "pad": 4,
    "notes": ""
   }

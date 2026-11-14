@@ -58,7 +58,7 @@
     47
    ],
    "jp": "「メモリーカードの{n}チェックをしています。」",
-   "en": "",
+   "en": "\"Now checking{n}the Memory Card.\"",
    "pad": 4,
    "notes": ""
   },
@@ -68,7 +68,7 @@
     24
    ],
    "jp": "「メモリーカードが{n}セットされていません。」",
-   "en": "",
+   "en": "\"No Memory Card{n}has been inserted.\"",
    "pad": 4,
    "notes": ""
   },
@@ -79,7 +79,7 @@
     48
    ],
    "jp": "「ゲームデータをロードしますか？」",
-   "en": "",
+   "en": "\"Load your game data?\"",
    "pad": 1,
    "notes": ""
   },
@@ -89,7 +89,7 @@
     49
    ],
    "jp": "「ゲームデータのロードをしています。{n}メモリーカードやコントローラを{n}ぬきさし しないでください。」",
-   "en": "",
+   "en": "\"Loading game data.{n}Please do not remove or insert{n}the Memory Card or controller.\"",
    "pad": 2,
    "notes": ""
   },
@@ -99,7 +99,7 @@
     50
    ],
    "jp": "「ロードかんりょうよ。」",
-   "en": "",
+   "en": "\"Load complete!\"",
    "pad": 3,
    "notes": ""
   },
@@ -109,7 +109,7 @@
     51
    ],
    "jp": "「せいじょうにロードできませんでした。」",
-   "en": "",
+   "en": "\"The data could not be loaded.\"",
    "pad": 3,
    "notes": ""
   },
@@ -119,7 +119,7 @@
     52
    ],
    "jp": "「ゲームデータがはそんしています。{n}せいじょうにロードできませんでした。」",
-   "en": "",
+   "en": "\"The game data is corrupted.{n}It could not be loaded.\"",
    "pad": 2,
    "notes": ""
   },
@@ -129,7 +129,7 @@
     53
    ],
    "jp": "「メモリーカードにガオレンジャーの{n}ゲームデータがありません。」",
-   "en": "",
+   "en": "\"There is no GaoRanger game data{n}on this Memory Card.\"",
    "pad": 4,
    "notes": ""
   }

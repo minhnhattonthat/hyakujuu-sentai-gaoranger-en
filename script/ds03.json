@@ -29,7 +29,7 @@
     16
    ],
    "jp": "「これまでにない{n}じゃあくなきが、かんじられます。」",
-   "en": "",
+   "en": "\"I sense a wicked aura{n}unlike any I have felt before.\"",
    "pad": 4,
    "notes": ""
   },
@@ -39,7 +39,7 @@
     17
    ],
    "jp": "「まさか、ハイネスデュークオルグ！？」",
-   "en": "",
+   "en": "\"Could it be... a Highness Duke Org!?\"",
    "pad": 1,
    "notes": ""
   },
@@ -49,7 +49,7 @@
     18
    ],
    "jp": "「ゆだんしないで{n}ちからをあわせて、たたかうのです。」",
-   "en": "",
+   "en": "\"Don't let your guard down.{n}Combine your powers and fight!\"",
    "pad": 2,
    "notes": ""
   }
