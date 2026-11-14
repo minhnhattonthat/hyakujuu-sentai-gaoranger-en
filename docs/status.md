@@ -2,7 +2,7 @@
 
 Updated at the end of every session. Keep it to what the next session needs; history is in git.
 
-- **Phase:** 8. QA in the emulator next (phase 7 insert/fit/check done 2026-11-14). Last build:
+- **Phase:** 8. QA in the emulator next, not started (phase 7 done and its harness review fixed 2026-11-14). Last build:
   `build/gaoranger_en.bin` 2026-11-14 11:54, SHA-1 6c338be3..., smoke ok (`work/qa/smoke`), verify 0 errors,
   `jpleft` 0, lint 0 errors / 0 untranslated (check.py now gates on untranslated + glossary).
 - **Done:**
