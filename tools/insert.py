@@ -18,6 +18,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 import extract  # noqa: E402
 import font  # noqa: E402
+import gfx_edit  # noqa: E402
 import pac  # noqa: E402
 from tbl import Table  # noqa: E402
 
@@ -121,6 +122,11 @@ def insert(overlay, marker=False, qa=None):
         assert extract.leaf(f) == extract.leaf(FONT_LEAVES[0]), f
         name, leaf = f.split("/")
         edits[name].append(([int(p) for p in leaf.split("_")], tim))
+    taken = {f"{n}/{'_'.join(map(str, p))}" for n, ed in edits.items() for p, _ in ed}
+    for f, data in gfx_edit.patched_leaves().items():  # graphics text (gfx/edits.py), every copy
+        assert f not in taken, f"{f} is both a text/font leaf and a graphics edit"
+        name, leaf = f.split("/")
+        edits[name].append(([int(p) for p in leaf.split("_")], data))
     out = Path(overlay) / "DATA"
     out.mkdir(parents=True, exist_ok=True)
     for name, ed in sorted(edits.items()):

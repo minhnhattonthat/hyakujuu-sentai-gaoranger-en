@@ -147,6 +147,13 @@ def check_pacs(overlay, marker, qa):
     for t in tables:
         allowed |= set(t["files"])
     errs = []
+    for f, data in insert.gfx_edit.patched_leaves().items():  # graphics leaves: exactly the edited images
+        name, leaf = f.split("/")
+        built = Path(overlay) / "DATA" / name
+        got = insert.leaf_of(built.read_bytes(), leaf) if built.exists() else b""
+        if got[:len(data)] != data or any(got[len(data):]):
+            errs.append(f"{f}: graphics leaf differs from gfx/edits.py")
+        allowed.add(f)
     for built in sorted((Path(overlay) / "DATA").glob("*.PAC")):
         old = dict(leaves((extract.DATA / built.name).read_bytes()))
         new = dict(leaves(built.read_bytes()))
