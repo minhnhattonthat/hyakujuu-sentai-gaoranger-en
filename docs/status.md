@@ -84,8 +84,9 @@ Updated at the end of every session. Keep it to what the next session needs; his
     (EN margins 32/33, 36/37 vs JP 22/22, 39/40 etc.); game-over choices sit where the JP ones do (by eye: busy bg).
     Tour manifest `work/qa/tour/manifest.tsv` (432 sheets, build 1020559e); visual QA by codex
     (`tools/vqa_codex.py work/qa/tour`, brief docs/visual-qa-brief.md) -> `work/qa/tour/verdicts/`.
-- **Next (phase 8):** read `work/qa/vqa1.log` (codex verdict issues), fix, re-tour changed scenes, write
-  `verdicts/recheck_N.tsv`, until `qa_gate.py check work/qa/tour/manifest.tsv work/qa/tour/verdicts` exits 0.
+- **Next (phase 8):** fix the visual-QA issues below (all 66 in `work/qa/vqa1.log`, verdict files in
+  `work/qa/tour/verdicts/`), rebuild, re-run `tools/tour.py SCENES` for the changed scenes + `tools/vqa_codex.py
+  work/qa/tour` (only sheets without a current verdict go out), until `qa_gate.py check work/qa/tour/manifest.tsv work/qa/tour/verdicts` exits 0.
   The tour's overb never reached game over (tour's HOLD=0 overrides the scene's HOLD=200: keeps fighting); its EN
   game over is in work/qa/p8/w5/overb. In-game shots still missing for banners (TIM 136: 12_17 groups g00-g05 in
   DS_ST01/04 and DE_ST03-05; the DS ones live in the story PACs' slot-12 script 12_18, which no traced path runs
@@ -102,6 +103,19 @@ Updated at the end of every session. Keep it to what the next session needs; his
   - Card table (Y_TITLE/21, CARDMS/0) never shown by any tour: its 232 px budget is a guess; find its screen in
     phase 8 (maybe no-card / minigame high-score flows).
   - Debug menu tables left Japanese (unreachable); they would draw as garbage now that hiragana cells hold English.
-- **Open bugs:** none.
+- **Open bugs (codex visual QA, build 1020559e, tour work/qa/tour):**
+  1. **de01, de02, de03s-05s save prompt after the ending** (f5600+): orange/green garbage background, THE END
+     repeated across the screen and over "Save your game data?", choices missing (de05s); JP de01 shows blue sky.
+     Likely VRAM/TIM placement: check the DE PACs' TIM 154 (THE END) / 136 copies and Y_SAVE-in-DE textures vs
+     the original (`warp.py de01 de03s` on the original disc for the JP reference; work/qa/warp has no de03s-05s).
+  2. Sprite narrower than the English (TIM 131, gfx/edits.py): plates SAILING SHIP ORG, BULLDOZER ORG, KING ORG,
+     RASETSU lose their last letter (ds01/02/05/06, ba03, ytitle); START LOADING loses its G (load, tcont,
+     tcontdata, loadbad). Plate/label sprites cover only the JP ink width: measure each sprite's u/w (story 12_17 or
+     the menu's sprite table) and fit each label inside it.
+  3. Option title VIBRATION: orange JP remnant right of the N (clear the rest of the old rect, x 108-130);
+     SOUND title ~7 px right of the JP centre (its sprite isn't the rect's centre: align to the sprite).
+  4. Title wheel (TIM 159) "Vibration" ~8 px left of centre (all stage pause wheels too: a*, bb*, title, tcont).
+  5. Pause menus (pausea, pauseb) and ba01b: stray "GIVE U" left of CONTINUE (TIM 7/96: the CONTINUE sprite's
+     rect overlaps the GIVE UP lettering; clear/relayout).
 - **Waiting on the user:** (non-blocking) D13: brush hit kanji (斬 etc.) kept as decoration; say if they should
   become English words.
