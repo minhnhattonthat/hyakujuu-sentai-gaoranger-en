@@ -15,7 +15,7 @@ def test_scene_list_parses():
         if s["route"].endswith(".txt"):
             assert (ROOT / s["route"]).is_file(), s["name"]
         card = s["card"]
-        if card and card != "unformatted":  # a card fixture must come from a scene that writes it
+        if card and card not in ("unformatted", "full", "corrupt"):  # generated cards (corrupt: from savedone)  # a card fixture must come from a scene that writes it
             assert Path(card).stem in scenes and not scenes[Path(card).stem]["card"], s["name"]
     assert scenes["save"]["swaps"] == [(0x5010, 0x5079), (0x5008, 0x5007)]
 

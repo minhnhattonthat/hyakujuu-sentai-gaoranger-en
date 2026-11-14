@@ -16,6 +16,8 @@
 --            boxes wait for a press). 0 = keep mashing.
 --   KEYS     {{frames, 'key'}, ..}: press each key that many frames after the scene settled (SKIPPED, or LOADED
 --            when there is no SKIP); mashing stops at the first one. E.g. {{1500,'start'}} = pause menu.
+--            Key 'pull' removes the memory card from slot 1 instead (card errors mid-save/format/load).
+--   NOCARD   1 = no memory card in slot 1.
 --   GOD      1 = refill the player's health (not mapped yet: logs a warning).
 -- Logs: CHAPTER frame F n, SWAP frame F at ADDR, LOADED frame F, SKIPPED frame F.
 local mem = PCSX.getMemPtr()
@@ -74,6 +76,8 @@ local function swap_ops()
 end
 
 if GOD == 1 then L.log("GOD not mapped yet") end
+-- NOCARD=1: memory card slot 1 empty (the game's "no Memory Card" messages)
+if NOCARD == 1 then PCSX.settings.emulator.Mcd1Inserted = false; L.log("NOCARD slot 1 empty") end
 
 L.on_frame(function(f)
   if f % 4 == 0 and not opening and find_switch() then
@@ -107,7 +111,7 @@ L.on_frame(function(f)
     for _, k in ipairs(KEYS) do
       if f == settled_at + k[1] then
         MASH = 0
-        L.press(k[2], 6)
+        if k[2] == "pull" then PCSX.settings.emulator.Mcd1Inserted = false else L.press(k[2], 6) end
         L.log(string.format("KEY frame %d %s", f, k[2]))
       end
     end

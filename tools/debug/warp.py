@@ -12,7 +12,8 @@ tools/debug/scenes.txt, one scene per line (shell-style quoting):
   swap     FROM>TO file ids (hex) for warp.lua, or -; a chain FROM>TO,FROM2>TO2 also swaps a load the first
            target's own script makes
   options  nomash (no circle presses after the route), card=PATH (start from this memory card instead of a blank
-           one; card=unformatted: all zeros), var=NAME=LUA, var2=.. (extra warp.lua globals; later ones win)
+           one; card=unformatted: all zeros; card=full: every block used; card=corrupt: savedone.mcd damaged),
+           var=NAME=LUA, var2=.. (extra warp.lua globals; later ones win)
 A card the game wrote during the run is kept as work/saves/<scene>.mcd (a fixture for card=).
   after    chapter to write once `expect` has loaded, 0 = none
   expect   file id (hex, tools/filetable.py) whose CD seek proves the warp (LOADED in log.txt), or -
@@ -31,7 +32,7 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, os.path.join(ROOT, "tools"))
 from skill import SKILL  # noqa: E402
-from blankcard import blank_card  # noqa: E402
+from blankcard import blank_card, corrupt_card, full_card  # noqa: E402
 
 CUE = os.path.join(ROOT, "rom", "Hyakujuu Sentai GaoRanger (Japan).cue")
 SCENES = os.path.join(ROOT, "tools", "debug", "scenes.txt")
@@ -69,6 +70,16 @@ def run(sc, cue, out, frames, state, mash, trace, skip=True, card=None, scripts=
     if sc["card"] == "unformatted":  # all zeros: the game offers to format it
         card = os.path.join(out, "unformatted.mcd")
         open(card, "wb").write(bytes(128 * 1024))
+    elif sc["card"] == "full":  # every block taken by another game
+        card = os.path.join(out, "full.mcd")
+        open(card, "wb").write(full_card())
+    elif sc["card"] == "corrupt":  # savedone.mcd with its save data damaged
+        src = os.path.join(ROOT, "work", "saves", "savedone.mcd")
+        if not os.path.exists(src):
+            print(f"{sc['name']:14s} FAIL card {src} missing (run savedone first)", flush=True)
+            return False
+        card = os.path.join(out, "corrupt.mcd")
+        open(card, "wb").write(corrupt_card(src))
     elif card and not os.path.exists(card):
         print(f"{sc['name']:14s} FAIL card {card} missing (run the scene that writes it first)", flush=True)
         return False

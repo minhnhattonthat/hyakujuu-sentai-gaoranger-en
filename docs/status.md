@@ -3,7 +3,7 @@
 Updated at the end of every session. Keep it to what the next session needs; history is in git.
 
 - **Phase:** 8. QA in the emulator in progress: all graphics text English incl. credits (2026-11-14).
-  Last build: `build/gaoranger_en.bin` SHA-1 2379bb2cc655..., build+verify exit 0, smoke ok, check.py green.
+  Last build: `build/gaoranger_en.bin` SHA-1 1020559e095b..., build+verify exit 0, smoke ok, check.py green.
   THE END seen in game on it (warp de07e, work/qa/p8/w6/de07e/f006000.png). **warp.py's default --cue is the
   original disc: always pass `--cue build/gaoranger_en.cue` for English shots.**
 - **Done:**
@@ -75,30 +75,32 @@ Updated at the end of every session. Keep it to what the next session needs; his
     rewritten DE_ST07 12_17 groups; D14; guessed readings in docs/polish.md, unticked for the user/phase 9), every
     page seen in game (work/qa/p8/credits_en, © lines credits_en2 ~f14100). tests/test_credits.py. de07 now 14500
     frames. Glossary: Gao colours, Yabaiba/TsueTsue, Shuten/Rouki/Rasetsu, King Org.
-- **Next (phase 8):** In-game shots still missing for banners (no trigger found in ds01/ds04/de03-05 within 12000 frames: try the
-  robo-battle/robo-scene files after those chapters, or the 12_18 script ops that pick 12_17 groups), ORGETTE
-  (HUD shows it only in some state: not on screen in a11's first 9000 frames), CHANCE! (robo battle prompt; not in
-  b00 demo or b01 at shots every 20 frames, work/qa/p8/robo; a white+purple pixel scan of the frames found none).
-  Then: QA tour of
-  every text scene with visual-QA verdicts (`qa_gate.py`), graphics text (the bulk:
-  menus, name plates, banners, game over, credits, chapter cards; translator brief + style reference first, D10),
-  `inkbox.py` on choice/centred boxes, `textcover.py`. Story boxes beyond the first page of each ds scene were not
-  shot yet (warps stop at the first box). Card table: idle オルゲットファイト (20000 frames, work/qa/p7card) never
-  ends, so its record-save prompt (likely where card-* shows) is still unreached; needs a kill/lose cheat.
-  Space = normal ASCII space (VWF glyph); never `{sp81}` (0x81 takes no width under the VWF).
+  - Phase 8 session 4: card/option scenes (savefmt, savefull, savenc, loadnc, loadbad, savepull, fmtpull, loadpull,
+    tsoundset, tvibset; warp.lua `NOCARD=1`, KEYS key `pull` = card pulled; blankcard full/corrupt cards). textptr.lua
+    now logs the next string of a table (pointer steps past an FF). **Text coverage gate passes**: `tools/tour.py`
+    (all 101 scenes, text scenes shot every 30 frames, HOLD=0) -> `textcov.py work/qa/tour --waive
+    script/text_unshown.tsv` = 0 unshown (waivers D15). Fixed: option-screen title showed VIBRATIO (sprite is only
+    しんどう wide; TIM 131 rect 88 px, xscale 0.85). inkbox: save/load Yes/No + titles, Stereo/Mono, On/Off centred
+    (EN margins 32/33, 36/37 vs JP 22/22, 39/40 etc.); game-over choices sit where the JP ones do (by eye: busy bg).
+    Tour manifest `work/qa/tour/manifest.tsv` (432 sheets, build 1020559e); visual QA by codex
+    (`tools/vqa_codex.py work/qa/tour`, brief docs/visual-qa-brief.md) -> `work/qa/tour/verdicts/`.
+- **Next (phase 8):** read `work/qa/vqa1.log` (codex verdict issues), fix, re-tour changed scenes, write
+  `verdicts/recheck_N.tsv`, until `qa_gate.py check work/qa/tour/manifest.tsv work/qa/tour/verdicts` exits 0.
+  The tour's overb never reached game over (tour's HOLD=0 overrides the scene's HOLD=200: keeps fighting); its EN
+  game over is in work/qa/p8/w5/overb. In-game shots still missing for banners (TIM 136: 12_17 groups g00-g05 in
+  DS_ST01/04 and DE_ST03-05; the DS ones live in the story PACs' slot-12 script 12_18, which no traced path runs
+  (chapter intros run slot 13); DE_ST03-05 slot 12 runs in de03-05 but no banner seen: decode op 0x9001/0x9002
+  object/group args in 12_18), ORGETTE (TIM 5; maybe only in extra stages ex01-10, which load A_OGET*), CHANCE!
+  (robo battle prompt; needs enemy HP low: find it). Space = normal ASCII space (VWF glyph); never `{sp81}`.
 - **Open questions (non-blocking):**
   - Action-stage game over not in the scene list: player HP not found (0x8007c6f8 is a sprite x, not HP; idle 15000
     frames barely dents the bar). It uses the same game-over texture as the robo one (scene overb). Find HP for
     GOD/kill if phase 8 needs the action layout.
-  - No-card memory-card messages (メモリーカードがセットされていません): emu.py always inserts a card; needs a
-    no-card run option if phase 8 wants that shot.
   - FMV burned-in Japanese not checked yet (`XA/*.STR`: OP0, RB0-5, RN0-2).
   - Title logo: keep Japanese unless an official English logo exists (D5) - check in phase 8.
   - Graphics are the bulk of the work (menus, name plates, banners, game over, credits); dialogue text is small.
   - Card table (Y_TITLE/21, CARDMS/0) never shown by any tour: its 232 px budget is a guess; find its screen in
     phase 8 (maybe no-card / minigame high-score flows).
-  - Coverage gaps for phase 8 scenes: no card, card check, format progress/done/failed, not enough space,
-    save/load failed, corrupted data, option-0092/00e6/0116 (docs/re/text.md §Marker build and coverage).
   - Debug menu tables left Japanese (unreachable); they would draw as garbage now that hiragana cells hold English.
 - **Open bugs:** none.
 - **Waiting on the user:** (non-blocking) D13: brush hit kanji (斬 etc.) kept as decoration; say if they should

@@ -32,7 +32,8 @@ EDITS = {
         {"rect": (16, 75, 40, 19), "text": "Yes", **SMALL},
         {"rect": (58, 75, 60, 19), "text": "No", **SMALL},
         {"rect": (20, 96, 110, 24), "text": "SAVE DATA", **BIG},
-        {"rect": (20, 120, 110, 24), "text": "VIBRATION", **BIG},
+        # the option screen's sprite shows u 20-107 only (しんどう's width): VIBRATION came out as VIBRATIO
+        {"rect": (20, 120, 88, 24), "text": "VIBRATION", **BIG, "xscale": 0.85},
         {"rect": (20, 144, 110, 24), "text": "SOUND", **BIG},
         {"rect": (15, 172, 65, 17), "text": "Stereo", **SMALL},
         {"rect": (90, 172, 67, 17), "text": "Mono", **SMALL},
