@@ -30,3 +30,6 @@ One line each: the reference file it belongs in, then the fact.
   `<dummy type="32">` postgap, and a post-pass for the PVD submode (0x08), a 1901 root-dir date, postgap subheaders,
   and a cue `PREGAP` the .bin doesn't store (dumpsxiso wrote `<pregap 00:04:00>`: wrong). Paths in the xml resolve
   relative to the xml's folder. Python EDC/ECC for form-1 sectors: tools/mkdisc.py (checked on original sectors).
+- references/pipeline.md §Extract: in a 2-byte big-endian glyph encoding whose high byte can be 00, zero padding
+  between strings is indistinguishable from a glyph start; take string starts from the pointer table and treat a
+  non-zero gap as an unreferenced string starting at the even byte before its first non-zero byte.

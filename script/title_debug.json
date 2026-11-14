@@ -1,0 +1,154 @@
+{
+ "files": [
+  "Y_TITLE.PAC/22"
+ ],
+ "a": 0,
+ "count": 26,
+ "lead": 2,
+ "end_slots": [],
+ "strings": [
+  {
+   "id": "title_debug-003a",
+   "slots": [
+    0,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    11,
+    12,
+    13,
+    14,
+    15
+   ],
+   "jp": "123456789012345678901{n}123456789012345678901",
+   "en": "",
+   "pad": 2,
+   "notes": ""
+  },
+  {
+   "id": "title_debug-0092",
+   "slots": [
+    1,
+    8
+   ],
+   "jp": "○ ",
+   "en": "",
+   "pad": 4,
+   "notes": ""
+  },
+  {
+   "id": "title_debug-009a",
+   "slots": [
+    9
+   ],
+   "jp": "  ",
+   "en": "",
+   "pad": 1,
+   "notes": ""
+  },
+  {
+   "id": "title_debug-009e",
+   "slots": [
+    10,
+    16
+   ],
+   "jp": "○",
+   "en": "",
+   "pad": 1,
+   "notes": ""
+  },
+  {
+   "id": "title_debug-00a2",
+   "slots": [
+    17
+   ],
+   "jp": "デバックユーザ  ",
+   "en": "",
+   "pad": 3,
+   "notes": ""
+  },
+  {
+   "id": "title_debug-00b6",
+   "slots": [
+    18
+   ],
+   "jp": "セーブ      ",
+   "en": "",
+   "pad": 3,
+   "notes": ""
+  },
+  {
+   "id": "title_debug-00c6",
+   "slots": [
+    19
+   ],
+   "jp": "マスター",
+   "en": "",
+   "pad": 3,
+   "notes": ""
+  },
+  {
+   "id": "title_debug-00d2",
+   "slots": [
+    20
+   ],
+   "jp": "ミヤベ",
+   "en": "",
+   "pad": 1,
+   "notes": ""
+  },
+  {
+   "id": "title_debug-00da",
+   "slots": [
+    21
+   ],
+   "jp": "ノダ",
+   "en": "",
+   "pad": 3,
+   "notes": ""
+  },
+  {
+   "id": "title_debug-00e2",
+   "slots": [
+    22
+   ],
+   "jp": "オオタ",
+   "en": "",
+   "pad": 1,
+   "notes": ""
+  },
+  {
+   "id": "title_debug-00ea",
+   "slots": [
+    23
+   ],
+   "jp": "イワツキ",
+   "en": "",
+   "pad": 3,
+   "notes": ""
+  },
+  {
+   "id": "title_debug-00f6",
+   "slots": [
+    24
+   ],
+   "jp": "ヤマダ",
+   "en": "",
+   "pad": 1,
+   "notes": ""
+  },
+  {
+   "id": "title_debug-00fe",
+   "slots": [
+    25
+   ],
+   "jp": "バンダイ",
+   "en": "",
+   "pad": 3,
+   "notes": ""
+  }
+ ]
+}

@@ -2,8 +2,8 @@
 
 Updated at the end of every session. Keep it to what the next session needs; history is in git.
 
-- **Phase:** 4. Extract next (phase 3 identity build done 2026-11-14). Last build: `build/gaoranger_en.bin`
-  2026-11-14, no edits, SHA-1 20df603f... = original (identity).
+- **Phase:** 5. Engine spike and marker build next (phase 4 extract done 2026-11-14). Last build:
+  `build/gaoranger_en.bin` 2026-11-14, no edits, SHA-1 20df603f... = original (identity).
 - **Done:**
   - Step 0: repo setup (PCSX-Redux nightly + SCPH-5500 BIOS in tools/, mkpsxiso 2.30, armips 0.11.0, pre-commit
     hook runs `tools/check.py`, guard hook verified, rom.sha1). Original boots: `work/qa/smoke-orig`.
@@ -27,9 +27,14 @@ Updated at the end of every session. Keep it to what the next session needs; his
     overlay (`build/overlay/`, same paths as the tree; changed files go there). `pac.parse/build` repacks every PAC
     byte-identical; `pac.lzs_encode` roundtrips all 2252 blocks. Moved-file test (`tools/movetest.py`: every block
     re-encoded, 65 PACs resized, files moved): all 87 warps OK, files loaded from new LBAs. Tests: `tests/test_disc.py`.
-- **Next (phase 4):** extract every string table (text.md: 22 tables, 307 strings; EXE + PAC leaves incl. `_z_`
-  payloads) to `script/*.json` via `tbl/jp.tbl`, roundtrip test (re-encode == original bytes) and coverage test.
-  Insertion will write changed leaves through `pac.parse` -> replace node -> `pac.build` into `build/overlay/DATA/`.
+  - Phase 4 (`docs/re/text.md` §Extraction): `tools/extract.py` -> `script/*.json` (15 unique tables in 22 files,
+    280 strings; no text in the EXE/PRGs). Rebuild from jp == original for every file; coverage tests
+    (`tests/test_extract.py`).
+- **Next (phase 5):** English font/encoding decision (12 px cells; half-width / VWF / digraph glyphs; font TIM
+  copies listed in text.md), insertion: `extract.build(json, "en")` -> replace the leaf (`pac.parse` -> node with
+  `payload` for lzs leaves, `_z_` paths through the payload's add) -> `pac.build` into `build/overlay/DATA/` for
+  every file in the JSON's `files`. Marker build `[id] ...`, warp tour, mark non-text (debug tables, ruler, hex
+  digits), measure box widths per variant (story box ~2 x 17 glyphs, save/load/card boxes, title labels).
 - **Open questions (non-blocking):**
   - Action-stage game over not in the scene list: player HP not found (0x8007c6f8 is a sprite x, not HP; idle 15000
     frames barely dents the bar). It uses the same game-over texture as the robo one (scene overb). Find HP for

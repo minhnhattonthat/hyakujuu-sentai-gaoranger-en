@@ -1,0 +1,451 @@
+{
+ "files": [
+  "Y_TITLE.PAC/20"
+ ],
+ "a": 0,
+ "count": 71,
+ "lead": 0,
+ "end_slots": [],
+ "strings": [
+  {
+   "id": "title-0092",
+   "slots": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    29,
+    30,
+    31,
+    45,
+    46,
+    47
+   ],
+   "jp": "レンジャー    ",
+   "en": "",
+   "pad": 1,
+   "notes": ""
+  },
+  {
+   "id": "title-00a2",
+   "slots": [
+    23
+   ],
+   "jp": "ロボ       ",
+   "en": "",
+   "pad": 4,
+   "notes": ""
+  },
+  {
+   "id": "title-00b2",
+   "slots": [
+    24
+   ],
+   "jp": "デバック   ",
+   "en": "",
+   "pad": 4,
+   "notes": ""
+  },
+  {
+   "id": "title-00c2",
+   "slots": [
+    25
+   ],
+   "jp": "デバックメニュー",
+   "en": "",
+   "pad": 3,
+   "notes": ""
+  },
+  {
+   "id": "title-00d6",
+   "slots": [
+    26
+   ],
+   "jp": "ユーザ",
+   "en": "",
+   "pad": 1,
+   "notes": ""
+  },
+  {
+   "id": "title-00de",
+   "slots": [
+    27
+   ],
+   "jp": "ステージスタート ",
+   "en": "",
+   "pad": 2,
+   "notes": ""
+  },
+  {
+   "id": "title-00f2",
+   "slots": [
+    28,
+    32
+   ],
+   "jp": "ガオレンジャー",
+   "en": "",
+   "pad": 1,
+   "notes": ""
+  },
+  {
+   "id": "title-0102",
+   "slots": [
+    33
+   ],
+   "jp": "スタート",
+   "en": "",
+   "pad": 3,
+   "notes": ""
+  },
+  {
+   "id": "title-010e",
+   "slots": [
+    34
+   ],
+   "jp": "メモリーカード",
+   "en": "",
+   "pad": 1,
+   "notes": ""
+  },
+  {
+   "id": "title-011e",
+   "slots": [
+    35
+   ],
+   "jp": "オプションせってい",
+   "en": "",
+   "pad": 1,
+   "notes": ""
+  },
+  {
+   "id": "title-0132",
+   "slots": [
+    36
+   ],
+   "jp": "サウンド  ",
+   "en": "",
+   "pad": 1,
+   "notes": ""
+  },
+  {
+   "id": "title-013e",
+   "slots": [
+    37
+   ],
+   "jp": "ステレオ",
+   "en": "",
+   "pad": 3,
+   "notes": ""
+  },
+  {
+   "id": "title-014a",
+   "slots": [
+    38
+   ],
+   "jp": "モノラル",
+   "en": "",
+   "pad": 3,
+   "notes": ""
+  },
+  {
+   "id": "title-0156",
+   "slots": [
+    39
+   ],
+   "jp": "ショック  ",
+   "en": "",
+   "pad": 1,
+   "notes": ""
+  },
+  {
+   "id": "title-0162",
+   "slots": [
+    40
+   ],
+   "jp": "つかわない",
+   "en": "",
+   "pad": 1,
+   "notes": ""
+  },
+  {
+   "id": "title-016e",
+   "slots": [
+    41
+   ],
+   "jp": "つかう  ",
+   "en": "",
+   "pad": 3,
+   "notes": ""
+  },
+  {
+   "id": "title-017a",
+   "slots": [
+    42
+   ],
+   "jp": "○",
+   "en": "",
+   "pad": 1,
+   "notes": ""
+  },
+  {
+   "id": "title-017e",
+   "slots": [
+    43
+   ],
+   "jp": " ",
+   "en": "",
+   "pad": 2,
+   "notes": ""
+  },
+  {
+   "id": "title-0182",
+   "slots": [
+    44,
+    48
+   ],
+   "jp": "0",
+   "en": "",
+   "pad": 1,
+   "notes": ""
+  },
+  {
+   "id": "title-0186",
+   "slots": [
+    49
+   ],
+   "jp": "1",
+   "en": "",
+   "pad": 1,
+   "notes": ""
+  },
+  {
+   "id": "title-018a",
+   "slots": [
+    50
+   ],
+   "jp": "2",
+   "en": "",
+   "pad": 1,
+   "notes": ""
+  },
+  {
+   "id": "title-018e",
+   "slots": [
+    51
+   ],
+   "jp": "3",
+   "en": "",
+   "pad": 1,
+   "notes": ""
+  },
+  {
+   "id": "title-0192",
+   "slots": [
+    52
+   ],
+   "jp": "4",
+   "en": "",
+   "pad": 1,
+   "notes": ""
+  },
+  {
+   "id": "title-0196",
+   "slots": [
+    53
+   ],
+   "jp": "5",
+   "en": "",
+   "pad": 1,
+   "notes": ""
+  },
+  {
+   "id": "title-019a",
+   "slots": [
+    54
+   ],
+   "jp": "6",
+   "en": "",
+   "pad": 1,
+   "notes": ""
+  },
+  {
+   "id": "title-019e",
+   "slots": [
+    55
+   ],
+   "jp": "7",
+   "en": "",
+   "pad": 1,
+   "notes": ""
+  },
+  {
+   "id": "title-01a2",
+   "slots": [
+    56
+   ],
+   "jp": "8",
+   "en": "",
+   "pad": 1,
+   "notes": ""
+  },
+  {
+   "id": "title-01a6",
+   "slots": [
+    57
+   ],
+   "jp": "9",
+   "en": "",
+   "pad": 1,
+   "notes": ""
+  },
+  {
+   "id": "title-01aa",
+   "slots": [
+    58
+   ],
+   "jp": "A",
+   "en": "",
+   "pad": 1,
+   "notes": ""
+  },
+  {
+   "id": "title-01ae",
+   "slots": [
+    59
+   ],
+   "jp": "B",
+   "en": "",
+   "pad": 1,
+   "notes": ""
+  },
+  {
+   "id": "title-01b2",
+   "slots": [
+    60
+   ],
+   "jp": "C",
+   "en": "",
+   "pad": 1,
+   "notes": ""
+  },
+  {
+   "id": "title-01b6",
+   "slots": [
+    61
+   ],
+   "jp": "D",
+   "en": "",
+   "pad": 1,
+   "notes": ""
+  },
+  {
+   "id": "title-01ba",
+   "slots": [
+    62
+   ],
+   "jp": "E",
+   "en": "",
+   "pad": 1,
+   "notes": ""
+  },
+  {
+   "id": "title-01be",
+   "slots": [
+    63
+   ],
+   "jp": "F",
+   "en": "",
+   "pad": 1,
+   "notes": ""
+  },
+  {
+   "id": "title-01c2",
+   "slots": [
+    64
+   ],
+   "jp": "マスター",
+   "en": "",
+   "pad": 3,
+   "notes": ""
+  },
+  {
+   "id": "title-01ce",
+   "slots": [
+    65
+   ],
+   "jp": "ミヤベ",
+   "en": "",
+   "pad": 1,
+   "notes": ""
+  },
+  {
+   "id": "title-01d6",
+   "slots": [
+    66
+   ],
+   "jp": "ノダ",
+   "en": "",
+   "pad": 3,
+   "notes": ""
+  },
+  {
+   "id": "title-01de",
+   "slots": [
+    67
+   ],
+   "jp": "オオタ",
+   "en": "",
+   "pad": 1,
+   "notes": ""
+  },
+  {
+   "id": "title-01e6",
+   "slots": [
+    68
+   ],
+   "jp": "イワツキ",
+   "en": "",
+   "pad": 3,
+   "notes": ""
+  },
+  {
+   "id": "title-01f2",
+   "slots": [
+    69
+   ],
+   "jp": "ヤマダ",
+   "en": "",
+   "pad": 1,
+   "notes": ""
+  },
+  {
+   "id": "title-01fa",
+   "slots": [
+    70
+   ],
+   "jp": "バンダイ",
+   "en": "",
+   "pad": 3,
+   "notes": ""
+  }
+ ]
+}

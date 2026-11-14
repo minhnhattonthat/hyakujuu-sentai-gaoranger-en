@@ -27,6 +27,20 @@
 - `tools/runscan.py --skip-tables` (grammar sweep, any offset) finds nothing else but noise (しし.. in pixel data).
 - Not found yet: in-battle text, if any (likely all graphics). The box speaker name is a graphic (graphics.md).
 
+## Extraction (phase 4, `tools/extract.py`, tests/test_extract.py)
+- `script/<name>.json`, one per unique table (15; 280 strings). Identical tables share one JSON: `save` is in
+  DE_ST01-05 + Y_EDSAVE + Y_SAVE, `card` in CARDMS/0 + Y_TITLE/21; insertion must write every file in `files`.
+- Per string: `id` = `<name>-<original offset>`, `slots` (entry indexes pointing at it), `jp`, `en`, `pad` (zeros
+  after FF), `notes`. `{n}` = newline (82), `{col:XX}` = 85 xx, ASCII space = 81, `　` = glyph 00A0.
+- Strings start 2-aligned; padding after FF is 1-4 zeros. A glyph's high byte can be 00, so string starts come
+  from the offsets, not from "first non-zero byte". `extract.build` keeps 2-alignment when lengths change.
+- O_TITLE/2 header count is 195; one entry = table size (empty end slot, `end_slots`). O_TITLE/1 holds one
+  unreferenced string "BANDAI" at 0x62a (`slots: []`, kept).
+- Roundtrip: `extract.build(json) == original leaf` for all 22 files; coverage: textscan finds tables exactly in
+  those leaves, and the grammar sweep of every other leaf, the EXE and PRGs finds only pixel noise.
+- Likely non-text / debug-only (decide in the marker build): `debug` (O_TITLE/1 debug menu), `title_debug`
+  (Y_TITLE/22, incl. a 21-glyph ruler `123456789012345678901`), hex digit and dev-name strings in `title`.
+
 ## Open
 - Box width / line limits: measure in phase 5 (dialogue box ~ 2 lines x ~17 glyphs seen).
 - Where tables are referenced from (index only, or also by fixed offsets in code).
