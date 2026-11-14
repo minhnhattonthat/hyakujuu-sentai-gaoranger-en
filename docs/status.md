@@ -2,7 +2,8 @@
 
 Updated at the end of every session. Keep it to what the next session needs; history is in git.
 
-- **Phase:** 8. QA in the emulator in progress: all graphics text English incl. credits and FMV captions (2026-11-14).
+- **Phase:** 8. QA in the emulator in progress: visual-QA gate green on build 9c143a4a; only the banner (TIM 136)
+  in-game shot left (2026-11-14).
   Last build: `build/gaoranger_en.bin` SHA-1 9c143a4aaa7c..., build+verify exit 0, smoke ok, check.py green.
   THE END seen in game on it (warp de07e, work/qa/p8/w6/de07e/f006000.png). **warp.py's default --cue is the
   original disc: always pass `--cue build/gaoranger_en.cue` for English shots.**
@@ -97,24 +98,26 @@ Updated at the end of every session. Keep it to what the next session needs; his
     ~f4800). Own STR v2 codec `tools/strv.py` (jPSXdec jar refused by the permission check), `tools/fmvcap.py`
     (build.py step, cached in build/fmvcache), verify.check_fmv, tests/test_strv.py, `tools/fmvmap.py` (scene ->
     STR). Logo, brush kanji and the RN0 破邪百獣剣 flash kept. visual-qa brief updated for FMVs.
+  - Phase 8 session 7: tour of build 9c143a4a completed (the killed run's warps had all finished: `tour.py
+    --sheets-only`), stale D16 junk verdicts dropped, codex round 3 (work/qa/vqa3.log): 130 sheets, 0 issues.
+    **`qa_gate.py check work/qa/tour/manifest.tsv work/qa/tour/verdicts` exits 0**; textcov 0 unshown. In-game:
+    CHANCE! (TIM 77) in b01 f6600 (work/qa/p8/w7/chance_b01_f6600.png, JP same blend), ORGETTE (TIM 5) on the
+    ofight result "6 ORGETTE" (w7/orgette_ofight.png; needs `tools/lua/brawl.lua`: the circle mash never kills).
+    New probes: `tools/lua/ramevery.lua` (RAM dumps every N frames), `readaddrs.lua` (which table bytes are read,
+    when; `--trace`), `brawl.lua`, `tools/sprfind.py` (sprite records showing a tpage area). Lua vars must not be
+    named FROM/TO (warp.lua's swap ids); LuaJIT has no `//`.
 - **Next (phase 8):**
-  1. `python -X utf8 tools/tour.py --jobs 4` on build 9c143a4a. The session-6 run (`--jobs 8`) was killed by Claude
-     Code for low system memory part-way (work/qa/tour_run4.log): use fewer jobs, the manifest still names build
-     1020559e/0661b64f. Then delete the stale de01/de02/de03s-05s `issue` lines from `work/qa/tour/verdicts/*.tsv`
-     (save-screen junk = original, D16; brief says so) and run `tools/vqa_codex.py work/qa/tour` until
-     `qa_gate.py check work/qa/tour/manifest.tsv work/qa/tour/verdicts` exits 0.
-  2. In-game shots still missing (below): banners TIM 136, ORGETTE TIM 5, CHANCE! TIM 77.
+  1. Banners TIM 136 in game (last phase-8 gap; docs/re/graphics.md §Redraw status row 136 has the de03 trace):
+     de03 stalls on the GaoMuscle still (f5360+) in the warp, on the original too, with g00 built every frame but
+     not visible. Find what the scene waits for / g00's object position, or reach it through the real chapter-3
+     flow (b03 robo battle win -> ending). If it can't be shown on the original either, waive it with that proof
+     (D-entry) and move to phase 9.
   The tour's overb never reached game over (tour's HOLD=0 overrides the scene's HOLD=200: keeps fighting); its EN
-  game over is in work/qa/p8/w5/overb. In-game shots still missing for banners (TIM 136: 12_17 groups g00-g05 in
-  DS_ST01/04 and DE_ST03-05; the DS ones live in the story PACs' slot-12 script 12_18, which no traced path runs
-  (chapter intros run slot 13); DE_ST03-05 slot 12 runs in de03-05 but no banner seen: decode op 0x9001/0x9002
-  object/group args in 12_18), ORGETTE (TIM 5; maybe only in extra stages ex01-10, which load A_OGET*), CHANCE!
-  (robo battle prompt; needs enemy HP low: find it). Space = normal ASCII space (VWF glyph); never `{sp81}`.
+  game over is in work/qa/p8/w5/overb. Space = normal ASCII space (VWF glyph); never `{sp81}`.
 - **Open questions (non-blocking):**
   - Action-stage game over not in the scene list: player HP not found (0x8007c6f8 is a sprite x, not HP; idle 15000
     frames barely dents the bar). It uses the same game-over texture as the robo one (scene overb). Find HP for
     GOD/kill if phase 8 needs the action layout.
-  - ORGETTE (TIM 5) not seen: ofight/ex01 HUD shows only the counter digit at f3600/f6000 (label may need kills).
   - Title logo: keep Japanese unless an official English logo exists (D5) - check in phase 8.
   - Graphics are the bulk of the work (menus, name plates, banners, game over, credits); dialogue text is small.
   - Card table (Y_TITLE/21, CARDMS/0) never shown by any tour: its 232 px budget is a guess; find its screen in
