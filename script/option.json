@@ -41,7 +41,7 @@
     31
    ],
    "jp": "「おとのせっていをするのね。」",
-   "en": "\"You'd like to set the sound?\"",
+   "en": "\"Changing the sound settings?\"",
    "pad": 1,
    "notes": ""
   },
@@ -72,7 +72,7 @@
     32
    ],
    "jp": "「コントローラの{n}しんどうのせっていをするのね。」",
-   "en": "\"You'd like to set{n}the controller vibration?\"",
+   "en": "\"Changing the controller{n}vibration settings?\"",
    "pad": 2,
    "notes": ""
   },

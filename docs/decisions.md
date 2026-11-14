@@ -14,3 +14,5 @@ decision replaces one, mark the old one "replaced by D<n>" instead of deleting i
 | D6 | 2026-11-14 | Specs and plans | need approval, pre-approved | Pre-approved: keep going through checkpoints, report at the end. |
 | D7 | 2026-11-14 | Existing saves / memory cards | use user's, none | None provided; build the debug tool as usual. |
 | D8 | 2026-11-14 | Git identity | - | Already set by new-game.ps1; do not change it. |
+| D9 | 2026-11-14 | Name for 帆船オルグ (worker call, pre-approved run) | Boat Org (fandom), Hansen Org (Hepburn), Sailing Ship Org (literal) | Sailing Ship Org: no official English name found; Org names are puns on the monster's motif, so the meaning beats a bare romanisation, and a fandom name is no source under D2. |
+| D10 | 2026-11-14 | Skill process artifacts for phase 6 (worker call) | style reference + translator brief + batches.py, skip | Skipped: one 77-string batch done by the worker itself (Orca brief: no subagents). Create `docs/style-reference.md` (seed: glossary Tetomu rule) and `docs/translator-brief.md` before any later batch (phase 8 graphics text) goes to translator agents. |

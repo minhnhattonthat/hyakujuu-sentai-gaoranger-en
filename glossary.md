@@ -21,7 +21,7 @@ Binding for every translator and reviewer. Agents propose additions in reports; 
 | JP | EN | max | notes | Avoid |
 |---|---|---|---|---|
 | テトム | Tetomu | | Gao shrine maiden; never named in the game text | Tetom |
-| ガオレンジャー | GaoRangers | | team, plural when addressed | Gaorangers |
+| ガオレンジャー | GaoRanger(s) | | team: plural when addressed, singular as an adjective ("GaoRanger save file") | Gaorangers, Gaoranger |
 | ガオのせんし | warriors of Gao | | | Gao soldiers |
 
 ## Places
@@ -32,7 +32,7 @@ Binding for every translator and reviewer. Agents propose additions in reports; 
 | JP | EN | max | notes | Avoid |
 |---|---|---|---|---|
 | オルグ | Org(s) | | | Orug, Orgue |
-| はんせんオルグ | Boat Org | | 帆船オルグ; fandom/RetroAchievements name | Sailing Ship Org, Hansen Org |
+| はんせんオルグ | Sailing Ship Org | | 帆船オルグ; no official English name found, so the literal meaning (D9) | Boat Org, Hansen Org |
 | ブルドーザーオルグ | Bulldozer Org | | | |
 | ハイネスデュークオルグ | Highness Duke Org | | | Highness Duke Ogre |
 | じゃあくなおに | wicked ogres | | the Orgs (Ogre Tribe Org) | demons |
@@ -41,5 +41,7 @@ Binding for every translator and reviewer. Agents propose additions in reports; 
 | メモリーカード | Memory Card | | | memory card |
 
 ## Decisions from earlier batches
+- p6 review (codex, Important on card-0446): the reviewer flagged "I'll read..." as breaking the neutral card-table
+  rule. Ruling: JP よむわ is Tetomu's voice, so the line keeps "I'll" and the style rule above names the exception.
 - p6 (whole script, one batch, translated by the phase-6 worker): card choices keep the cursor cell `○` (12 px);
   the unselected side gets 3 ASCII spaces (4 px each) so "No"/"Yes" stay put when the cursor moves.

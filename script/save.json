@@ -149,7 +149,7 @@
     40
    ],
    "jp": "「データのセーブをしています。{n}メモリーカードやコントローラを{n}ぬきさし しないでください。」",
-   "en": "\"Saving game data.{n}Please do not remove or insert{n}the Memory Card or controller.\"",
+   "en": "\"Saving data.{n}Please do not remove or insert{n}the Memory Card or controller.\"",
    "pad": 4,
    "notes": ""
   },
@@ -159,7 +159,7 @@
     41
    ],
    "jp": "「セーブかんりょうよ。」",
-   "en": "\"Save complete!\"",
+   "en": "\"Your game's saved!\"",
    "pad": 3,
    "notes": ""
   },

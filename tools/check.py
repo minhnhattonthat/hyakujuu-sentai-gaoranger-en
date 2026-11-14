@@ -6,5 +6,5 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 tests = subprocess.call([sys.executable, "-X", "utf8", "-m", "pytest", "-q", str(ROOT / "tests")], cwd=ROOT)
-lint = subprocess.call([sys.executable, "-X", "utf8", str(ROOT / "tools" / "lint.py")], cwd=ROOT)
+lint = subprocess.call([sys.executable, "-X", "utf8", str(ROOT / "tools" / "lint.py"), "--untranslated"], cwd=ROOT)
 sys.exit(1 if tests or lint else 0)

@@ -2,7 +2,8 @@
 
 Per translated string: encodes through tbl/en.tbl, no Japanese left, control codes other than {n} the same as the
 jp (same order), lines <= the box's line budget, each line's pixel width (font.line_px) <= the box's budget, no
-ordinal suffix glued to a number, no stub last line. Budgets per table: BUDGETS (measured in game, docs/re/text.md
+ordinal suffix glued to a number, no stub last line, glossary.md terms (a JP term in jp needs its EN form in en,
+no Avoid spelling). Budgets per table: BUDGETS (measured in game, docs/re/text.md
 §Box budgets); a table with no measured budget is reported, not passed.
 
     python -X utf8 tools/lint.py [--untranslated]   # exit 1 on any error; --untranslated also fails on empty en
@@ -28,9 +29,38 @@ BUDGETS = {
 JP = re.compile(r"[぀-ヿ一-鿿]")
 CTRL = re.compile(r"\{(?!n\})[^}]*\}")
 KEEP = ROOT / "script" / "keep_jp.txt"  # ids that stay Japanese on purpose: "<id> <reason>" per line
+KATA = "゠-ヿ"
+
+
+def load_glossary(path=ROOT / "glossary.md"):
+    """Glossary rows -> [(jp regex, en regex, [avoid regexes])]. `JP1 / JP2` pairs with `EN1 / EN2`; `(s)` in an EN
+    form is optional; a katakana edge of a JP term must not touch more katakana (オルグ is not inside ...クオルグ)."""
+    terms = []
+    for ln in Path(path).read_text(encoding="utf-8").splitlines():
+        cells = [c.strip() for c in ln.strip().strip("|").split("|")]
+        if len(cells) != 5 or not JP.search(cells[0]):
+            continue
+        jps, ens = cells[0].split(" / "), cells[1].split(" / ")
+        avoid = [re.compile(rf"\b{re.escape(a.strip())}\b") for a in cells[4].split(",") if a.strip()]
+        for jp, en in zip(jps, ens if len(ens) == len(jps) else ens[:1] * len(jps)):
+            pre = f"(?<![{KATA}])" if re.match(f"[{KATA}]", jp) else ""
+            post = f"(?![{KATA}])" if re.search(f"[{KATA}]$", jp) else ""
+            want = re.escape(en).replace(r"\(s\)", "s?")
+            terms.append((re.compile(pre + re.escape(jp) + post), re.compile(rf"\b{want}\b", re.I), avoid))
+    return terms
+
+
+def glossary_errors(sid, jp, txt, terms):
+    errs = []
+    for jre, ere, avoid in terms:
+        if jre.search(jp) and not ere.search(txt):
+            errs.append(f"{sid}: glossary: jp has {jre.pattern!r} but en lacks {ere.pattern!r}")
+        errs += [f"{sid}: glossary: avoid spelling {a.pattern!r}" for a in avoid if a.search(txt)]
+    return errs
 
 
 def lint(untranslated=False):
+    terms = load_glossary()
     en = Table.load(ROOT / "tbl" / "en.tbl")
     keep = {ln.split()[0] for ln in KEEP.read_text(encoding="utf-8").splitlines() if ln.strip()} \
         if KEEP.exists() else set()
@@ -52,6 +82,7 @@ def lint(untranslated=False):
                 errors.append(f"{sid}: not encodable ({e})")
             if JP.search(txt):
                 errors.append(f"{sid}: Japanese in en")
+            errors += glossary_errors(sid, jp, txt, terms)
             if CTRL.findall(txt) != CTRL.findall(jp):
                 errors.append(f"{sid}: control codes {CTRL.findall(txt)} != jp {CTRL.findall(jp)}")
             if re.search(r"\d(st|nd|rd|th)\b", txt):
