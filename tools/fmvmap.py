@@ -13,7 +13,7 @@ def extents():
     out = []
     for line in (ROOT / "work" / "disc" / "lba.txt").read_text().splitlines():
         lba, size, name = line.split()
-        if name.endswith(".STR"):
+        if name.endswith((".STR", ".XA")):  # .XA: in-game voice banks (subtitles, docs/re/fmv.md)
             out.append((int(lba), int(lba) + (int(size) + 2047) // 2048, name))
     return out
 

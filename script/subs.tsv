@@ -1,0 +1,29 @@
+# Spoken-line subtitles (docs/re/fmv.md §Subtitles). src<TAB>start s<TAB>end s<TAB>ja<TAB>en; '|' in en forces a line break.
+# src = XA/<src>.STR: burned into the FMV by tools/fmvcap.py (build.py). CDXA* (in-game voice bank_channel) rows are
+# not built yet (engine hook to do). Times and ja from tools/asr.py (Whisper), checked against the in-game text.
+# Not subtitled: OP0 theme song (lyrics), RB4 (music + GAOICARUS caption), RB5 (grunt), the 誕生! shouts under the
+# RB2/RB4 name captions.
+RB0	0.00	3.40	獣の剣と魂の宝珠が合わさって	When the sword of the beasts and the jewels of the soul unite,
+RB0	3.66	6.42	剣の音色が天空を越えて響くとき	and the sword's song rings out beyond the heavens,
+RB0	6.42	8.40	その音色に応え	answering its call,
+RB0	8.58	11.96	大自然の精霊たちが光の道を駆け	the spirits of nature race down a road of light
+RB0	11.96	14.50	地上に降臨するのです	and descend to the earth.
+RB0	30.00	32.70	5人の戦士の心が一つになるとき	When the hearts of the five warriors become one,
+RB0	32.70	34.38	宝珠が輝き	the jewels shine
+RB0	34.38	38.10	気高き猛獣に歌いかけます	and sing out to the noble beasts.
+RB0	42.54	45.10	誕生!ガオキング!	GaoKing is born!
+RB1	0.00	2.20	天地鳴動!アニマルハート!	Heaven and earth tremble! Animal Heart!
+RB1_B	0.00	2.20	天地鳴動!アニマルハート!	Heaven and earth tremble! Animal Heart!
+RB2	4.32	6.80	5人の心が一つになるとき	When the five hearts become one,
+RB2	7.10	8.86	ガオゴリラを中心に	with GaoGorilla at the center,
+RB2	8.86	11.60	パワーアニマルたちが一つに集まり	the Power Animals gather together
+RB2	11.90	14.60	筋肉の戦士が誕生するのです	and the warrior of muscle is born.
+RB3	0.00	2.20	強襲爆裂!ライノシュート!	Assault Burst! Rhino Shoot!
+RN0	2.94	4.80	邪気退散!	Evil spirit, begone!
+RN0_B	2.94	4.80	邪気退散!	Evil spirit, begone!
+RN1	0.00	3.05	風が大空に命の叫びを伝え	When the wind carries the cry of life across the sky
+RN1	3.12	6.30	パワーアニマルの心を目覚めさせるとき	and awakens the hearts of the Power Animals,
+RN1	6.38	10.20	自然の力と人の思いが一つになり	the power of nature and the will of people become one,
+RN1	10.28	14.40	地球を守る5人の戦士が生まれるのです	and five warriors are born to protect the Earth.
+RN2	0.00	3.60	鬼は内、福は外	Demons in! Fortune out!
+RN2_B	0.00	3.60	鬼は内、福は外	Demons in! Fortune out!

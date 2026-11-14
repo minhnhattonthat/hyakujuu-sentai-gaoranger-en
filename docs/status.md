@@ -120,7 +120,15 @@ Updated at the end of every session. Keep it to what the next session needs; his
     issue. tour.py fixed: a one-scene tour wrote into the tour root (warp.py's --out is the scene dir for one scene).
     de07 re-toured on build 22954f04 (sheets unchanged: the staff pages sit past the sheet's 24 frames).
     `tools/release.py` + `docs/release-readme.txt` (zip README with base/patched hashes); repo README filled.
-- **Next:** publishing is the user's call (pipeline.md §Publish: `gh release create v1.0 release/GaoRanger_EN_v1.0.zip`,
+  - Post-release session (2026-11-14, user report): title PRESS START!! was invisible (TIM 159 drawn with no
+    outline on the logo's white glow; outline restored, seen in game work/qa/ts_en f1510). FMV subtitles (D21,
+    docs/re/fmv.md §Subtitles): `script/subs.tsv` burned in by fmvcap.py; xawav.py + asr.py (Whisper) transcribe;
+    fmvdiff.py checks re-encode damage (0 on all). Seen in game: bb01c (RB0, f3420-6060), a11 (RN1). Build
+    4a4ffc1d4385, check 48 passed, smoke ok. RB0 frame 1190's right-edge stripe is original (frame untouched).
+    **v1.0 release zip is stale** (rebuild with release.py when the user asks).
+- **Next:** in-game voice subtitles (CDXA clips: Org taunts, robo attack calls, narration with no text box): engine
+  hook on the clip-play call (O_XAHEAD clip table, docs/re/fmv.md); transcripts in work/subs/asr.tsv (not committed,
+  regenerate with asr.py). Re-tour + visual QA of the subtitled FMV scenes before a new release. Publishing is the user's call (pipeline.md §Publish: `gh release create v1.0 release/GaoRanger_EN_v1.0.zip`,
   notes with base hashes + patch SHA-1). Optional: player bug reports (GitHub issues).
   Known gap (non-blocking): action-stage game over (TIM 7) never shown in game: player HP not found (ramsearch
   over work/qa/p8/hp dumps leaves ~6.5k candidates); TIM 7 uses the same rects/edit as TIM 96, seen in overb.

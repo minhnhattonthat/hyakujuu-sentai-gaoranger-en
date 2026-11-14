@@ -215,7 +215,7 @@ def check_disc(bin_path, overlay):
 def check_overlay(overlay):
     """The build changes only the EXE, DATA/*.PAC files and the captioned FMVs."""
     rels = [p.relative_to(overlay).as_posix() for p in Path(overlay).rglob("*") if p.is_file()]
-    fmv = {f"XA/{c[0]}.STR" for c in fmvcap.CAPTIONS}
+    fmv = {f"XA/{n}.STR" for n in fmvcap.edited()}
     return [f"overlay {r}: the build should not change this file" for r in rels
             if r != "SLPS_033.53" and r not in fmv
             and not (r.startswith("DATA/") and r.endswith(".PAC") and r.count("/") == 1)]
@@ -225,13 +225,13 @@ def check_fmv(overlay):
     """Captioned STRs: same size, only the caption frames' video sectors change, those keep valid EDC/ECC, and
     every caption frame still decodes."""
     errs = []
-    for c in fmvcap.CAPTIONS:
-        rel = f"XA/{c[0]}.STR"
+    for name, ranges in fmvcap.edited().items():
+        rel = f"XA/{name}.STR"
         new, old = (Path(overlay) / rel).read_bytes(), (mkdisc.TREE / rel).read_bytes()
         if len(new) != len(old):
             errs.append(f"{rel}: size changed")
             continue
-        allowed = fmvcap.caption_sectors(c[0])
+        allowed = fmvcap.caption_sectors(name)
         n = len(old) // strv.SECTOR
         for i in range(n):
             s = new[i * strv.SECTOR:(i + 1) * strv.SECTOR]
@@ -245,7 +245,7 @@ def check_fmv(overlay):
                 errs.append(f"{rel}: sector {i} EDC/ECC wrong")
         try:
             for fno, secs, hd in strv.frames(new):
-                if c[1] <= fno <= c[2]:  # a few untouched frames elsewhere don't parse cleanly (docs/re/fmv.md)
+                if any(a <= fno <= b for a, b in ranges):  # a few untouched frames elsewhere don't parse cleanly (docs/re/fmv.md)
                     strv.parse(strv.frame_bytes(new, secs), hd["w"], hd["h"])
         except Exception as e:  # noqa: BLE001
             errs.append(f"{rel}: frame does not decode: {e}")

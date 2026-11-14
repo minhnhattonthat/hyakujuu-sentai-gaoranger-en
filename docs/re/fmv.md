@@ -45,3 +45,22 @@ touch are re-encoded at the frame's qscale; if a frame then overflows its sector
 coefficients past an index (printed; lowest 36 in RB0, 45 in RB4). Sector headers, count and EDC/ECC rewritten.
 Output cached in build/fmvcache/<hash of fmvcap.py, strv.py, font> (90 s to regenerate). verify.check_fmv: same
 size, only caption-frame sectors change, EDC/ECC valid, caption frames decode.
+
+## Subtitles (spoken lines; 2026-11-14, D21)
+- Source of the lines: `tools/xawav.py` (STR/XA audio -> one WAV per XA channel through ffmpeg's psxstr demuxer;
+  the 2336-byte sectors get a sync + header back) -> `tools/asr.py` (faster-whisper large-v3, gitignored venv
+  `tools/asr/`, setup in its docstring; `--no-vad` for voice under music) -> `work/subs/asr*.tsv`. Whisper's text is
+  a draft (names: GaoMuscle came out ガオマンスル; 光の道 as 怒りの道): fix it against the in-game text and other
+  takes of the same line (CDXA00 holds the narrations again).
+- `script/subs.tsv` (src, start s, end s, ja, en). STR rows are burned in by `fmvcap.subtitle` (build.py, cached
+  with the captions): white Liberation Sans Bold 13, 2 px black outline, max 2 lines of 304 px, bottom at y 204;
+  frame = int(s * 30) + 1. The text's macroblocks are re-encoded; most frames are packed full, so a frame whose
+  text doesn't fit even with AC cuts is re-encoded whole at a coarser qscale (RN2 test frame: q 10). verify and
+  `caption_sectors` cover captions + subtitle frames (`fmvcap.edited()`).
+- What talks where (`fmvmap.py`, now with .XA): OP0 theme song (not subtitled); RB0/RB2/RN1 Tetomu's narration;
+  RB1/RB3/RN0/RN2 attack calls and the Org revival chant. In-game voice: `O_XAHEAD.PAC` leaf 1 = clip table (u16
+  count 0x5f at 0, then 8-byte rows from 0x10: u16 channel, u16 start, u16 length, u16 bank 0-2 = CDXA00-02).
+  CDXA00 (16 ch): Tetomu's narration (story/endings) and menu voice; CDXA01: boss taunts in action stages and
+  story intros; CDXA02: robo-scene Org chants and attack calls. CDXA lines are kept in subs.tsv as rows with src
+  `CDXA0n_c<ch>` for the engine hook still to do (hook the clip-play call, draw the clip's line with the VWF
+  renderer for its length; robo scenes may not load the font TIM).

@@ -35,3 +35,21 @@ def test_check_fmv(tmp_path):
     f.write_bytes(b)
     errs = verify.check_fmv(tmp_path)
     assert any("sector 0 outside" in e for e in errs) and any(f"sector {i} EDC" in e for e in errs)
+
+
+def test_subtitle_burn(tmp_path, monkeypatch):
+    subs = tmp_path / "subs.tsv"
+    subs.write_text("RN2\t0.5\t1.0\tテスト\tPress on, rangers!\n", encoding="utf-8")
+    monkeypatch.setattr(fmvcap, "SUBS", subs)
+    assert fmvcap.edited()["RN2"] == [(16, 31)]
+    orig = strv.sectors(mkdisc.TREE / "XA" / "RN2.STR")
+    data = bytearray(orig)
+    assert fmvcap.subtitle("RN2", data, fmvcap.load_subs()["RN2"]) == 16
+    fr = {f[0]: f for f in strv.frames(bytes(data))}
+    _, secs, hd = fr[20]
+    q, _, blocks, _ = strv.parse(strv.frame_bytes(data, secs), hd["w"], hd["h"])
+    band = strv.to_rgb(blocks, q, hd["w"], hd["h"])[180:205, 40:280]
+    assert (band.min(-1) > 180).sum() > 30 and (band.max(-1) < 50).sum() > 100  # white letters, black outline
+    _, secs, _ = fr[40]  # outside the subtitle: untouched
+    assert all(data[i * strv.SECTOR:(i + 1) * strv.SECTOR] == orig[i * strv.SECTOR:(i + 1) * strv.SECTOR]
+               for i in secs)

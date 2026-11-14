@@ -72,7 +72,8 @@ EDITS = {
     # by side: オルゲット|ゆったり|ドッ+キリ + ファイト (first part right-aligned, ファイト left-aligned, so any pair
     # reads as one label), データ+の+ロ+ード (one composite). TEST USER (debug) and the frame parts stay.
     "9e381e7c8f83": (0, [
-        {"rect": (10, 9, 155, 14), "text": "PRESS START!!", **TITLE, "ring": 0},
+        # outline kept: it sits on the logo's white glow band (no ring = invisible)
+        {"rect": (10, 9, 155, 14), "text": "PRESS START!!", "font": "sans-b"},
         {"rect": (8, 25, 80, 20), "text": "Orgette ", **TITLE, "align": "r"},  # ト ends at x 87, ド starts at 88
         {"rects": [(88, 25, 32, 20), (8, 81, 32, 20)], "text": "Thrill ", **TITLE, "align": "r"},  # ドッキリ
         {"rect": (12, 105, 96, 20), "text": "New Game", **TITLE},
