@@ -18,6 +18,9 @@
 --            when there is no SKIP); mashing stops at the first one. E.g. {{1500,'start'}} = pause menu.
 --            Key 'pull' removes the memory card from slot 1 instead (card errors mid-save/format/load).
 --   NOCARD   1 = no memory card in slot 1.
+--   MODE     story-loop mode (u16 gp+0x134 = 0x80063c88, script op "02 0 v") written the first time it reads 0x13
+--            after EXPECT loads. The opening leaves 0x13, whose D_SYS loop never steps fades (op 1c/1d), so the
+--            de03-05 endings stall on their white flash; a robo battle enters them with 0x15/0x16. 0 = off.
 --   GOD      1 = refill the player's health (not mapped yet: logs a warning).
 -- Logs: CHAPTER frame F n, SWAP frame F at ADDR, LOADED frame F, SKIPPED frame F.
 local mem = PCSX.getMemPtr()
@@ -105,6 +108,11 @@ L.on_frame(function(f)
       L.log(string.format("LOADED frame %d id %04x lba %d", f, EXPECT, lba))
       if AFTER > 0 then mem[CH] = AFTER & 0xff; mem[CH + 1] = AFTER >> 8 end
     end
+  end
+  if (MODE or 0) > 0 and loaded_at and mem[0x63c88] == 0x13 and mem[0x63c89] == 0 then
+    mem[0x63c88] = MODE & 0xff; mem[0x63c89] = MODE >> 8
+    L.log(string.format("MODE frame %d 13 -> %x", f, MODE))
+    MODE = 0
   end
   if KEYS and not settled_at and loaded_at and not skipping then settled_at = f end
   if KEYS and settled_at then

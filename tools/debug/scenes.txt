@@ -67,10 +67,11 @@ ba03      6       4006>4013  0     4013   7000   tools/routes/newgame.txt "robo 
 ba05      6       4006>4015  0     4015   3600   tools/routes/newgame.txt "robo scene BA_ST05 (Orgs cutscene, then chapter story)"
 de01      0       5010>5079,5008>5018  1  5018  9000  tools/routes/newgame.txt "chapter 1 ending (save prompt)"
 de02      0       5010>5079,5008>5028  2  5028  9000  tools/routes/newgame.txt "chapter 2 ending"
-de03      0       5010>5038  3     5038   9000   tools/routes/newgame.txt "chapter 3 ending"
-de04      0       5010>5048  4     5048   9000   tools/routes/newgame.txt "chapter 4 ending"
-de05      0       5010>5058  5     5058   9000   tools/routes/newgame.txt "chapter 5 ending"
-# de03-05 above stop on the ending's last picture; entered like de01 (from DE_ST07E's save load) they reach the
+de03      0       5010>5038  3     5038   9000   tools/routes/newgame.txt "chapter 3 ending (GAOMUSCLE STRIKER IS BORN! banner ~f5400)" var=MODE=0x15
+de04      0       5010>5048  4     5048   9000   tools/routes/newgame.txt "chapter 4 ending (GAOSILVER AWAKENS! banner ~f5400)" var=MODE=0x15
+de05      0       5010>5058  5     5058   9000   tools/routes/newgame.txt "chapter 5 ending (GAOICARUS IS BORN! banner ~f5400)" var=MODE=0x15
+# de03-05: MODE=0x15 = the story-loop mode a robo battle leaves (warp.lua); without it they stall on the white
+# flash before the banner. Entered like de01 (from DE_ST07E's save load) they reach the
 # save prompt, which decodes the DE save table (lzsmap EXPECT)
 de03s     0       5010>5079,5008>5038  3  5038  9000  tools/routes/newgame.txt "chapter 3 ending (save prompt)"
 de04s     0       5010>5079,5008>5048  4  5048  9000  tools/routes/newgame.txt "chapter 4 ending (save prompt)"

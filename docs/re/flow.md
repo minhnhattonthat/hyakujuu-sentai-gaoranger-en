@@ -28,6 +28,10 @@
 ## Script ops around scene changes (verified by disassembly, EXE)
 - 03 id = load file (4 bytes), 04 = wait for the load, 39 = fade out (0x800128cc, 2 bytes), 05 a b = start
   engine mode b with arg a (0x8001e774, table 0x80058d48; 6 bytes), 06 = wait for that mode, 02 k v = misc set (k 0-3).
+- `02 0 v` sets the story-loop mode u16 gp+0x134 = 0x80063c88 (gp = 0x80063b54). D_SYS runs one frame loop per
+  mode: 0x13 (story intro, from BA_ST01B), 0x14, 0x15/0x16 (set by B_ST0n before an ending). Only the 0x15/0x16 loops
+  step the screen fade (0x8001ee64; op 1c starts it, op 1d waits for it), so an ending entered with 0x13 stalls at
+  its first `1c`/`1d` (warp.lua MODE).
 - A screen is entered as `03 id; 39; 05 1 0; 06` from the caller's script (B_ST0n 0x7a5a Y_SAVE, DE_ST07E slot-12
   script 0xd4 Y_EDSAVE). Story/menu PACs hold up to three D_SYS script slots: 12 (story), 13 (cutscene / option /
   load), 14 (save). Swapping a file that starts at slot 13 or 14 into the opening's DS_ST01 load hangs (DE_ST01/02,

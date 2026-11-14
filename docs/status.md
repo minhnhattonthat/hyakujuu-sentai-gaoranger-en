@@ -2,8 +2,8 @@
 
 Updated at the end of every session. Keep it to what the next session needs; history is in git.
 
-- **Phase:** 8. QA in the emulator in progress: visual-QA gate green on build 9c143a4a; only the banner (TIM 136)
-  in-game shot left (2026-11-14).
+- **Phase:** 9. Release: not started. Phase 8 done 2026-11-14 (visual-QA gate green, 447 sheets, build 9c143a4a;
+  every graphics-text row seen in game incl. the TIM 136 banners).
   Last build: `build/gaoranger_en.bin` SHA-1 9c143a4aaa7c..., build+verify exit 0, smoke ok, check.py green.
   THE END seen in game on it (warp de07e, work/qa/p8/w6/de07e/f006000.png). **warp.py's default --cue is the
   original disc: always pass `--cue build/gaoranger_en.cue` for English shots.**
@@ -106,18 +106,23 @@ Updated at the end of every session. Keep it to what the next session needs; his
     New probes: `tools/lua/ramevery.lua` (RAM dumps every N frames), `readaddrs.lua` (which table bytes are read,
     when; `--trace`), `brawl.lua`, `tools/sprfind.py` (sprite records showing a tpage area). Lua vars must not be
     named FROM/TO (warp.lua's swap ids); LuaJIT has no `//`.
-- **Next (phase 8):**
-  1. Banners TIM 136 in game (last phase-8 gap; docs/re/graphics.md §Redraw status row 136 has the de03 trace):
-     de03 stalls on the GaoMuscle still (f5360+) in the warp, on the original too, with g00 built every frame but
-     not visible. Find what the scene waits for / g00's object position, or reach it through the real chapter-3
-     flow (b03 robo battle win -> ending). If it can't be shown on the original either, waive it with that proof
-     (D-entry) and move to phase 9.
+  - Phase 8 session 8: TIM 136 banners seen in game, EN beside JP (de03 GAOMUSCLE STRIKER IS BORN!, de04 GAOSILVER
+    AWAKENS!, de05 GAOICARUS IS BORN!, ~f5400; work/qa/p8/bnm, bnm45). Cause of the stall: the endings' fade-to-white
+    (script ops 1c/1d) is stepped only in D_SYS story-loop modes 0x15/0x16; the warp's opening entry left 0x13
+    (docs/re/flow.md). warp.lua `MODE` var, scenes de03-05 set MODE=0x15. Re-toured de03-05, codex round 4
+    (work/qa/vqa4.log): 18 sheets, 0 issues; `qa_gate.py check` exits 0, textcov 0 unshown, check.py green.
+- **Next (phase 9, `references/pipeline.md` §Release):**
+  1. Story pass per chapter (`references/translation.md` §Review; codex as the reviewer, no subagents) ->
+     work/qa/story/manifest.tsv verdicts.
+  2. docs/polish.md: 2 unticked lines (credits guessed readings, D14): settle or record as known limits.
+  3. `tools/release.py` (not written yet): qa_gate check on every manifest + textcov, jpleft on the release build,
+     debug tool off (warp is external Lua only: confirm nothing debug is patched in), xdelta vs the .bin,
+     re-apply + verify, zip = patch + README with base hashes; repo README placeholders filled.
+  Known gap (non-blocking): action-stage game over (TIM 7) never shown in game: player HP not found (ramsearch
+  over work/qa/p8/hp dumps leaves ~6.5k candidates); TIM 7 uses the same rects/edit as TIM 96, seen in overb.
   The tour's overb never reached game over (tour's HOLD=0 overrides the scene's HOLD=200: keeps fighting); its EN
   game over is in work/qa/p8/w5/overb. Space = normal ASCII space (VWF glyph); never `{sp81}`.
 - **Open questions (non-blocking):**
-  - Action-stage game over not in the scene list: player HP not found (0x8007c6f8 is a sprite x, not HP; idle 15000
-    frames barely dents the bar). It uses the same game-over texture as the robo one (scene overb). Find HP for
-    GOD/kill if phase 8 needs the action layout.
   - Title logo: keep Japanese unless an official English logo exists (D5) - check in phase 8.
   - Graphics are the bulk of the work (menus, name plates, banners, game over, credits); dialogue text is small.
   - Card table (Y_TITLE/21, CARDMS/0) never shown by any tour: its 232 px budget is a guess; find its screen in
