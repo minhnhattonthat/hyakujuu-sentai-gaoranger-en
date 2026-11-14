@@ -77,7 +77,8 @@ Updated at the end of every session. Keep it to what the next session needs; his
     frames. Glossary: Gao colours, Yabaiba/TsueTsue, Shuten/Rouki/Rasetsu, King Org.
 - **Next (phase 8):** In-game shots still missing for banners (no trigger found in ds01/ds04/de03-05 within 12000 frames: try the
   robo-battle/robo-scene files after those chapters, or the 12_18 script ops that pick 12_17 groups), ORGETTE
-  (HUD shows it only in some state: not on screen in a11's first 9000 frames), CHANCE! (robo battle prompt).
+  (HUD shows it only in some state: not on screen in a11's first 9000 frames), CHANCE! (robo battle prompt; not in
+  b00 demo or b01 at shots every 20 frames, work/qa/p8/robo; a white+purple pixel scan of the frames found none).
   Then: QA tour of
   every text scene with visual-QA verdicts (`qa_gate.py`), graphics text (the bulk:
   menus, name plates, banners, game over, credits, chapter cards; translator brief + style reference first, D10),
