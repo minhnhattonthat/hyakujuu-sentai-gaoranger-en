@@ -39,6 +39,12 @@ Also seen in VRAM at the intermission (`work/qa/vd6000`): the same #131 and #136
 
 ## Redraw status (phase 8; tools/gfx.py, tools/gfx_edit.py, edits in gfx/edits.py, copies from gfx/tims.tsv)
 Build writes every copy of each edited TIM (insert.py), verify.py checks each graphics leaf equals gfx/edits.py.
+**Rects come from the sprite, not the ink** (phase 8 visual QA): the game shows a label through a sprite record
+(u/v/w/h, often wider or offset from the JP ink), so an ink-box rect gives clipped last letters or off-centre
+labels. Find the record (12-byte `x, y, u, v, w, h, tpage, clut`; tpage & 0x1f = VRAM x/64 + 16*(y/256)) by
+scanning the scene's PAC leaves: menus/plates DS_ST01/Y_LOAD 13_17 (`tools/sprgroups.py LEAF --tpage-x 6`),
+title wheel Y_TITLE 13, pause/game over A_*/16_1 + B*/1_12_1. Composite labels whose English can't share a piece
+are fixed in the sprite group itself (`gfx/edits.py SPRITE_FIXES`, e.g. the pause menu's たたかい+つづける).
 Preview: `python -X utf8 tools/gfx.py preview` (original | English per image, work/gfx/preview). Find rects:
 `gfx_edit.boxes`, per-row/column ink profiles; pieces touch, so split on ink-column minima.
 

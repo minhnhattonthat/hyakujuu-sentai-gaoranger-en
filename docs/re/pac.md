@@ -47,9 +47,15 @@ Tools: `tools/pac.py list|unpack`, `tools/unpack_all.py` (all PACs -> `work/pac/
   on build). `tools/movetest.py` re-encodes every block of every PAC (the moved-file test, disc.md §Rebuild).
 - **No block may start earlier than in the original** (verified, phase 5): the English font TIM (DE_ST01 9_7) packed
   0x2e7 bytes smaller, 9_8..9_10 moved up, and the chapter-1 ending's cloud picture (9_10, 8bpp) came out in wrong
-  colours; re-encoding 9_7 unchanged (+0xb8, blocks moved later) was fine. Mechanism not traced (decoding near the
-  still-packed data, guess). `insert.py` pads every replaced block (lzs: `pad_to`, zeros after the stream) to at
-  least its original size and `check_offsets` fails the build if any block starts earlier.
+  colours; re-encoding 9_7 unchanged (+0xb8, blocks moved later) was fine. `insert.py` pads every replaced block
+  (lzs: `pad_to`, zeros after the stream) to at least its original size and `check_offsets` fails the build if any
+  block starts earlier. **Probably not corruption at all** (phase 8, 2026-11-14): the same "wrong colours" came back
+  with every block in place once DE_ST07E 9_3 (THE END) was re-encoded, even with unchanged pixels. VRAM dumps
+  (`tools/lua/vdumpat.lua`) at the post-ending save prompt: every texture and CLUT identical to the original; only
+  the framebuffers differ. That screen never redraws its background, so it shows one of two leftover buffers (one
+  with the rendered sky, one with an 8bpp texture copied raw = orange/green), and which one depends on how many
+  frames loading took, i.e. on the packed sizes. The original disc shows the orange buffer itself in de03s-05s.
+  Kept the padding rule anyway (cheap). Bisect a build by graphics edit: `GFX_SKIP=sha,.. tools/build.py --out ..`.
 
 ## Leaf kinds (from unpack_all.py)
 840 TIM (`10 00 00 00`, flags with bit 31 set: `08 00 00 80`), 613 `41 00 00 00` (models/anim, guess), 119 VAB

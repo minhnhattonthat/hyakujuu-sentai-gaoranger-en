@@ -35,6 +35,11 @@ Standing non-bugs, `ok`:
 - the action-stage gauge and HUD numbers; the title screen's TEST USER (debug) label;
 - runs that end on the title screen or loop back (demo scenes b00, bb00c, ademo);
 - credits names are romanised guesses listed in docs/polish.md (judge only layout there).
+- the save prompt after an ending (de01, de02, de03s-de05s, ~f5600 on): its background is leftover framebuffer
+  junk in the original too (raw texture data drawn as orange/green "clouds", repeated おわり/THE END, sprite
+  scraps). Which of the two leftover buffers shows depends on load timing, so the original's de01/de02 happen to
+  show a blue sky and de03s-05s the orange junk (work/qa/warp/de03s..de05s); either is the game's own behaviour.
+  Judge only the prompt text and choices there.
 
 ## Verdicts
 Write your verdict file once you have read every sheet, one line per id in the chunk:

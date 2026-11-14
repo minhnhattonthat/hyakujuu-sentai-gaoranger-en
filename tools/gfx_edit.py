@@ -10,6 +10,8 @@ index. Outline and per-row fill are read from the original pixels in the rect un
     preview(out_dir)        -> original | English sheet per edited image (gfx.py preview)
 """
 import functools
+import os
+import struct
 import sys
 from collections import Counter
 from pathlib import Path
@@ -205,7 +207,10 @@ def patched():
     """{sha prefix: (Tim original, Tim edited, rects)} for every image in gfx/edits.py."""
     import edits
     out = {}
+    skip = os.environ.get("GFX_SKIP", "").split(",")  # bisect: GFX_SKIP=sha,.. builds without those edits
     for sha, (row, eds) in edits.EDITS.items():
+        if sha in skip:
+            continue
         path, off = gfx.copies(sha)[0]
         orig = gfx.load(path, off)
         new = gfx.load(path, off)
@@ -232,7 +237,31 @@ def patched_leaves():
     for path, data in credits.leaves().items():
         assert path not in leaves, f"{path}: both a TIM edit and the credits"
         leaves[path] = data
+    import edits
+    for path in edits.SPRITE_LEAVES:
+        leaves[path], n = sprite_fix(leaves.get(path) or gfx.extract.leaf(path), edits.SPRITE_FIXES)
+        assert n == 2, f"{path}: {n} sprite groups fixed, expected 2"
     return leaves
+
+
+SPR = struct.Struct("<hhBBBBHH")  # x, y, u, v, w, h, tpage, clut (sprite group record, tools/sprgroups.py)
+
+
+def sprite_fix(data, fixes):
+    """Rewrite every group (u16 count + records) whose records match `old` (clut aside) to `new`; returns
+    (bytes, groups rewritten)."""
+    d, n = bytearray(data), 0
+    for old, new in fixes:
+        head = struct.pack("<H", len(old)) + SPR.pack(*old[0], 0)[:-2]
+        i = d.find(head)
+        while i >= 0:
+            recs = [SPR.unpack_from(d, i + 2 + SPR.size * k) for k in range(len(old))]
+            if all(r[:7] == o for r, o in zip(recs, old)):
+                for k, (r, s) in enumerate(zip(recs, new)):
+                    SPR.pack_into(d, i + 2 + SPR.size * k, *s, r[7])
+                n += 1
+            i = d.find(head, i + 1)
+    return bytes(d), n
 
 
 def preview(out_dir, zoom=2):
