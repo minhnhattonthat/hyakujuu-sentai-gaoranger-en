@@ -20,6 +20,12 @@ Tools: `tools/pac.py list|unpack`, `tools/unpack_all.py` (all PACs -> `work/pac/
 - Compressor: `pac.lzs_encode(data, L, name)` (greedy, hash chains, keeps the block's L and name; packed size field =
   whole block). Roundtrips all 2252 blocks; output is 0.8% bigger than the original overall (worst block +10%).
   Load buffer limits per block still unknown: check when a block grows a lot.
+- Decode targets (verified 2026-11-14, English build, `warp.py ds01 de01 save load option tcontdata --trace --script
+  tools/lua/lzslog.lua`, `tools/lzsmap.py work/qa/lzs_en`): decompress(src, dst) is 0x8002f858. Story/menu PAC
+  blocks (D_SYS script slots, ra 0x80017a20/a64/ab8/b14, ending tables ra 0x800ac4c0) are decoded back to back from
+  0x801cd000, each dst = the previous block's end (aligned), so a grown text table moves the later blocks up instead
+  of overwriting them. Largest end seen: 0x801ce648 (DE/Y_SAVE table 838 -> 1232 bytes); no decode overlaps any
+  table's grown tail (lzsmap: 0 overlaps). What sits far above (stack near 0x801fff00) is a guess, ~200 KB away.
 
 ## Repack (verified, tests/test_disc.py)
 - `pac.parse(d)` -> tree, `pac.build(tree)` -> bytes; every PAC rebuilds byte-identical. Rules: entry table right

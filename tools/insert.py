@@ -43,6 +43,12 @@ def marker(s):
     return lead + "{n}".join(out)
 
 
+def text_for(s, marker_mode, qa=None):
+    """The text string s gets in the build (None: keep its jp bytes)."""
+    text = marker(s) if marker_mode and JP_TEXT.search(s["jp"]) else s.get("en")
+    return (qa or {}).get(s["id"], text)
+
+
 def encode_table(t, marker_mode, qa=None):
     """Table dict -> bytes. Strings without `en` (and non-text strings in marker mode) keep their jp bytes.
     qa: {id: text} overrides (stress lines for the width gate)."""
@@ -53,8 +59,7 @@ def encode_table(t, marker_mode, qa=None):
     for s in t["strings"]:
         for i in s["slots"]:
             offs[i] = len(body)
-        text = marker(s) if marker_mode and JP_TEXT.search(s["jp"]) else s.get("en")
-        text = (qa or {}).get(s["id"], text)
+        text = text_for(s, marker_mode, qa)
         body += EN.encode(text + "{end}") if text else extract.TBL.encode(s["jp"] + "{end}")
         body += bytes(s["pad"] + (len(body) + s["pad"]) % 2)
     for i in t["end_slots"]:

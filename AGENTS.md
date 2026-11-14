@@ -4,7 +4,7 @@ Skill: translate-retro-game (Claude Code: plugin, enabled in .claude/settings.js
 
 ## Commands (run from repo root)
 - Setup once: `git config core.hooksPath tools/hooks`
-- Build:    `python -X utf8 tools/build.py`  -> build/gaoranger_en.cue/.bin (checks the dump against `rom.sha1` first)
+- Build:    `python -X utf8 tools/build.py`  -> build/gaoranger_en.cue/.bin (checks the dump against `rom.sha1` first, ends with `tools/verify.py`: EXE/PAC/disc/text readback checks)
 - Check:    `python -X utf8 tools/check.py`  (tests + lint; the pre-commit hook runs this)
 - Smoke:    `python -X utf8 $SKILL/scripts/emu.py build/gaoranger_en.cue --out work/qa/smoke --route tools/routes/boot.txt --smoke`
 - Warp:     `python -X utf8 tools/debug/warp.py <scene>.. [--cue build/gaoranger_en.cue] [--state]` -> `work/qa/warp/<scene>/` (`--list`; `--all` regenerates every scene, exit 1 on a miss; scenes: `tools/debug/scenes.txt`; never ask the user to play to a scene)

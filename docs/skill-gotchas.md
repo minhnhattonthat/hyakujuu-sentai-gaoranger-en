@@ -41,3 +41,8 @@ One line each: the reference file it belongs in, then the fact.
 - references/platform-ps1.md: a cheap PS1 VWF when the renderer emits one 12 px quad per text cell: keep the cells,
   replace `x = col * 12` by a running per-row offset + a width byte table; dead PCdrv host-file I/O functions
   (no callers) in the EXE make a safe home for the table.
+- references/pipeline.md §Checks (compressed archives, disc images): `romdiff.py` on a re-encoded archive or a
+  relaid disc diffs everywhere; compare decoded leaves instead (same leaf set, only text/font leaves changed) and
+  dump the built disc back to files (here tools/verify.py, run by build.py).
+- references/pipeline.md §Checks: text tables decoded from compressed blocks grow (+50% here); log the decoder's
+  (src, dst, size) at runtime (tools/lua/lzslog.lua) and check nothing else lands in the grown tail.

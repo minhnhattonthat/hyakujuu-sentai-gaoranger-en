@@ -78,6 +78,12 @@ def main():
     build_exe(overlay)
     insert.insert(overlay, marker=a.marker, qa=qa)
     out = mkdisc.build(a.out, overlay)
+    import verify  # imports build: load it late
+    errs = verify.verify(out, overlay, a.marker, qa)
+    for e in errs[:100]:
+        print(e)
+    if errs:
+        sys.exit(f"verify: {len(errs)} errors in {out}")
     print(out.with_suffix(".cue"))
 
 

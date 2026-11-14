@@ -21,4 +21,4 @@ Addresses are for the dump in `rom.sha1` unless a note says otherwise. No earlie
 
 Recon tools (all in `tools/`): `unpack_all.py`, `pac.py`, `catpac.py` (one blob + `where`), `textscan.py`,
 `runscan.py`, `loosetbl.py`, `make_tbl.py`, `fontsheet.py`, `timscan.py`, `vram.py`, `ramfind.py`, `relscan.py`,
-`patscan.py`, `sjis_scan.py`, `disc_lba.py`; build: `build.py`, `mkdisc.py`, `movetest.py`; Lua probes `tools/lua/readbp.lua`, `seqdump.lua`, `vdump.lua`.
+`patscan.py`, `sjis_scan.py`, `disc_lba.py`; build: `build.py`, `mkdisc.py`, `movetest.py`, `verify.py`, `lzsmap.py`; Lua probes `tools/lua/readbp.lua`, `seqdump.lua`, `vdump.lua`, `lzslog.lua`.

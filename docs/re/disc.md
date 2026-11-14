@@ -33,6 +33,13 @@
   scenes differ only in moment), and the save written in scene savedone has the same save blocks. Shots:
   `work/movetest/warp/`, pairs `work/movetest/cmp_sheet.png`.
 
+## Build verification (phase 7, tools/verify.py, run by build.py; tests/test_verify.py proves each check fails)
+- EXE: `romdiff.check` vs the original: writes only at the asm/vwf.asm sites (original bytes = build.HOOKS) plus
+  the width-table range; no branch/j/jal in the original code lands inside a replaced span or the width table.
+- PACs: same leaf set (lzs payloads decoded and walked); only text-table and font leaves differ (37 of 275 leaves in
+  the 20 changed PACs). Every string reads back through every pointer slot as the en (or untouched jp) text.
+- Disc: dumpsxiso of the built .bin = original tree with the overlay files swapped in, byte for byte.
+
 ## Free space
 - Inside PACs: files are found by name, so a PAC may grow; each PAC is read whole to 0x800cd000,
   so its size is capped by the buffer below the next RAM user (unknown), and each lzs block has to fit its target.

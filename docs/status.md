@@ -2,10 +2,9 @@
 
 Updated at the end of every session. Keep it to what the next session needs; history is in git.
 
-- **Phase:** 7. Insert, fit, check next (phase 6 translation done 2026-11-14). Last build:
-  `build/gaoranger_en.bin` 2026-11-14, all 77 strings English, SHA-1 f1d4c05d..., smoke ok (`work/qa/smoke`),
-  `jpleft` 0, lint 0 errors / 0 untranslated. Spot warps ds01, ds07, saveunf, option render the English
-  (`work/qa/warp/<scene>/p6sheet*.png`).
+- **Phase:** 8. QA in the emulator next (phase 7 insert/fit/check done 2026-11-14). Last build:
+  `build/gaoranger_en.bin` 2026-11-14 11:54, SHA-1 6c338be3..., smoke ok (`work/qa/smoke`), verify 0 errors,
+  `jpleft` 0, lint 0 errors / 0 untranslated (check.py now gates on untranslated + glossary).
 - **Done:**
   - Step 0: repo setup (PCSX-Redux nightly + SCPH-5500 BIOS in tools/, mkpsxiso 2.30, armips 0.11.0, pre-commit
     hook runs `tools/check.py`, guard hook verified, rom.sha1). Original boots: `work/qa/smoke-orig`.
@@ -47,10 +46,20 @@ Updated at the end of every session. Keep it to what the next session needs; his
     Org, Memory Card wording, card choice spacing). Independent review: `codex exec --sandbox read-only` on
     `work/tl/p6_pairs.txt`: 0 Critical, 1 Important (card-0446, waived: glossary rule was wrong, JP is Tetomu's
     voice), 3 Minors fixed now (`docs/polish.md`, all ticked). Widest line 192/232 px.
-- **Next (phase 7):** insert/fit/check: `romdiff.py` against allowed ranges with the build's write log (does
-  build.py/insert.py emit one?), control-code check (lint does it), measure the card table's real box (budget is a
-  guess) if reachable. Then phase 8: QA tour of every text scene with visual-QA verdicts, graphics text (the bulk).
-  Story boxes beyond the first page of each ds scene were not shot yet (warps stop at the first box).
+  - Phase 6 harness review fixed (H:\translation\.harness\reviews\...-phase6.md): lint enforces glossary.md (JP term
+    -> EN form, Avoid spellings; `tests/test_lint_glossary.py`), check.py passes `--untranslated`, 帆船オルグ ->
+    Sailing Ship Org (D9), Tetomu voice/idiom Minors fixed, codex re-review saved `docs/reviews/p6-review.md`
+    (0 Critical/Important; its one Minor fixed), skipped style-reference/translator-brief recorded (D10).
+  - Phase 7 (docs/re/disc.md §Build verification, pac.md §Decode targets): `tools/verify.py`, run at the end of every
+    build: EXE romdiff + hook-site original bytes, no branch into a replaced span, PAC leaf diff (only text/font
+    leaves change), every string read back through every slot, built disc dumped back = tree + overlay. Mutation
+    tests `tests/test_verify.py`. Runtime: decoded tables grew ~50% but blocks are placed back to back (heap-like),
+    `tools/lzsmap.py` on lzslog traces: 0 overlaps. Lint covers widths, lines, control codes.
+- **Next (phase 8):** QA tour of every text scene with visual-QA verdicts (`qa_gate.py`), graphics text (the bulk:
+  menus, name plates, banners, game over, credits, chapter cards; translator brief + style reference first, D10),
+  `inkbox.py` on choice/centred boxes, `textcover.py`. Story boxes beyond the first page of each ds scene were not
+  shot yet (warps stop at the first box). Card table: idle オルゲットファイト (20000 frames, work/qa/p7card) never
+  ends, so its record-save prompt (likely where card-* shows) is still unreached; needs a kill/lose cheat.
   Space = normal ASCII space (VWF glyph); never `{sp81}` (0x81 takes no width under the VWF).
 - **Open questions (non-blocking):**
   - Action-stage game over not in the scene list: player HP not found (0x8007c6f8 is a sprite x, not HP; idle 15000
