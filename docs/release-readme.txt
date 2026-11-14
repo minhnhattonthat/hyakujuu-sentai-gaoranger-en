@@ -45,7 +45,8 @@ Translation status
   Staff credits                                    English (rebuilt roll)
   Title logo                                       Japanese (no official English logo)
   Brush hit effects (斬, 破, 滅...) and FMV brush calligraphy   kept as artwork
-  Voices, theme song                               Japanese audio
+  Spoken lines in FMVs and in game                 English subtitles (Japanese audio)
+  Theme song                                       Japanese audio
 
 Known issues
 ------------

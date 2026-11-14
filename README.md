@@ -20,7 +20,8 @@ or memory card file helps most.
 | Staff credits roll | Translated (rebuilt in English) |
 | Title logo | Left in Japanese (no official English logo) |
 | Brush hit effects (斬, 破, 滅...), FMV brush calligraphy | Kept as artwork |
-| Voices, theme song | Japanese audio |
+| Spoken lines (FMVs, in-game voice clips) | English subtitles over the Japanese audio |
+| Theme song | Japanese audio |
 
 Known issues: some staff names in the credits are read from the kanji (no English credit found; `docs/polish.md`);
 the action-stage game-over screen shares the robo one's redraw but was never reached in testing. See

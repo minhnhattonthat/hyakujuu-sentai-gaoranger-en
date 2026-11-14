@@ -2,11 +2,11 @@
 
 Updated at the end of every session. Keep it to what the next session needs; history is in git.
 
-- **Phase:** 9. Release: done 2026-11-14. Release zip built and verified: `release/GaoRanger_EN_v1.0.zip`
-  (GaoRanger_EN_v1.0.xdelta 2277708 bytes, SHA-1 1cc9a171...; + README.txt), `tools/release.py --version 1.0`
-  exit 0 (build, check 47 passed, smoke ok, jpleft 0, qa_gate story 8/8 + tour 447/447, textcov 0 unshown,
-  polish all ticked, README filled, no debug file, xdelta re-applied = build). Patched .bin SHA-1 22954f04b898...,
-  CRC32 5466d329. Not published: `gh release create` is the user's call (pipeline.md §Publish).
+- **Phase:** 9. Released v1.0 2026-11-15 (GitHub release, repo public): `release/GaoRanger_EN_v1.0.zip`
+  (xdelta 18114151 bytes, SHA-1 50ff3c1e...; + README.txt; FMV + in-game voice subtitles included).
+  `tools/release.py --version 1.0 --skip-build` exit 0 (check 51 passed, smoke ok, jpleft 0, story 8/8, tour
+  waived for the subtitle-only build, D23). Patched .bin SHA-1 cbc12bae5221..., CRC32 f154eb9b. Next tour must
+  re-init the tour manifest on the new build.
   **warp.py's default --cue is the original disc: always pass `--cue build/gaoranger_en.cue` for English shots.**
 - **Done:**
   - Step 0: repo setup (PCSX-Redux nightly + SCPH-5500 BIOS in tools/, mkpsxiso 2.30, armips 0.11.0, pre-commit
