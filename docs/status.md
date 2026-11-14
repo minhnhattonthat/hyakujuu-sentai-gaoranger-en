@@ -2,9 +2,10 @@
 
 Updated at the end of every session. Keep it to what the next session needs; history is in git.
 
-- **Phase:** 8. QA in the emulator in progress: graphics-text pipeline + 4 of ~13 texture groups done (2026-11-14).
-  Last build: `build/gaoranger_en.bin` (graphics edits in), verify 0 errors; warps load/save/option/tsound/tvib/
-  title/tnew/tload/ofmenu/overb/ds01 all OK on it (work/qa/p8/w1-w5), SHA-1 2f01fd5945f5..., smoke ok.
+- **Phase:** 8. QA in the emulator in progress: graphics text done except the credits (2026-11-14).
+  Last build: `build/gaoranger_en.bin` SHA-1 719afaa056fd..., build+verify exit 0, smoke ok, check.py green.
+  THE END seen in game on it (warp de07e, work/qa/p8/w6/de07e/f006000.png). **warp.py's default --cue is the
+  original disc: always pass `--cue build/gaoranger_en.cue` for English shots.**
 - **Done:**
   - Step 0: repo setup (PCSX-Redux nightly + SCPH-5500 BIOS in tools/, mkpsxiso 2.30, armips 0.11.0, pre-commit
     hook runs `tools/check.py`, guard hook verified, rom.sha1). Original boots: `work/qa/smoke-orig`.
@@ -67,8 +68,15 @@ Updated at the end of every session. Keep it to what the next session needs; his
     insert.py writes every copy, verify.py checks them. Fonts: Anton, Liberation Sans (OFL, docs/fonts.md). Done:
     TIM 131 (menus, plates), 7 + 96 (game over), 159 (title wheel). Per-row state: docs/re/graphics.md §Redraw
     status. Wording: D12.
-- **Next (phase 8):** remaining graphics rows in docs/re/graphics.md §Redraw status (136 banners, 154 THE END,
-  5 HUD label, effect kanji 4/6/8/77, credits 142/148-150: needs cast/staff romanisation, D2/D3), then: QA tour of
+  - Phase 8 session 2: TIM 136 story banners (composites; layout from the 12_17 sprite groups), 154 THE END,
+    5 ORGETTE HUD label, 77 好機 -> CHANCE!; hit kanji 4/6/8 kept (D13). `tools/sprgroups.py` decodes 12_17
+    sprite-group leaves (credits, banners); `warp.py --shot-every N`.
+- **Next (phase 8):** credits (TIMs 142/148-150): build the credits redraw per docs/re/graphics.md §Credits layout
+  (rewrite 12_17 sprite u/v/w/h + new English strips; cast romanisation D2, staff readings guessed -> docs/polish.md).
+  In-game shots still missing for banners (no trigger found in ds01/ds04/de03-05 within 12000 frames: try the
+  robo-battle/robo-scene files after those chapters, or the 12_18 script ops that pick 12_17 groups), ORGETTE
+  (HUD shows it only in some state: not on screen in a11's first 9000 frames), CHANCE! (robo battle prompt).
+  Then: QA tour of
   every text scene with visual-QA verdicts (`qa_gate.py`), graphics text (the bulk:
   menus, name plates, banners, game over, credits, chapter cards; translator brief + style reference first, D10),
   `inkbox.py` on choice/centred boxes, `textcover.py`. Story boxes beyond the first page of each ds scene were not
@@ -90,4 +98,5 @@ Updated at the end of every session. Keep it to what the next session needs; his
     save/load failed, corrupted data, option-0092/00e6/0116 (docs/re/text.md §Marker build and coverage).
   - Debug menu tables left Japanese (unreachable); they would draw as garbage now that hiragana cells hold English.
 - **Open bugs:** none.
-- **Waiting on the user:** nothing.
+- **Waiting on the user:** (non-blocking) D13: brush hit kanji (斬 etc.) kept as decoration; say if they should
+  become English words.

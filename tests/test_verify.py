@@ -55,7 +55,9 @@ def test_wrong_text_and_foreign_leaf(overlay, tmp_path):
     shutil.copytree(overlay, tmp_path / "o")
     f = tmp_path / "o" / "DATA" / "DS_ST01.PAC"
     node = pac.parse(f.read_bytes())
-    path = next(p for p, _ in verify.leaves(f.read_bytes()) if p not in ((13, 12), (9, 7)))
+    gfx = insert.gfx_edit.patched_leaves()  # edited graphics leaves are allowed changes (their own check)
+    path = next(p for p, _ in verify.leaves(f.read_bytes())
+                if p not in ((13, 12), (9, 7)) and f"DS_ST01.PAC/{'_'.join(map(str, p))}" not in gfx)
     data = dict(verify.leaves(f.read_bytes()))[path]
     node = insert.set_leaf(node, list(path), bytes([data[0] ^ 1]) + data[1:])
     insert.finish(node)

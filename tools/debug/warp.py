@@ -58,6 +58,9 @@ def load_scenes():
     return scenes
 
 
+SHOT_EVERY = 150
+
+
 def run(sc, cue, out, frames, state, mash, trace, skip=True, card=None, scripts=(), extra_vars=()):
     out = out or os.path.join(ROOT, "work", "qa", "warp", sc["name"])
     os.makedirs(out, exist_ok=True)
@@ -73,7 +76,7 @@ def run(sc, cue, out, frames, state, mash, trace, skip=True, card=None, scripts=
         card = os.path.join(out, "blank.mcd")
         open(card, "wb").write(blank_card())
     cmd = [sys.executable, "-X", "utf8", os.path.join(SKILL, "scripts", "emu.py"), cue, "--out", out,
-           "--frames", str(frames or sc["frames"]), "--shot-every", "150", "--sheet", "--timeout", "1500",
+           "--frames", str(frames or sc["frames"]), "--shot-every", str(SHOT_EVERY), "--sheet", "--timeout", "1500",
            "--script", os.path.join(ROOT, "tools", "debug", "warp.lua"),
            "--var", f"CHAPTER={sc['chapter']}", "--var", f"AFTER={sc['after']}", "--sav", card]
     for i, (fr, to) in enumerate(sc["swaps"]):
@@ -142,7 +145,10 @@ def main():
     ap.add_argument("--script", action="append", default=[], help="extra Lua probe (e.g. tools/lua/textptr.lua)")
     ap.add_argument("--var", action="append", default=[], help="extra warp.lua/probe global NAME=LUA (wins over "
                     "scenes.txt), e.g. HOLD=0 to keep pressing circle through every story box")
+    ap.add_argument("--shot-every", type=int, default=150, help="frames between shots (short banners: 20)")
     a = ap.parse_args()
+    global SHOT_EVERY
+    SHOT_EVERY = a.shot_every
     scenes = load_scenes()
     if a.list:
         for s in scenes.values():

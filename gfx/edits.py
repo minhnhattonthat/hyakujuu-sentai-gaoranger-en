@@ -11,6 +11,7 @@ SMALL = dict(font="sans-b")  # red 16-19 px option values
 TITLE = dict(font="sans-b", size=14)  # 19-20 px title wheel items (lime, white top, dark outline)
 GLOW = [10, 6, 4, 3, 2, 2, 1, 1]  # game over logo: ramp index by distance from the letters (core = 15)
 MENU20 = dict(font="anton", size=16, tracking=1)  # game-over choices (orange gradient, dark outline), caps
+BANNER = dict(font="anton", fill=15, glow=[13, 9, 6, 3, 2, 1, 1], tracking=1)  # story banners (white, ramp glow)
 GAMEOVER_TOP = [  # rows 0-110: the same pixels in the action (TIM 7) and robo (TIM 96) game-over pages
     {"rect": (0, 0, 225, 64), "text": "GAME OVER", "font": "anton", "fill": 15, "glow": GLOW, "tracking": 2},
     {"rect": (225, 0, 31, 26), "clear": True},  # the separate long-vowel bar after バ
@@ -73,5 +74,26 @@ EDITS = {
         {"rect": (8, 200, 127, 11), "text": "©2001 TV Asahi / Toei", "font": "sans-b", "ring": 0},
         {"rect": (11, 226, 81, 19), "text": "Easy", **TITLE},
         {"rect": (100, 226, 97, 20), "text": "Hard", **TITLE},
+    ]),
+    # TIM 136: DS_ST01/04, DE_ST03-05 4: story banners, one 48 px line of two pieces each (name + 誕生/覚醒; sprite
+    # groups in the PAC's 12_17 leaf, tools/sprgroups.py), CLUT rows 0-5 = orange/green/purple variants
+    "cb0cf6ab0650": (0, [
+        {"rects": [(0, 0, 248, 48), (192, 48, 56, 48)], "text": "GAOMUSCLE STRIKER IS BORN!", **BANNER},
+        {"rects": [(0, 96, 224, 48), (168, 144, 72, 48)], "text": "GAOICARUS IS BORN!", **BANNER},
+        {"rects": [(0, 192, 216, 48), (0, 144, 88, 48)], "text": "GAOSILVER AWAKENS!", **BANNER},
+    ]),
+    # TIM 154: DE_ST07E 9_3, おわり after the credits (red, white rim, grey glow)
+    "69ccdfb64f5e": (0, [
+        {"rect": (0, 0, 80, 32), "text": "THE END", "font": "anton", "fill": 8, "glow": [15, 12, 7, 3, 1],
+         "tracking": 1},
+    ]),
+    # TIM 77: robo battles 1_14_5, 好機 (chance to strike) prompt: white letters, purple glow; the rest are effects
+    "8fb456fd1084": (0, [
+        {"rect": (60, 99, 90, 46), "text": "CHANCE!", "font": "anton", "fill": 15, "glow": [10, 7, 5, 3, 2, 1],
+         "tracking": 1},
+    ]),
+    # TIM 5: A_*.PAC 15_4, action-stage HUD: オルゲット label beside the counter digits
+    "d352ef235210": (0, [
+        {"rect": (105, 65, 108, 39), "text": "ORGETTE", "font": "sans-b"},
     ]),
 }

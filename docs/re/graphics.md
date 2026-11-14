@@ -50,8 +50,20 @@ Preview: `python -X utf8 tools/gfx.py preview` (original | English per image, wo
 | 159 | English title wheel/submenus (composites), copyright line; TEST USER kept (debug) | title, tnew, ofmenu, tload: w2-w5 |
 | 158, 163, 135 | logo / logo art: kept Japanese (D5, D12) | - |
 | 124 | no text (skull textures): drop from the list | - |
-| 136 | TODO story banners: ガオマッスルストライカー, 誕生 (x2), ガオイカロス, 覚醒, ガオシルバー | ds01/ds04/de03-05 |
-| 154 | TODO おわり -> THE END | de07e |
-| 5 | TODO オルゲット HUD counter label (beside the digit font) | any action stage |
-| 4, 6, 8, 77 | TODO brush effect kanji 斬 / 破削烈魂滅痛砕 / 牙吹 滅鬼 / 好機: rects are irregular, check the sprite use in game first | action stages, robo battles |
-| 142, 148, 149, 150 | TODO credits (cast + staff lists, (c) line) | de07 |
+| 136 | English: GAOMUSCLE STRIKER IS BORN!, GAOICARUS IS BORN!, GAOSILVER AWAKENS! (composites: each banner is one line of two pieces, name + 誕生/覚醒, sprite groups g00-g05 of the PAC's 12_17 leaf) | not shown by ds01/ds04/de03-05 in 12000 frames (HOLD=0 and default mash, shots every 20 frames, work/qa/p8/story20): trigger unknown |
+| 154 | English: THE END | de07e |
+| 5 | English: ORGETTE (HUD label) | action stage |
+| 77 | English: 好機 -> CHANCE! (robo battle prompt); rest of the sheet is effects | robo battle, when the prompt fires |
+| 4, 6, 8 | kept: brush impact kanji 斬 / 破削烈魂滅痛砕 / 牙吹 滅鬼 shown on hits (sound-effect-like decoration, glossary: no sound effects in text); D13 | - |
+| 142, 148, 149, 150 | TODO credits: see §Credits layout | de07 (work/qa/p8/credits, shots every 30 frames) |
+
+## Credits layout (DE_ST07)
+`python -X utf8 tools/sprgroups.py DE_ST07.PAC/12_17 --tpage-x 9,10,11,12` lists every credits sprite (u32 offset
+table from 0x3c, group = u16 count + count x {s16 x, s16 y, u8 u, v, w, h, u16 tpage, u16 clut}). Atlases: tpage x 9
+= TIM 148 (cast, 576,256), 10 = 149 (staff), 11 = 150 (special thanks/companies), 12 = 142 ((c) lines, Orgette
+cast). Lines are built from fragments, often single 16x16 kana reused across groups (g32 = 4 single cells + a
+name; ツエ drawn twice = ツエツエ; ナ+レー+ション), so a per-rect redraw can't give English. Plan: a credits builder that
+renders each group's English line(s) as new strips packed into the 4 atlases (16 px rows, sans 12-13 px) and
+rewrites each sprite's u/v/w/h (and x for centring) in 12_17, keeping every group's sprite count (unused sprites ->
+w 0). Romanisation per D2 (official cast spellings; staff readings Hepburn, guessed readings listed in
+docs/polish.md for the user). Same 12_17 format holds the story banners (DS/DE story PACs, tpage x 9).
