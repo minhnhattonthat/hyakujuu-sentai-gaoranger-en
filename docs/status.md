@@ -126,9 +126,14 @@ Updated at the end of every session. Keep it to what the next session needs; his
     fmvdiff.py checks re-encode damage (0 on all). Seen in game: bb01c (RB0, f3420-6060), a11 (RN1). Build
     4a4ffc1d4385, check 48 passed, smoke ok. RB0 frame 1190's right-edge stripe is original (frame untouched).
     **v1.0 release zip is stale** (rebuild with release.py when the user asks).
-- **Next:** in-game voice subtitles (CDXA clips: Org taunts, robo attack calls, narration with no text box): engine
-  hook on the clip-play call (O_XAHEAD clip table, docs/re/fmv.md); transcripts in work/subs/asr.tsv (not committed,
-  regenerate with asr.py). Re-tour + visual QA of the subtitled FMV scenes before a new release. Publishing is the user's call (pipeline.md §Publish: `gh release create v1.0 release/GaoRanger_EN_v1.0.zip`,
+  - In-game voice subtitles (2026-11-15, D22, docs/re/fmv.md §In-game voice): engine hook `asm/subs.asm` (stubs in
+    dead code 0x8002F10C, blob appended to the EXE and copied to 0x800C8000 at boot) + `tools/subs.py`; 94 CDXA rows
+    in script/subs.tsv (transcripts work/subs/asr2.tsv: `asr.py --prompt` with the cast names, not committed).
+    Skipped: lines already shown as text, chants/grunts, 4 unclear lines (listed in subs.tsv). Seen in game on every
+    scene (`warp.py --all` with tools/lua/subshot.lua: 101 OK; one shot per line checked by eye). tests/test_subs.py.
+- **Next:** user check of the in-game subtitle wording, esp. guesses: CDXA00_c2 22.0/23.8 ("You never give it a
+  thought." / "Isn't that so?", opening narration), CDXA00_c11 6.44 (which Highness Duke: Whisper hears only
+  "ハイネスデュークオルグ"), CDXA01_c1 "Yabaiba" pun. Re-tour + visual QA of the subtitled FMV scenes before a new release. Publishing is the user's call (pipeline.md §Publish: `gh release create v1.0 release/GaoRanger_EN_v1.0.zip`,
   notes with base hashes + patch SHA-1). Optional: player bug reports (GitHub issues).
   Known gap (non-blocking): action-stage game over (TIM 7) never shown in game: player HP not found (ramsearch
   over work/qa/p8/hp dumps leaves ~6.5k candidates); TIM 7 uses the same rects/edit as TIM 96, seen in overb.

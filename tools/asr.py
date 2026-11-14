@@ -29,6 +29,7 @@ def main():
     ap.add_argument("--model", default="large-v3")
     ap.add_argument("--cpu", action="store_true")
     ap.add_argument("--no-vad", action="store_true", help="voice under loud music: VAD can drop it all")
+    ap.add_argument("--prompt", help="Whisper initial prompt: the cast's names, so they come out spelled right")
     a = ap.parse_args()
     m = WhisperModel(a.model, device="cpu" if a.cpu else "cuda", compute_type="int8" if a.cpu else "float16")
     with open(a.out, "w", encoding="utf-8") as f:
@@ -36,7 +37,8 @@ def main():
             with wave.open(w) as r:  # own decode: faster-whisper 1.2.1's PyAV call breaks on av 19
                 assert r.getframerate() == 16000 and r.getnchannels() == 1 and r.getsampwidth() == 2, w
                 pcm = np.frombuffer(r.readframes(r.getnframes()), "<i2").astype(np.float32) / 32768
-            segs, _ = m.transcribe(pcm, language="ja", vad_filter=not a.no_vad, beam_size=5, word_timestamps=True)
+            segs, _ = m.transcribe(pcm, language="ja", vad_filter=not a.no_vad, beam_size=5, word_timestamps=True,
+                                   initial_prompt=a.prompt)
             for s in segs:
                 # segment times span leading/trailing music; the words' own times are the subtitle's
                 t0, t1 = (s.words[0].start, s.words[-1].end) if s.words else (s.start, s.end)

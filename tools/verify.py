@@ -42,23 +42,27 @@ from tbl import Table  # noqa: E402
 
 ROOT = mkdisc.ROOT
 EXE_BASE = 0x80010000 - 0x800  # file offset = address - EXE_BASE
-WTAB = (0x80022A6C, 0x80022BC4)  # width table region: the replaced read/write PCdrv functions
+WTAB = build.DEAD[0]  # width table region: the replaced read/write PCdrv functions
 
 
-def asm_writes(size):
-    """[(file offset, bytes)] runs asm/vwf.asm writes, from two armips runs over filled dummies of `size` bytes."""
+def asm_writes(size, name="vwf.asm"):
+    """[(file offset, bytes)] runs asm/<name> writes, from two armips runs over filled dummies of `size` bytes (bytes
+    past `size`: the subs.asm blob appended to the image). subs.asm's code checksum word is filled in as build does."""
     with tempfile.TemporaryDirectory() as tmp:
         t = Path(tmp)
         (t / "w.bin").write_bytes(font.widths())
+        (t / "subs.asm").write_text(build.subs.asm(), encoding="ascii")
         outs = []
         for fill in (0x00, 0xFF):
             (t / "in.bin").write_bytes(bytes([fill]) * size)
-            r = subprocess.run([str(build.ARMIPS), str(ROOT / "asm" / "vwf.asm"), "-strequ", "EXE_IN", str(t / "in.bin"),
-                                "-strequ", "EXE_OUT", str(t / "out.bin"), "-strequ", "WIDTHS", str(t / "w.bin")],
+            r = subprocess.run([str(build.ARMIPS), str(ROOT / "asm" / name), "-strequ", "EXE_IN", str(t / "in.bin"),
+                                "-strequ", "EXE_OUT", str(t / "out.bin"), "-strequ", "WIDTHS", str(t / "w.bin"),
+                                "-strequ", "SUBDATA", str(t / "subs.asm"), "-sym", str(t / "s.sym")],
                                capture_output=True)
             if r.returncode:
                 raise SystemExit(f"armips failed: {r.stdout!r}")
-            outs.append((t / "out.bin").read_bytes())
+            out = (t / "out.bin").read_bytes()
+            outs.append(build.sub_checksum(out, t / "s.sym") if name == "subs.asm" else out)
     z, f = outs
     runs, start = [], None
     for i in range(len(z) + 1):
@@ -75,32 +79,43 @@ def check_exe(overlay):
     orig = (mkdisc.TREE / "SLPS_033.53").read_bytes()
     new = (Path(overlay) / "SLPS_033.53").read_bytes()
     writes, errs = [], []
-    for o, data in asm_writes(len(orig)):
-        a, n = o + EXE_BASE, len(data)
-        site = [(s, bytes.fromhex(h)) for s, h in build.HOOKS.items() if s <= a and a + n <= s + len(h) // 2]
-        if WTAB[0] <= a and a + n <= WTAB[1]:
-            want = orig[o:o + n]  # the whole region is dead code, any original bytes are fine
-        elif site:
-            s, h = site[0]
-            want = h[a - s:a - s + n]
-        else:
-            errs.append(f"EXE vwf.asm writes {n} bytes at {a:08x}, outside every build.HOOKS site")
-            continue
-        writes.append((o, want, data, f"vwf.asm@{a:08x}"))
-    e, _ = romdiff.check(orig, new, set(range(WTAB[0] - EXE_BASE, WTAB[1] - EXE_BASE)), writes)
+    for name in ("vwf.asm", "subs.asm"):
+        for o, data in asm_writes(len(orig), name):
+            a, n = o + EXE_BASE, len(data)
+            site = [(s, bytes.fromhex(h)) for s, h in build.HOOKS.items() if s <= a and a + n <= s + len(h) // 2]
+            if any(lo <= a and a + n <= hi for lo, hi in build.DEAD):
+                want = orig[o:o + n]  # the whole region is dead code, any original bytes are fine
+            elif site:
+                s, h = site[0]
+                want = h[a - s:a - s + n]
+            elif o >= len(orig):
+                want = b"\xff" * n  # the appended blob (romdiff counts bytes past ORIG as 0xff)
+            elif o == 0x1C and n == 4 and name == "subs.asm":
+                want = orig[o:o + n]  # PS-X EXE header t_size: grows by the blob
+            else:
+                errs.append(f"EXE {name} writes {n} bytes at {a:08x}, outside every build.HOOKS site")
+                continue
+            writes.append((o, want, data, f"{name}@{a:08x}"))
+    dead = set().union(*(range(lo - EXE_BASE, hi - EXE_BASE) for lo, hi in build.DEAD))
+    e, _ = romdiff.check(orig, new, dead, writes)
+    if len(new) % 0x800 or struct.unpack_from("<I", new, 0x1C)[0] != len(new) - 0x800:
+        errs.append(f"EXE t_size {struct.unpack_from('<I', new, 0x1C)[0]:#x} != file size {len(new):#x} - 0x800")
     return errs + [f"EXE {x}" for x in e] + branch_errors(orig)
 
 
 def branch_errors(exe, prgs=None):
-    """Original code or data reaching into a span the build replaced (a hook's middle, or the width table): EXE
+    """Original code or data reaching into a span the build replaced (a hook's middle, or a dead region): EXE
     branches and j/jal, PRG j/jal (PRGs run at 0x80xxxxxx), and any aligned word in the EXE or a PRG."""
-    spans = [(a, a + len(h) // 2) for a, h in build.HOOKS.items() if a != WTAB[0]]
+    spans = [(a, a + len(h) // 2) for a, h in build.HOOKS.items() if not any(lo <= a < hi for lo, hi in build.DEAD)]
+
+    def indead(t):
+        return any(lo <= t < hi for lo, hi in build.DEAD)
 
     def inside(t):
-        return WTAB[0] <= t < WTAB[1] or any(lo < t < hi for lo, hi in spans)
+        return indead(t) or any(lo < t < hi for lo, hi in spans)
 
     def replaced(pc):
-        return WTAB[0] <= pc < WTAB[1] or any(lo <= pc < hi for lo, hi in spans)
+        return indead(pc) or any(lo <= pc < hi for lo, hi in spans)
 
     if prgs is None:
         prgs = {p.name: p.read_bytes() for p in sorted((mkdisc.TREE / "DATA").glob("*.PRG"))}

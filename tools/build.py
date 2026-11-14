@@ -9,6 +9,7 @@ original (tests/test_disc.py).
 """
 import argparse
 import shutil
+import struct
 import subprocess
 import sys
 from pathlib import Path
@@ -19,6 +20,7 @@ import fmvcap  # noqa: E402
 import font  # noqa: E402
 import insert  # noqa: E402
 import mkdisc  # noqa: E402
+import subs  # noqa: E402
 
 ROOT = mkdisc.ROOT
 CUE = ROOT / "rom" / "Hyakujuu Sentai GaoRanger (Japan).cue"
@@ -32,7 +34,15 @@ HOOKS = {
                 "8010020021600202",
     0x800154D8: "14000724",
     0x80015504: "14000724",
+    # asm/subs.asm (in-game voice subtitles)
+    0x8004C970: "0680023cf03b4224",  # crt0: lui v0 / addiu v0 (BSS clear start) -> j CopyStub
+    0x8002E468: "18e3000c",  # flip: jal DrawOTag -> jal FlipStub
+    0x8002E8B4: "9be1000c",  # frame end: jal DrawSync -> jal MainStub
 }
+# dead code the asm may overwrite whole (no jal, branch, pointer word or lui pair reaches it: verify.branch_errors)
+DEAD = [(0x80022A6C, 0x80022BC4),  # vwf.asm width table: host-file read/write functions
+        (0x8002F10C, 0x8002F444)]  # subs.asm stubs: a window function nothing calls
+SUB_BLOB, SUB_TAIL = 0x800C8000, 0x54800  # asm/subs.asm: blob address and its file offset in the EXE
 
 
 def ensure_tree():
@@ -55,10 +65,34 @@ def build_exe(overlay):
     widths = ROOT / "build" / "vwf_widths.bin"
     widths.write_bytes(font.widths())
     out = overlay / "SLPS_033.53"
+    vwf = ROOT / "build" / "exe_vwf.bin"
     r = subprocess.run([str(ARMIPS), str(ROOT / "asm" / "vwf.asm"), "-strequ", "EXE_IN", str(exe),
-                        "-strequ", "EXE_OUT", str(out), "-strequ", "WIDTHS", str(widths)])
-    if r.returncode or len(out.read_bytes()) != len(orig):
-        sys.exit("armips failed")
+                        "-strequ", "EXE_OUT", str(vwf), "-strequ", "WIDTHS", str(widths)])
+    if r.returncode or len(vwf.read_bytes()) != len(orig):
+        sys.exit("armips failed (vwf.asm)")
+    data = ROOT / "build" / "subs_data.asm"
+    errs = subs.lint()
+    if errs:
+        sys.exit("\n".join(errs))
+    data.write_text(subs.asm(), encoding="ascii")
+    sym = ROOT / "build" / "subs.sym"
+    r = subprocess.run([str(ARMIPS), str(ROOT / "asm" / "subs.asm"), "-strequ", "EXE_IN", str(vwf),
+                        "-strequ", "EXE_OUT", str(out), "-strequ", "SUBDATA", str(data), "-sym", str(sym)])
+    if r.returncode or len(out.read_bytes()) <= len(orig):
+        sys.exit("armips failed (subs.asm)")
+    out.write_bytes(sub_checksum(out.read_bytes(), sym))
+
+
+def sub_checksum(exe, sym):
+    """asm/subs.asm: the blob's second word = sum of the code words CODE_START..CODE_END (MainStub checks it)."""
+    labels = {}
+    for line in Path(sym).read_text().splitlines():
+        p = line.split()
+        if len(p) == 2:
+            labels[p[1].upper()] = int(p[0], 16)
+    a, b = (labels[k] - SUB_BLOB + SUB_TAIL for k in ("CODE_START", "CODE_END"))
+    s = sum(struct.unpack_from(f"<{(b - a) // 4}I", exe, a)) & 0xFFFFFFFF
+    return exe[:SUB_TAIL + 4] + struct.pack("<I", s) + exe[SUB_TAIL + 8:]
 
 
 def main():

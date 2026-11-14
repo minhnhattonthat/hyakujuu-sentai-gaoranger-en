@@ -238,8 +238,10 @@ def cached(overlay):
     """build.py: the edited STRs into overlay/XA/, from build/fmvcache/<hash of code, font, subs> when present."""
     import hashlib
     import shutil
-    srcs = [Path(__file__), Path(strv.__file__), FONT] + ([SUBS] if SUBS.is_file() else [])
-    h = hashlib.sha1(b"".join(p.read_bytes() for p in srcs)).hexdigest()[:12]
+    srcs = [Path(__file__), Path(strv.__file__), FONT]
+    # only the FMV rows of subs.tsv: the CDXA (in-game voice) rows don't touch the STRs
+    h = hashlib.sha1(b"".join(p.read_bytes() for p in srcs) + repr(sorted(load_subs().items())).encode()
+                     ).hexdigest()[:12]
     cache = ROOT / "build" / "fmvcache" / h
     names = edited()
     if not all((cache / "XA" / f"{n}.STR").is_file() for n in names):

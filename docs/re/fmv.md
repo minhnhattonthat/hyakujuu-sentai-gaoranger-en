@@ -61,6 +61,28 @@ size, only caption-frame sectors change, EDC/ECC valid, caption frames decode.
   RB1/RB3/RN0/RN2 attack calls and the Org revival chant. In-game voice: `O_XAHEAD.PAC` leaf 1 = clip table (u16
   count 0x5f at 0, then 8-byte rows from 0x10: u16 channel, u16 start, u16 length, u16 bank 0-2 = CDXA00-02).
   CDXA00 (16 ch): Tetomu's narration (story/endings) and menu voice; CDXA01: boss taunts in action stages and
-  story intros; CDXA02: robo-scene Org chants and attack calls. CDXA lines are kept in subs.tsv as rows with src
-  `CDXA0n_c<ch>` for the engine hook still to do (hook the clip-play call, draw the clip's line with the VWF
-  renderer for its length; robo scenes may not load the font TIM).
+  story intros; CDXA02: robo-scene Org chants and attack calls. CDXA lines are rows with src `CDXA0n_c<ch>`, drawn
+  by the engine (§In-game voice).
+
+## In-game voice (2026-11-15, D22)
+- Every voice clip plays through `xa_play` 0x80034F78 (flags a0, a1 = &{channel, lba, length in sectors};
+  `tools/lua/xalog.lua` logs them). Driver globals (gp = 0x80063B54): +0x290 play mode (3 seeking, 0x13 playing, 0
+  stopped), +0x2a0/+0x2a4 clip start/end LBA, +0x2a8 LBA of the last sector read (advances ~2.5 sectors/frame at 2x),
+  +0x2ac XA flag, +0x2b5 channel. The drive reads on past +0x2a4 until the game stops it.
+- Hook (`asm/subs.asm`, data from `tools/subs.py` -> build/subs_data.asm): frame end `jal DrawSync` 0x8002E8B4 ->
+  MainStub, flip `jal DrawOTag` 0x8002E468 -> FlipStub, crt0 0x8004C970 -> CopyStub. Stubs sit in dead code
+  0x8002F10C-0x8002F444 (build.DEAD). The blob (code, font, SubTable, texts) is appended to the EXE image at
+  0x80064000 (t_size grows; BSS, so CopyStub copies it before crt0 clears BSS) and runs at 0x800C8000-0x800CD000
+  (never written by the original game: `tools/lua/subwatch.lua`, only the BIOS boot clear; `tools/memfree.py`).
+  MainStub checks the blob's magic and code checksum each frame and falls back to the plain calls if it was ever
+  overwritten.
+- Once a frame FindRow maps (+0x2a8 - file LBA, channel) to a SubTable row (only while mode & 3, XA, and sector <
+  clip end); a new row must come back 4 main-loop passes in a row (debounce), then Render draws the line with the English VWF font into a 1-bit mask, outlines it into a
+  304x28 4bpp canvas and LoadImages it to VRAM x 768 y 416 (+ the 48 px right part at y 444) with its CLUT at
+  800,412. The flip then sprites it over the game OT at the bottom centre of the DRAWENV clip (0x800A2448), top
+  56 px above the clip bottom (some screens show only 224 lines). Pause/stop follow the audio.
+- Rows: times are the channel's own audio (asr.py on xawav.py output); `subs.table` maps them to file sectors by
+  the channel's audio-sector list and starts a mid-channel row 2 sectors late (a clip's last sector can hold the
+  next line's first words: a 2-6 frame flash; the debounce catches the rest). Check on a build: `warp.py SCENE --cue build/gaoranger_en.cue
+  --script tools/lua/subshot.lua --var CURROW=.. --var OKFLAG=..` (addresses from build/subs.sym) logs each row
+  change and shoots it. Warp routes mash circle, which cuts some clips short.

@@ -46,11 +46,12 @@ def test_exe_hook(tmp_path):
     o = 0x80022A6C - 0x80010000 + 0x800
     w = font.widths()
     assert exe[o:o + len(w)] == w
-    diff = [i for i in range(len(exe)) if exe[i] != orig[i]]
-    lo, hi = 0x800 + 0x80022A6C - 0x80010000, 0x800 + 0x80022BC4 - 0x80010000
-    for i in diff:  # every changed byte is at a site build.HOOKS checks
+    assert len(exe) > len(orig)  # asm/subs.asm appends its blob to the image
+    diff = [i for i in range(len(orig)) if exe[i] != orig[i] and not 0x1C <= i < 0x20]  # 0x1C: t_size grows
+    for i in diff:  # every changed byte is at a site build.HOOKS checks, or in dead code build.DEAD names
         a = i - 0x800 + 0x80010000
-        assert lo <= i < hi or any(k <= a < k + len(v) // 2 for k, v in build.HOOKS.items()), hex(a)
+        assert any(lo <= a < hi for lo, hi in build.DEAD) or \
+            any(k <= a < k + len(v) // 2 for k, v in build.HOOKS.items()), hex(a)
 
 
 @need_disc

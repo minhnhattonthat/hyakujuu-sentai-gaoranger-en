@@ -1,6 +1,7 @@
 # Spoken-line subtitles (docs/re/fmv.md §Subtitles). src<TAB>start s<TAB>end s<TAB>ja<TAB>en; '|' in en forces a line break.
-# src = XA/<src>.STR: burned into the FMV by tools/fmvcap.py (build.py). CDXA* (in-game voice bank_channel) rows are
-# not built yet (engine hook to do). Times and ja from tools/asr.py (Whisper), checked against the in-game text.
+# src = XA/<src>.STR: burned into the FMV by tools/fmvcap.py (build.py). src = CDXA0<n>_c<ch>: in-game voice (XA/CDXA0<n>.XA
+# channel ch), times in that channel's own audio (xawav/asr timeline), drawn by the engine (asm/subs.asm, tools/subs.py).
+# Times and ja from tools/asr.py (Whisper), checked against the in-game text.
 # Not subtitled: OP0 theme song (lyrics), RB4 (music + GAOICARUS caption), RB5 (grunt), the 誕生! shouts under the
 # RB2/RB4 name captions.
 RB0	0.00	3.40	獣の剣と魂の宝珠が合わさって	When the sword of the beasts and the jewels of the soul unite,
@@ -27,3 +28,100 @@ RN1	6.38	10.20	自然の力と人の思いが一つになり	the power of nature
 RN1	10.28	14.40	地球を守る5人の戦士が生まれるのです	and five warriors are born to protect the Earth.
 RN2	0.00	3.60	鬼は内、福は外	Demons in! Fortune out!
 RN2_B	0.00	3.60	鬼は内、福は外	Demons in! Fortune out!
+# In-game voice (D22). Not subtitled: lines the game already shows as text (story boxes, save/load/option prompts),
+# chants and grunts (オルゲット cheers, ぬううう, ガオー), and lines Whisper could not make out (CDXA00_c5 16.7
+# 現代によみがえりし…, CDXA01_c5 どうだどうだ…, CDXA02_c11 シャークショット, CDXA02_c15 バークショット).
+CDXA00_c0	0.00	6.30	風が大空に命の叫びを伝え、パワーアニマルの心を目覚めさせるとき、	When the wind carries the cry of life across the sky|and awakens the hearts of the Power Animals,
+CDXA00_c0	6.38	14.24	自然の力と人の思いが一つになり、地球を守る五人の戦士が生まれるのです。	the power of nature and the will of people become one,|and five warriors are born to protect the Earth.
+CDXA00_c0	20.86	22.50	正義の雄叫びあり!	...there is a roar of justice!
+CDXA00_c1	0.00	6.42	獣の剣と魂の宝珠が合わさって、剣の音色が天空を越えて響くとき、	When the beasts' sword and the soul jewels unite,|and the sword's song rings beyond the heavens,
+CDXA00_c1	6.42	14.20	その音色に応え、大自然の精霊たちが光の道を駆け、地上に降臨するのです。	answering its call, the spirits of nature race down|a road of light and descend to the earth.
+CDXA00_c1	14.48	18.16	ガオレンジャーの活躍に追い詰められたオルグたち。	The Orgs, driven into a corner by the GaoRangers...
+CDXA00_c2	0.00	5.60	しかし、ガオレンジャーの絶望に応えるように、さらなるパワーアニマルたちが集い、	But in answer to the GaoRangers' despair,|more Power Animals gathered,
+CDXA00_c2	5.60	11.80	筋肉の戦士、ガオマッスルストライカーが誕生したのです。	and the warrior of muscle,|GaoMuscle Striker, was born.
+CDXA00_c2	12.18	16.26	シュテンなる一本角が、じきじきにお出ましのようです。	It seems the one-horned Shuten|has come out in person.
+CDXA00_c2	22.00	23.64	そんなこと気にしない。	You never give it a thought.
+CDXA00_c2	23.82	24.40	そうでしょう。	Isn't that so?
+CDXA00_c3	0.00	4.54	5人の心が一つになるとき、ガオゴリラを中心に	When the five hearts become one,|with GaoGorilla at the center,
+CDXA00_c3	4.54	9.60	パワーアニマルたちが一つに集まり、筋肉の戦士が誕生するのです。	the Power Animals gather together|and the warrior of muscle is born.
+CDXA00_c3	17.30	19.68	今回はどうも様子が違います。	Something seems different this time.
+CDXA00_c4	0.00	5.00	かくして、ガオレンジャーの正義の心と、それに応える聖なる獣たちによって、	And so, by the GaoRangers' hearts of justice|and the sacred beasts who answered them,
+CDXA00_c4	5.00	8.90	邪悪な鬼たちは滅びました。	the wicked ogres were destroyed.
+CDXA00_c4	16.80	19.24	ガオレンジャー、立ち上がるのです。	GaoRangers, rise up!
+CDXA00_c4	19.46	20.46	よかったー。	Thank goodness!
+CDXA00_c4	21.10	22.00	百獣戦隊!	Hyakujuu Sentai...
+CDXA00_c5	0.00	4.60	そして、邪気に操られていた狼鬼の正体は、	And Rouki, who was controlled by evil spirits,|was in truth...
+CDXA00_c5	4.60	8.64	ガオレンジャー6人目の戦士、ガオシルバーだったのです。	the sixth GaoRanger warrior, GaoSilver!
+CDXA00_c5	13.30	16.46	ガオの聖なる力が、奇跡を呼んだんだわ。	The sacred power of Gao has worked a miracle!
+CDXA00_c5	21.04	21.80	百獣戦隊!	Hyakujuu Sentai...
+CDXA00_c6	0.00	5.30	三つの宝珠が紋章を描くとき、魔獣たちは一つに重なり、	When the three jewels draw the crest,|the demon beasts become one
+CDXA00_c6	5.30	8.26	邪悪なる王が誕生するのです。	and an evil king is born.
+CDXA00_c6	8.44	12.72	ガオレンジャーの活躍によって、邪悪な鬼は倒されました。	Thanks to the GaoRangers,|the wicked ogre has been defeated.
+CDXA00_c6	16.66	17.30	やったよ!	We did it!
+CDXA00_c6	19.10	21.00	そう、こんな風に。	Yes, just like that.
+CDXA00_c6	21.14	21.86	ガオレンジャー!	GaoRanger!
+CDXA00_c7	0.00	3.20	5人の戦士の心が一つになるとき、	When the hearts of the five warriors become one,
+CDXA00_c7	3.20	7.48	宝珠が輝き、気高き猛獣に歌いかけます。	the jewels shine and sing out to the noble beasts.
+CDXA00_c7	7.62	12.18	ついに、新たなハイネスデューク、ウラがその姿を現したのです。	At last, a new Highness Duke, Ura, has appeared.
+CDXA00_c7	12.42	15.80	何やら、悪いことを企んでいるようです。	It seems to be plotting something wicked.
+CDXA00_c7	20.69	21.87	ガオレンジャー!	GaoRanger!
+CDXA00_c8	0.00	7.24	彼らのもたらした平和を、これからずっと守っていくのは、全人類の使命なのです。	To guard the peace they brought, from now on,|is the mission of all humankind.
+CDXA00_c8	7.58	12.34	熾烈な戦いの末、ハイネスデューク、ウラを打ち取ったガオレンジャー。	After a fierce battle, the GaoRangers|have struck down Highness Duke Ura.
+CDXA00_c8	12.42	15.76	力を合わせて、平和を守るガオレンジャー。	The GaoRangers join forces to protect the peace.
+CDXA00_c8	20.58	21.46	命あるところ。	Where there is life...
+CDXA00_c9	0.00	6.98	しかし、最後の戦いが迫る今、自分たちの力の足りなさを感じずにはいられません。	But with the final battle near, they can't help|feeling that their strength is not enough.
+CDXA00_c9	7.12	11.76	しかし、平和が破られるときはいつだって突然なんです。	But peace is always shattered without warning.
+CDXA00_c9	15.82	18.32	強敵、シュテンを倒したガオレンジャー。	The GaoRangers have beaten a mighty foe, Shuten.
+CDXA00_c10	0.00	6.34	あまねくオルグの王、キングオルグとの決着のつく時がやってきたのです。	The time has come to settle things|with King Org, ruler of all the Orgs.
+CDXA00_c10	6.54	11.30	そう、ガオレンジャーの戦いは始まったばかりなのです。	Yes, the GaoRangers' battle has only just begun.
+CDXA00_c10	15.44	18.26	またまた鬼が悪さをしているようです。	It seems the ogres are up to mischief once again.
+CDXA00_c11	0.00	6.18	ガオレンジャーの正義の心が、恨みに閉ざされた狼鬼の心を解き放ったのです。	The GaoRangers' hearts of justice set free|Rouki's heart, locked away by resentment.
+CDXA00_c11	6.44	11.32	熾烈な戦いの末、ハイネスデュークオルグを打ち取ったガオレンジャー。	After a fierce battle, the GaoRangers|have struck down the Highness Duke Org.
+CDXA00_c11	11.38	15.34	ついに、オルグの聖地に乗り込んだガオレンジャーたち。	At last, the GaoRangers storm the Orgs' holy land.
+CDXA00_c12	0.00	5.82	その心に応えたパワーアニマルにより、ガオイカロスが誕生したのです。	The Power Animals answered their hearts,|and GaoIcarus was born.
+CDXA00_c12	5.94	10.94	ついに、新たなハイネスデュークオルグがその姿を現したのです。	At last, a new Highness Duke Org has appeared.
+CDXA00_c13	0.00	5.50	あなたは、この平和な生活がいつまでも続くと思っていますか?	Do you believe this peaceful life will last forever?
+CDXA00_c13	5.92	10.88	しかし、本当の戦いはこれから始まるのです。	But the real battle is only now beginning.
+CDXA00_c13	10.86	14.90	その戦いにまた、ガオキングも傷ついてしまいました。	And in that battle, GaoKing was wounded too.
+CDXA00_c14	0.00	5.56	ガオレンジャーへの恨みを抱き、狼鬼が千年の眠りから覚めました。	Bearing a grudge against the GaoRangers,|Rouki has woken from a thousand-year sleep.
+CDXA00_c14	5.72	10.76	ついに、新たなハイネスデューク、ラセツがその姿を現したのです。	At last, a new Highness Duke, Rasetsu, has appeared.
+CDXA00_c15	0.00	5.26	熾烈な戦いの末、ハイネスデューク、ラセツを打ち取ったガオレンジャー。	After a fierce battle, the GaoRangers|have struck down Highness Duke Rasetsu.
+CDXA00_c15	5.26	10.30	戦士たちの戦いに、まだまだ休息の時は来ないのです。	But there is still no rest for the warriors.
+CDXA00_c15	10.54	14.44	この黒き狼、一体何者なんでしょう。	This black wolf... who could it be?
+CDXA00_c15	17.85	19.92	うん、さっすがガオレンジャー。	Mm-hm, that's the GaoRangers for you!
+CDXA00_c15	20.02	21.56	もっと力が欲しい。	I want more power...
+CDXA01_c0	0.00	3.68	私自ら、ガオレンジャーを倒してくれる!	I'll defeat the GaoRangers myself!
+CDXA01_c0	3.90	4.50	ガッデム!	Dammit!
+CDXA01_c1	0.00	3.80	人は私を絶望の王子と呼ぶ。	They call me the Prince of Despair.
+CDXA01_c1	3.86	5.08	本当にヤバイバ!	This is really bad... Yabaiba!
+CDXA01_c4	0.00	3.70	破壊された街こそ最高のご馳走。	A ruined town is the finest feast!
+CDXA01_c4	3.84	5.34	邪気退散!	Evil spirit, begone!
+CDXA01_c6	0.00	3.48	この私自ら、相手をしてくれる。	I'll take you on myself!
+CDXA01_c7	0.00	1.64	負けるわけにはいかないんだ!	We can't afford to lose!
+CDXA01_c7	3.22	5.30	難破させてやる。	I'll shipwreck you!
+CDXA01_c8	3.40	4.98	目に物見せてやるぜ!	I'll show you what I'm made of!
+CDXA01_c9	0.00	3.10	私の名はハイネスデューク・ラセツ。	My name is Highness Duke Rasetsu.
+CDXA01_c9	3.20	5.18	魔獣、召喚!	Demon beast, I summon you!
+CDXA01_c10	3.18	3.92	ガッデム!	Dammit!
+CDXA01_c11	0.00	3.04	千年の恨み、晴らしてくれる。	I'll avenge a thousand years of resentment!
+CDXA01_c11	4.66	5.66	行くぞ!	Here I come!
+CDXA01_c12	0.00	2.28	消え失せろ、人間ども!	Begone, humans!
+CDXA01_c12	2.86	3.78	なんでだよ!	But why?!
+CDXA01_c13	0.00	1.68	自分はガオレンジャー失格だ。	I'm not fit to be a GaoRanger.
+CDXA01_c13	3.38	5.40	頭からかじってやる。	I'll bite your head off!
+CDXA01_c14	0.00	2.80	役立たずのお前たちでは埒があかん。	You useless lot will get us nowhere!
+CDXA01_c15	0.00	2.54	あら、美味しそうじゃない。	My, don't you look delicious!
+CDXA01_c15	2.76	5.42	我を封印せしガオレンジャー。	The GaoRangers who sealed me away...
+CDXA02_c0	0.00	5.56	オルグシードよ、消えゆかんとする邪悪に、再び巨大なる力を!	Org Seed! Give the fading evil|giant power once more!
+CDXA02_c0	7.60	10.82	鬼はうち!	Demons in!
+CDXA02_c3	0.00	5.48	オルグシードよ、消えゆかんとする邪悪に再び巨大なる力を!	Org Seed! Give the fading evil|giant power once more!
+CDXA02_c4	4.69	5.49	やだやだやだ。	No, no, no!
+CDXA02_c6	0.00	3.60	また、難破しちまった。	Shipwrecked again!
+CDXA02_c7	0.00	2.28	消え失せろ、人間ども!	Begone, humans!
+CDXA02_c11	0.05	1.87	難破しちまった。	I've been shipwrecked!
+CDXA02_c11	3.63	5.81	うーん、こうなったら。	Hmm, in that case...
+CDXA02_c11	7.23	7.69	マジ?	Seriously?
+CDXA02_c13	0.00	1.90	人間の分際で。	How dare you, mere humans!
+CDXA02_c14	0.00	2.40	この私自ら、相手をしてくれる、	I'll take you on myself!
+CDXA02_c14	3.48	5.75	降臨、ガオハンター!	Descend, GaoHunter!
+CDXA02_c14	5.80	7.38	ガオキング!	GaoKing!
