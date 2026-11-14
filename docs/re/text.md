@@ -41,7 +41,34 @@
 - Likely non-text / debug-only (decide in the marker build): `debug` (O_TITLE/1 debug menu), `title_debug`
   (Y_TITLE/22, incl. a 21-glyph ruler `123456789012345678901`), hex digit and dev-name strings in `title`.
 
+## Renderer (verified: read breakpoint on the story string, disassembly, VWF hook works in game)
+- Windows: 4 structs at 0x8009ec88, 0x54 bytes: +0 s16 x, +2 y, +4 cols, +5 rows, +6 line height, +7 state,
+  +8 column, +0xe next cell, +0x10 first cell, +0x28 text pointer, +0x2d attr (0x20 = per-line x at +0x30, 0x80 =
+  13 px pitch / centred). Open: 0x80026490(id, x, y, cols, [sp+0x10] rows, lh, attr, ...). Cell pool 0x8009edd8,
+  384 cells of 8 bytes (u16 code, u16 clut, u16 attr, u8 state 0 empty/1 glyph/3 blank, u8), next free at gp+0x19c.
+- Text -> cells: 0x80026e34 (one glyph per tick, typewriter): byte b0 & 0x80 = control (81 blank cell, 82 newline
+  0x80026d28, 84 xx xx, 85 xx colour, 86, FF end); else code = (b0 & 3) << 8 | b1, colour = (b0 >> 2) & 15. A row
+  wraps by itself at `cols` glyphs.
+- Cells -> GPU: 0x800271d8, one POLY_FT4 (0x2c) per cell, 12x16 quad, u = (code & 31) * 12, v = (code >> 5) * 16.
+  Original x = window x + column * 12 (13 with cell attr 0x80).
+- Story box: opened at 0x80015490 (EXE): layout 0 x 38, y 178, 20 cols x 2 rows, lh 18, attr 9; layout 1 y 172,
+  3 rows, lh 16, attr 10.
+
+## English font and VWF (phase 5; asm/vwf.asm, tools/font.py)
+- Hook at 0x80027290: x = row x + running offset (s4, zeroed at each row start 0x80027260) and offset += advance
+  from a byte table (codes 0xA0..0x1F4) at 0x80022A6C. That spot held two host-file (PCdrv) read/write functions
+  with no caller (no jal, pointer word or lui pair in the EXE or any PRG: `tools/refrange.py`, disasm.py xref).
+- Story box columns 20 -> 48 (0x800154D8, 0x80015504); the line limit is in pixels (lint), not columns.
+- Glyphs: `fonts/vwf.txt` (12 rows, cap top at cell row 3, baseline row 12), ink colour 15, shadow colour 1 right/
+  down. Codes: space 00A0 (advance 4), digits and A-Z keep 00A1-00CF, the rest take hiragana cells 00E0.. .
+  `tbl/en.tbl` is written by font.py. Japanese cells left (katakana, ○×△□, row 10) keep a 12 px advance.
+- 0x81 (blank cell) takes no width under the VWF: English text uses the space glyph; `{sp81}` in en.tbl only.
+- The font TIM has 19 identical copies (insert.py FONT_LEAVES); every one gets the English cells.
+
+## Box budgets (width gate, measured in game)
+| Box | Tables | Lines | px per line | Proof |
+|---|---|---|---|---|
+| story dialogue (layout 0) | ds01-07 | 2 | 232 (x 38..270; the ▼ arrow starts at ~276) | work/qa/width/w1, w2: 232 px line clears the arrow, 239 px touches it |
+
 ## Open
-- Box width / line limits: measure in phase 5 (dialogue box ~ 2 lines x ~17 glyphs seen).
-- Where tables are referenced from (index only, or also by fixed offsets in code).
 - 85 xx meaning; the zero padding after FF.

@@ -33,3 +33,11 @@ One line each: the reference file it belongs in, then the fact.
 - references/pipeline.md §Extract: in a 2-byte big-endian glyph encoding whose high byte can be 00, zero padding
   between strings is indistinguishable from a glyph start; take string starts from the pointer table and treat a
   non-zero gap as an unreferenced string starting at the even byte before its first non-zero byte.
+- references/pipeline.md §Marker (PS1, compressed archives): a re-encoded block that packs SMALLER moved the next
+  blocks earlier in the archive and a later picture decoded with wrong colours (likely decoded over still-packed
+  data); pad every rebuilt block to >= its original size and fail the build if any block starts earlier.
+- scripts/jp_left.py: can't see text inside compressed archive blocks; a per-table check that reads the built
+  archives back (here tools/jpleft.py) is needed instead.
+- references/platform-ps1.md: a cheap PS1 VWF when the renderer emits one 12 px quad per text cell: keep the cells,
+  replace `x = col * 12` by a running per-row offset + a width byte table; dead PCdrv host-file I/O functions
+  (no callers) in the EXE make a safe home for the table.

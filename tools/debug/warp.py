@@ -1,6 +1,7 @@
 """Warp to a scene from a cold boot (docs/re/flow.md §Debug tool). No debugger, so runs at full speed.
 
-    python -X utf8 tools/debug/warp.py SCENE [--cue CUE] [--out DIR] [--frames N] [--state] [--trace]
+    python -X utf8 tools/debug/warp.py SCENE.. [--cue CUE] [--out DIR] [--frames N] [--state] [--trace]
+                                    (several scenes: --out DIR is the root, DIR/<scene>/)
     python -X utf8 tools/debug/warp.py --all [--jobs 3] [--state]    # every scene: shots + sheet, exit 1 on a miss;
                                                     # work/qa/warp/finals*.png = every scene's last frame
     python -X utf8 tools/debug/warp.py --list
@@ -142,13 +143,14 @@ def main():
     todo = list(scenes.values()) if a.all else [scenes[s] for s in a.scene]
     if bad or not todo:
         ap.error(f"unknown scene(s) {bad}; --list shows them")
-    if len(todo) > 1:
-        a.out = None
+    def out(s):  # several scenes: --out is the root (OUT/<scene>/)
+        return a.out and (os.path.join(a.out, s["name"]) if len(todo) > 1 else a.out)
+
     res = []
     # scenes starting from a work/saves card run after the scenes that write those cards
     for batch in ([s for s in todo if not s["card"]], [s for s in todo if s["card"]]):
         with concurrent.futures.ThreadPoolExecutor(a.jobs) as ex:
-            res += ex.map(lambda s: run(s, a.cue, None if a.all else a.out, a.frames, a.state, not a.no_mash,
+            res += ex.map(lambda s: run(s, a.cue, None if a.all else out(s), a.frames, a.state, not a.no_mash,
                                         a.trace, not a.no_skip, a.card), batch)
     if a.all:  # one overview of every scene's last frame: work/qa/warp/finals*.png
         fin = os.path.join(ROOT, "work", "qa", "warp", "_finals")

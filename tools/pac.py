@@ -150,7 +150,8 @@ def parse(d, off=0, size=None):
 def build(node):
     if node["kind"] == "lzs" and "payload" in node:
         h = lzs_header(node["raw"], 0)
-        return lzs_encode(node["payload"], h["lbits"], h["name"], h["fbits"])
+        blob = lzs_encode(node["payload"], h["lbits"], h["name"], h["fbits"])
+        return blob + bytes(max(0, node.get("pad_to", 0) - len(blob)))  # zeros after the stream: never read
     if node["kind"] != "add":
         return node["raw"]
     n = node["count"]
