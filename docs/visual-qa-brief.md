@@ -32,6 +32,9 @@ Standing non-bugs, `ok`:
 - anything identical in the original's sheet;
 - the title logo (ガオレンジャー logo art) stays Japanese (decision D5);
 - brush impact kanji on hits in action/robo stages (斬, 破, 削, 烈, 魂, 滅, 痛, 砕, 牙, 吹, 鬼) stay (D13);
+- in the videos (FMV): the brush calligraphy 破邪百獣剣 flashing behind a light burst in the rangers' sword attack,
+  and 痛/砕鬼 in the opening, stay (D17); the robot-name captions under a robot at the end of a video are English
+  (GAOKING, GAOMUSCLE STRIKER, GAOICARUS) and are judged like any text;
 - the action-stage gauge and HUD numbers; the title screen's TEST USER (debug) label;
 - runs that end on the title screen or loop back (demo scenes b00, bb00c, ademo);
 - credits names are romanised guesses listed in docs/polish.md (judge only layout there).
