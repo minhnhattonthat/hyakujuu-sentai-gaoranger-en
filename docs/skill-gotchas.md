@@ -51,3 +51,5 @@ One line each: the reference file it belongs in, then the fact.
   give each traced scene the table it must decode, and cap each table's size in the build at what was traced.
 - references/emulator-qa.md: a read breakpoint on where a PAC sat at the title fires later on whatever file the
   game loads to the same buffer (a false "card table decoded" hit); confirm a block by its content, not its address.
+- references/graphics.md §Edit: a logo sprite can be drawn taller than its ink box (here rows 0-~72 of a 64-row logo); the top rows of the label packed below it then show under the logo, so clear those rows and drop the label a few px.
+- references/graphics.md §Edit: logos split into pieces drawn side by side (ゲームオーバ + a separate ー, データ+の+ロ+ード, ドッ+キリ): find each piece's rect from ink column gaps, render the English once across the pieces' total width and cut it (tools/gfx_edit.py composite); pair pieces shared by several labels with right-aligned + left-aligned halves.

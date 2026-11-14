@@ -2,9 +2,9 @@
 
 Updated at the end of every session. Keep it to what the next session needs; history is in git.
 
-- **Phase:** 8. QA in the emulator next, not started (phase 7 done and its harness review fixed 2026-11-14). Last build:
-  `build/gaoranger_en.bin` 2026-11-14 11:54, SHA-1 6c338be3..., smoke ok (`work/qa/smoke`), verify 0 errors,
-  `jpleft` 0, lint 0 errors / 0 untranslated (check.py now gates on untranslated + glossary).
+- **Phase:** 8. QA in the emulator in progress: graphics-text pipeline + 4 of ~13 texture groups done (2026-11-14).
+  Last build: `build/gaoranger_en.bin` (graphics edits in), verify 0 errors; warps load/save/option/tsound/tvib/
+  title/tnew/tload/ofmenu/overb/ds01 all OK on it (work/qa/p8/w1-w5), SHA-1 2f01fd5945f5..., smoke ok.
 - **Done:**
   - Step 0: repo setup (PCSX-Redux nightly + SCPH-5500 BIOS in tools/, mkpsxiso 2.30, armips 0.11.0, pre-commit
     hook runs `tools/check.py`, guard hook verified, rom.sha1). Original boots: `work/qa/smoke-orig`.
@@ -61,7 +61,15 @@ Updated at the end of every session. Keep it to what the next session needs; his
     (ending save prompt), ytitle. Card table decoded by no scene (`tools/slotcalls.py`, D11). `insert.TRACED` caps
     table sizes. verify: independent armips writes, PRG/word branch scan, leaf growth, overlay file set, jpleft.
     Lint: blanks both ways, GUESSED budgets named. warp.py `--out` on another drive fixed.
-- **Next (phase 8):** QA tour of every text scene with visual-QA verdicts (`qa_gate.py`), graphics text (the bulk:
+  - Phase 8 so far: graphics pipeline `tools/gfx.py` (TIM index arrays, show/preview) + `tools/gfx_edit.py`
+    (label: clear rect, OFL font without antialiasing, per-row fill + outline read from the original, glow ramps,
+    align, composite labels across pieces) + `gfx/edits.py` (one entry per TIM) + `gfx/tims.tsv` (every TIM copy);
+    insert.py writes every copy, verify.py checks them. Fonts: Anton, Liberation Sans (OFL, docs/fonts.md). Done:
+    TIM 131 (menus, plates), 7 + 96 (game over), 159 (title wheel). Per-row state: docs/re/graphics.md §Redraw
+    status. Wording: D12.
+- **Next (phase 8):** remaining graphics rows in docs/re/graphics.md §Redraw status (136 banners, 154 THE END,
+  5 HUD label, effect kanji 4/6/8/77, credits 142/148-150: needs cast/staff romanisation, D2/D3), then: QA tour of
+  every text scene with visual-QA verdicts (`qa_gate.py`), graphics text (the bulk:
   menus, name plates, banners, game over, credits, chapter cards; translator brief + style reference first, D10),
   `inkbox.py` on choice/centred boxes, `textcover.py`. Story boxes beyond the first page of each ds scene were not
   shot yet (warps stop at the first box). Card table: idle オルゲットファイト (20000 frames, work/qa/p7card) never

@@ -71,12 +71,17 @@ def style_of(t, rect):
     return outline, fill
 
 
-def render_mask(text, font, size, box_w, box_h, xscale=1.0, tracking=0):
-    """1-bit text mask (list of rows of 0/1), centred in box_w x box_h; None if it doesn't fit."""
+def render_mask(text, font, size, box_w, box_h, xscale=1.0, tracking=0, align="c"):
+    """1-bit text mask (list of rows of 0/1) in box_w x box_h (align l/c/r, centred vertically); None if it
+    doesn't fit."""
     f = ImageFont.truetype(str(ROOT / "fonts" / FONTS.get(font, font)), size)
     widths = [f.getlength(c) for c in text]
     tw = int(sum(widths) + tracking * (len(text) - 1) + 2)
+    # one vertical band per font/size (cap top to descender when there is lowercase), so labels drawn side by
+    # side share a baseline
+    ref = f.getbbox("Hg" if any(c.islower() for c in text) else "H")
     l, top, r, bot = f.getbbox(text)
+    top, bot = min(top, ref[1]), max(bot, ref[3])
     im = Image.new("1", (tw + 4, bot + 4), 0)
     d = ImageDraw.Draw(im)
     d.fontmode = "1"
@@ -87,12 +92,17 @@ def render_mask(text, font, size, box_w, box_h, xscale=1.0, tracking=0):
     bb = im.getbbox()
     if not bb:
         return [[0] * box_w for _ in range(box_h)]
-    im = im.crop(bb)
+    im = im.crop((bb[0], top, bb[2], bot))
     if xscale != 1.0:
         im = im.resize((max(1, round(im.width * xscale)), im.height), Image.NEAREST)
     if im.width > box_w or im.height > box_h:
         return None
-    ox, oy = (box_w - im.width) // 2, (box_h - im.height + 1) // 2
+    lead = round(f.getlength(" ") * (len(text) - len(text.lstrip(" "))))  # kept spaces: gap to the next piece
+    trail = round(f.getlength(" ") * (len(text) - len(text.rstrip(" "))))
+    if im.width + (lead if align == "l" else trail if align == "r" else 0) > box_w:
+        return None
+    ox = {"l": lead, "c": (box_w - im.width) // 2, "r": box_w - im.width - trail}[align]
+    oy = (box_h - im.height + 1) // 2
     m = [[0] * box_w for _ in range(box_h)]
     for y in range(im.height):
         for x in range(im.width):
@@ -102,10 +112,13 @@ def render_mask(text, font, size, box_w, box_h, xscale=1.0, tracking=0):
 
 
 def label(t, rect, text, font="sans-b", size=None, outline=None, fill=None, xscale=1.0, tracking=0, ring=1,
-          min_size=7):
-    """Replace rect's content with `text`. size None: the largest that fits (rect minus the outline ring)."""
+          min_size=7, glow=None, align="c", style=None):
+    """Replace rect's content with `text`. size None: the largest that fits (rect minus the outline ring).
+    glow: index list by distance (replaces the outline; ring = its length). style: (outline, {y: fill}) to use
+    instead of reading the rect (composite labels)."""
     x0, y0, w, h = rect
-    o_idx, rows = style_of(t, rect)
+    ring = len(glow) if glow else ring
+    o_idx, rows = style or style_of(t, rect)
     o_idx = o_idx if outline is None else outline
     for y in range(y0, y0 + h):
         for x in range(x0, x0 + w):
@@ -113,7 +126,7 @@ def label(t, rect, text, font="sans-b", size=None, outline=None, fill=None, xsca
     bw, bh = w - 2 * ring, h - 2 * ring
     m = None
     for s in ([size] if size else range(bh + 8, min_size - 1, -1)):
-        m = render_mask(text, font, s, bw, bh, xscale, tracking)
+        m = render_mask(text, font, s, bw, bh, xscale, tracking, align)
         if m:
             break
     if not m:
@@ -126,7 +139,17 @@ def label(t, rect, text, font="sans-b", size=None, outline=None, fill=None, xsca
         return rows[near]
 
     ink = {(x0 + ring + x, y0 + ring + y) for y, r in enumerate(m) for x, v in enumerate(r) if v}
-    if ring:
+    if glow:  # glow[d-1] = index at Euclidean distance d from the glyphs (ramp palettes: game over)
+        R = len(glow)
+        for y in range(y0, y0 + h):
+            for x in range(x0, x0 + w):
+                if (x, y) in ink:
+                    continue
+                d2 = min(((x - gx) ** 2 + (y - gy) ** 2 for gx, gy in ink
+                          if abs(gx - x) <= R and abs(gy - y) <= R), default=None)
+                if d2 is not None and d2 <= R * R:
+                    t.px[y][x] = glow[max(1, round(d2 ** 0.5)) - 1]
+    elif ring:
         for x, y in ink:
             for dx, dy in N8:
                 p = (x + dx, y + dy)
@@ -136,11 +159,37 @@ def label(t, rect, text, font="sans-b", size=None, outline=None, fill=None, xsca
         t.px[y][x] = fill_at(y)
 
 
+class Canvas:
+    def __init__(self, w, h):
+        self.W, self.H, self.px = w, h, [[0] * w for _ in range(h)]
+
+
+def composite(t, pieces, text, **kw):
+    """Render text once across the pieces' total width (style of the first piece), then cut it into the pieces,
+    each centred vertically on the strip."""
+    o_idx, rows = style_of(t, pieces[0])
+    H = max(r[3] for r in pieces)
+    top = pieces[0][1] - (H - pieces[0][3]) // 2
+    c = Canvas(sum(r[2] for r in pieces), H)
+    label(c, (0, 0, c.W, H), text, style=(o_idx, {y - top: v for y, v in rows.items()}), **kw)
+    cx = 0
+    for x0, y0, w, h in pieces:
+        dy = (H - h) // 2
+        for y in range(h):
+            t.px[y0 + y][x0:x0 + w] = c.px[dy + y][cx:cx + w]
+        cx += w
+
+
 def apply(t, edits):
     """edits: list of dicts {rect, text, ...label kwargs} or {rect, clear: True}. Returns the rects."""
     rects = []
     for e in edits:
         e = dict(e)
+        if "rects" in e:  # one label cut across pieces the game draws side by side (データ+の+ロ+ード)
+            pieces = [tuple(r) for r in e.pop("rects")]
+            composite(t, pieces, e.pop("text"), **e)
+            rects += pieces
+            continue
         rect = tuple(e.pop("rect"))
         if e.pop("clear", False):
             for y in range(rect[1], rect[1] + rect[3]):
