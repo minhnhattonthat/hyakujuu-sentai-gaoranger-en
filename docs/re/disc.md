@@ -34,11 +34,16 @@
   `work/movetest/warp/`, pairs `work/movetest/cmp_sheet.png`.
 
 ## Build verification (phase 7, tools/verify.py, run by build.py; tests/test_verify.py proves each check fails)
-- EXE: `romdiff.check` vs the original: writes only at the asm/vwf.asm sites (original bytes = build.HOOKS) plus
-  the width-table range; no branch/j/jal in the original code lands inside a replaced span or the width table.
+- EXE: `romdiff.check` vs the original. Expected writes come from assembling asm/vwf.asm again over 0x00- and
+  0xff-filled dummies (independent of the built EXE); each must sit in a build.HOOKS site (original bytes checked)
+  or the width-table range. No branch/j/jal in the EXE, no j/jal in a PRG, and no aligned word in either lands
+  inside a replaced span or the width table (lui/addiu pairs: checked by hand once, asm/vwf.asm).
 - PACs: same leaf set (lzs payloads decoded and walked); only text-table and font leaves differ (37 of 275 leaves in
-  the 20 changed PACs). Every string reads back through every pointer slot as the en (or untouched jp) text.
+  the 20 changed PACs), others may only gain zero padding. Every string reads back through every pointer slot as
+  the en (or untouched jp) text; `jpleft.scan` finds no Japanese left. The overlay holds only the EXE and DATA/*.PAC.
 - Disc: dumpsxiso of the built .bin = original tree with the overlay files swapped in, byte for byte.
+- Runtime (not in build.py, emulator traces): decoded table growth, docs/re/pac.md §Decode targets; insert.TRACED
+  caps each table at its traced size.
 
 ## Free space
 - Inside PACs: files are found by name, so a PAC may grow; each PAC is read whole to 0x800cd000,

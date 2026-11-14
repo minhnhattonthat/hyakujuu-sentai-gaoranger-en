@@ -30,6 +30,11 @@ FONT_LEAVES = ["CARDMS.PAC/1", "O_START.PAC/8", "Y_TITLE.PAC/12_5", "Y_EDSAVE.PA
 JP_TEXT = re.compile(r"[぀-ヿ一-鿿]")
 PANGRAM = "The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs. "
 MARKER_LINE = 40  # characters per marker line (story box: 48 columns)
+# Decoded table sizes a runtime trace showed safe (no decode lands in the grown tail; docs/re/pac.md §Decode targets,
+# lzsmap.TRACE_SCENES). A release build fails if a table grows past this (a table not listed: past its jp size);
+# re-run the trace on the new build, then raise the number. Marker and --qa builds are QA-only and not capped.
+TRACED = {"card": 2128, "save": 1232, "load": 798, "option": 452, "ds01": 448, "ds02": 346, "ds03": 352,
+          "ds04": 318, "ds05": 320, "ds06": 354, "ds07": 330}
 
 
 def marker(s):
@@ -102,6 +107,10 @@ def insert(overlay, marker=False, qa=None):
         t = json.loads(path.read_text(encoding="utf-8"))
         ids |= {s["id"] for s in t["strings"]}
         blob = encode_table(t, marker, qa)
+        cap = TRACED.get(path.stem) or len(extract.leaf(t["files"][0]))
+        if not marker and not qa and len(blob) > cap:
+            raise SystemExit(f"{path.stem}: table is {len(blob)} bytes, only {cap} traced safe at runtime: re-run "
+                             "the lzslog trace (tools/lzsmap.py docstring) and raise insert.TRACED")
         for f in t["files"]:
             name, leaf = f.split("/")
             edits[name].append(([int(p) for p in leaf.split("_")], blob))

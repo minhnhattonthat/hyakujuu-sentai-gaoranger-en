@@ -15,7 +15,6 @@ import mkdisc  # noqa: E402
 import pac  # noqa: E402
 import verify  # noqa: E402
 
-BIN = ROOT / "build" / "gaoranger_en.bin"
 need_tree = pytest.mark.skipif(not (mkdisc.TREE / "SLPS_033.53").is_file(), reason="no unpacked disc tree")
 
 
@@ -65,9 +64,42 @@ def test_wrong_text_and_foreign_leaf(overlay, tmp_path):
 
 
 @need_tree
-@pytest.mark.skipif(not BIN.is_file(), reason="no build")
-def test_disc_differs_from_overlay(tmp_path):
-    shutil.copytree(ROOT / "build" / "overlay", tmp_path / "o")
+def test_table_past_traced_size(tmp_path, monkeypatch):
+    monkeypatch.setitem(insert.TRACED, "ds01", 300)
+    with pytest.raises(SystemExit, match="traced safe"):
+        insert.insert(tmp_path)
+
+
+@need_tree
+def test_branch_word_in_prg():
+    exe = (mkdisc.TREE / "SLPS_033.53").read_bytes()
+    lo = next(a for a in build.HOOKS if a != verify.WTAB[0] and len(build.HOOKS[a]) > 8)
+    assert verify.branch_errors(exe, {"X.PRG": struct.pack("<I", lo + 4)})
+    assert verify.branch_errors(exe, {"X.PRG": struct.pack("<I", 3 << 26 | (lo + 4) >> 2 & 0x3FFFFFF)})
+    assert verify.branch_errors(exe, {"X.PRG": struct.pack("<I", lo)}) == []  # a hook's start is fine
+
+
+@need_tree
+def test_leaf_grows_and_stray_overlay_file(overlay, tmp_path):
+    shutil.copytree(overlay, tmp_path / "o")
+    f = tmp_path / "o" / "DATA" / "DS_ST01.PAC"
+    node = pac.parse(f.read_bytes())
+    path = next(p for p, d in verify.leaves(f.read_bytes()) if p not in ((13, 12), (9, 7)) and pac.kind(d, 0) != "tim")
+    data = dict(verify.leaves(f.read_bytes()))[path]
+    node = insert.set_leaf(node, list(path), data + b"\x01\0\0\0")
+    insert.finish(node)
+    f.write_bytes(pac.build(node))
+    assert any("neither a text table" in e for e in verify.check_pacs(tmp_path / "o", False, {}))
+    (tmp_path / "o" / "SYSTEM.CNF").write_bytes(b"x")
+    assert verify.check_overlay(tmp_path / "o")
+    assert verify.check_overlay(overlay) == []
+
+
+@need_tree
+def test_disc_differs_from_overlay(overlay, tmp_path):
+    out = mkdisc.build(tmp_path / "t.bin", overlay)  # a fresh image of this overlay, not build/'s
+    assert verify.check_disc(out, overlay) == []
+    shutil.copytree(overlay, tmp_path / "o")
     f = tmp_path / "o" / "DATA" / "DS_ST01.PAC"
     f.write_bytes(f.read_bytes()[:-1] + b"\x01")
-    assert any("DS_ST01.PAC" in e for e in verify.check_disc(BIN, tmp_path / "o"))
+    assert any("DS_ST01.PAC" in e for e in verify.check_disc(out, tmp_path / "o"))

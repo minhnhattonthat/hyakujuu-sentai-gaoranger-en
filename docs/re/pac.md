@@ -20,12 +20,23 @@ Tools: `tools/pac.py list|unpack`, `tools/unpack_all.py` (all PACs -> `work/pac/
 - Compressor: `pac.lzs_encode(data, L, name)` (greedy, hash chains, keeps the block's L and name; packed size field =
   whole block). Roundtrips all 2252 blocks; output is 0.8% bigger than the original overall (worst block +10%).
   Load buffer limits per block still unknown: check when a block grows a lot.
-- Decode targets (verified 2026-11-14, English build, `warp.py ds01 de01 save load option tcontdata --trace --script
-  tools/lua/lzslog.lua`, `tools/lzsmap.py work/qa/lzs_en`): decompress(src, dst) is 0x8002f858. Story/menu PAC
-  blocks (D_SYS script slots, ra 0x80017a20/a64/ab8/b14, ending tables ra 0x800ac4c0) are decoded back to back from
-  0x801cd000, each dst = the previous block's end (aligned), so a grown text table moves the later blocks up instead
-  of overwriting them. Largest end seen: 0x801ce648 (DE/Y_SAVE table 838 -> 1232 bytes); no decode overlaps any
-  table's grown tail (lzsmap: 0 overlaps). What sits far above (stack near 0x801fff00) is a guess, ~200 KB away.
+- Decode targets (verified 2026-11-14, English build, every scene in `lzsmap.py --scenes`, 33 runs in
+  `work/qa/lzs_all`; command in the `tools/lzsmap.py` docstring): decompress(src, dst) is 0x8002f858; lzslog.lua
+  logs src/dst/size and the first 16 stream bytes, which lzsmap matches against the built PACs to name the block.
+  Story/menu PAC blocks (D_SYS script slots, ra 0x80017a20/a64/ab8/b14, ending/menu tables ra 0x800ac4c0) are
+  decoded back to back from 0x801cd000, each dst = the previous block's end (aligned), so a grown text table moves
+  the later blocks up instead of overwriting them. Every grown table is decoded by its scene (lzsmap EXPECT) with 0
+  overlaps on its grown tail; decodes over the table's original bytes too are the next scene reusing the heap.
+  Per table (dst, end): ds01-07 0x801cde70-88 .. at most 0x801ce048; option 0x801cdf1c..0x801ce0e0; load
+  0x801ce19c..0x801ce4ba; save (DE_ST01-05 save prompt, Y_SAVE, Y_EDSAVE) 0x801ce178..0x801ce648 (largest end).
+  What sits far above (stack near 0x801fff00) is a guess, ~200 KB away. `insert.TRACED` caps each table at the
+  size traced here: a release build that grows one further fails until the trace is re-run.
+- The card table (Y_TITLE/21 = CARDMS/0, 1434 -> 2128 bytes) is decoded by no scene: none of the 33 runs (title
+  wheel, continue/load with and without a save, options, the オルゲットファイト menu and stage, Y_TITLE loaded as a
+  story file: scene `ytitle`) decodes it; no code asks for slot 21 by a constant (`tools/slotcalls.py --index 21`:
+  OPN.PRG, which owns Y_TITLE, asks for 1, 3, 12, 13, 14 and loops over slot 12's children only); its first 24
+  slots are a `12345678901234567890` ruler, like the debug tables in Y_TITLE/20 and /22. Treated as unused (D11).
+  CARDMS has no loader (flow.md). The player's memory-card messages come from the save and load tables.
 
 ## Repack (verified, tests/test_disc.py)
 - `pac.parse(d)` -> tree, `pac.build(tree)` -> bytes; every PAC rebuilds byte-identical. Rules: entry table right

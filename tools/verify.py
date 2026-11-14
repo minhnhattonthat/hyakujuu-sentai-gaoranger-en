@@ -1,14 +1,19 @@
 """verify.py: phase-7 checks on a finished build (build.py runs it last; exit 1 on any failure).
 
-1. EXE: romdiff.check of the built EXE against the original: changed bytes only at the asm/vwf.asm sites, each
-   write's original bytes as build.HOOKS expects, the width table only inside the dead PCdrv code.
-2. EXE: no branch or j/jal in the original code (outside the overwritten spans) lands strictly inside a hook span,
-   or anywhere in the width table region.
+1. EXE: romdiff.check of the built EXE against the original. The expected writes come from assembling asm/vwf.asm a
+   second time over a 0x00- and a 0xff-filled EXE (a byte armips wrote is the same in both), not from the built
+   EXE: every write must sit inside a build.HOOKS site (whose original bytes it checks) or the width table region,
+   the built EXE must hold exactly those bytes there, and nothing else may differ.
+2. EXE + every PRG: no branch (EXE) or j/jal (EXE, PRGs) in code outside the overwritten spans, and no aligned
+   32-bit word (jump tables, function pointers), lands strictly inside a hook span or anywhere in the width table.
+   Not checked: lui/addiu pairs (checked once by hand, asm/vwf.asm).
 3. PACs: every built PAC has the same leaves (recursing into lzs payloads) as the original, and the only leaves
-   whose decoded bytes differ are the text tables (script/*.json "files") and the font TIMs (insert.FONT_LEAVES).
-   This is romdiff for compressed archives: the lzs streams are re-encoded, so a byte diff of the PAC means nothing.
+   whose decoded bytes differ are the text tables (script/*.json "files") and the font TIMs (insert.FONT_LEAVES);
+   any other leaf may only gain zero padding. romdiff for compressed archives: the lzs streams are re-encoded, so a
+   byte diff of the PAC means nothing. The overlay holds only SLPS_033.53 and DATA/*.PAC.
 4. Text: every string of every table, read back from the built PAC through its pointer slots, decodes to the text
    insert.text_for chose (en, marker, qa) or to its original jp bytes; every slot is checked, not only the first.
+   jpleft.scan: no Japanese string left outside script/keep_jp.txt, no string table the extractor doesn't know.
 5. Disc: dumpsxiso of the built .bin gives the original tree with the overlay files swapped in, byte for byte.
 
     python -X utf8 tools/verify.py [build/gaoranger_en.bin] [--marker] [--qa ID=TEXT ...]
@@ -24,7 +29,9 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build  # noqa: E402
 import extract  # noqa: E402
+import font  # noqa: E402
 import insert  # noqa: E402
+import jpleft  # noqa: E402
 import mkdisc  # noqa: E402
 import pac  # noqa: E402
 import romdiff  # noqa: E402
@@ -35,36 +42,88 @@ EXE_BASE = 0x80010000 - 0x800  # file offset = address - EXE_BASE
 WTAB = (0x80022A6C, 0x80022BC4)  # width table region: the replaced read/write PCdrv functions
 
 
+def asm_writes(size):
+    """[(file offset, bytes)] runs asm/vwf.asm writes, from two armips runs over filled dummies of `size` bytes."""
+    with tempfile.TemporaryDirectory() as tmp:
+        t = Path(tmp)
+        (t / "w.bin").write_bytes(font.widths())
+        outs = []
+        for fill in (0x00, 0xFF):
+            (t / "in.bin").write_bytes(bytes([fill]) * size)
+            r = subprocess.run([str(build.ARMIPS), str(ROOT / "asm" / "vwf.asm"), "-strequ", "EXE_IN", str(t / "in.bin"),
+                                "-strequ", "EXE_OUT", str(t / "out.bin"), "-strequ", "WIDTHS", str(t / "w.bin")],
+                               capture_output=True)
+            if r.returncode:
+                raise SystemExit(f"armips failed: {r.stdout!r}")
+            outs.append((t / "out.bin").read_bytes())
+    z, f = outs
+    runs, start = [], None
+    for i in range(len(z) + 1):
+        w = i < len(z) and z[i] == f[i]
+        if w and start is None:
+            start = i
+        elif not w and start is not None:
+            runs.append((start, z[start:i]))
+            start = None
+    return runs
+
+
 def check_exe(overlay):
     orig = (mkdisc.TREE / "SLPS_033.53").read_bytes()
     new = (Path(overlay) / "SLPS_033.53").read_bytes()
-    writes = []
-    for addr, hexbytes in build.HOOKS.items():
-        o, n = addr - EXE_BASE, len(hexbytes) // 2
-        if addr != WTAB[0]:  # the table site is covered by the allowed range below
-            writes.append((o, bytes.fromhex(hexbytes), new[o:o + n], f"vwf.asm@{addr:08x}"))
-    errs, _ = romdiff.check(orig, new, set(range(WTAB[0] - EXE_BASE, WTAB[1] - EXE_BASE)), writes)
-    return [f"EXE {e}" for e in errs] + branch_errors(orig)
+    writes, errs = [], []
+    for o, data in asm_writes(len(orig)):
+        a, n = o + EXE_BASE, len(data)
+        site = [(s, bytes.fromhex(h)) for s, h in build.HOOKS.items() if s <= a and a + n <= s + len(h) // 2]
+        if WTAB[0] <= a and a + n <= WTAB[1]:
+            want = orig[o:o + n]  # the whole region is dead code, any original bytes are fine
+        elif site:
+            s, h = site[0]
+            want = h[a - s:a - s + n]
+        else:
+            errs.append(f"EXE vwf.asm writes {n} bytes at {a:08x}, outside every build.HOOKS site")
+            continue
+        writes.append((o, want, data, f"vwf.asm@{a:08x}"))
+    e, _ = romdiff.check(orig, new, set(range(WTAB[0] - EXE_BASE, WTAB[1] - EXE_BASE)), writes)
+    return errs + [f"EXE {x}" for x in e] + branch_errors(orig)
 
 
-def branch_errors(exe):
-    """Original code reaching into a span the build replaced (a hook's middle, or the width table)."""
+def branch_errors(exe, prgs=None):
+    """Original code or data reaching into a span the build replaced (a hook's middle, or the width table): EXE
+    branches and j/jal, PRG j/jal (PRGs run at 0x80xxxxxx), and any aligned word in the EXE or a PRG."""
     spans = [(a, a + len(h) // 2) for a, h in build.HOOKS.items() if a != WTAB[0]]
+
+    def inside(t):
+        return WTAB[0] <= t < WTAB[1] or any(lo < t < hi for lo, hi in spans)
+
+    def replaced(pc):
+        return WTAB[0] <= pc < WTAB[1] or any(lo <= pc < hi for lo, hi in spans)
+
+    if prgs is None:
+        prgs = {p.name: p.read_bytes() for p in sorted((mkdisc.TREE / "DATA").glob("*.PRG"))}
     t_addr, t_size = struct.unpack_from("<II", exe, 0x18)
     errs = []
     for pc in range(t_addr, t_addr + t_size, 4):
-        if WTAB[0] <= pc < WTAB[1] or any(lo <= pc < hi for lo, hi in spans):
+        if replaced(pc):
             continue
         w = struct.unpack_from("<I", exe, pc - EXE_BASE)[0]
         op = w >> 26
+        t = None
         if op in (2, 3):  # j, jal
             t = (pc + 4) & 0xF0000000 | (w & 0x3FFFFFF) << 2
         elif op in (1, 4, 5, 6, 7):  # regimm, beq, bne, blez, bgtz
             t = pc + 4 + ((w & 0xFFFF) - ((w & 0x8000) << 1)) * 4
-        else:
-            continue
-        if WTAB[0] <= t < WTAB[1] or any(lo < t < hi for lo, hi in spans):
+        if t is not None and inside(t):
             errs.append(f"EXE {pc:08x}: {w:08x} branches to {t:08x}, inside a replaced span")
+        elif inside(w):
+            errs.append(f"EXE {pc:08x}: word {w:08x} points inside a replaced span")
+    for name, d in prgs.items():
+        for o in range(0, len(d) - 3, 4):
+            w = struct.unpack_from("<I", d, o)[0]
+            if inside(w):
+                errs.append(f"{name} +{o:x}: word {w:08x} points inside a replaced span")
+            elif w >> 26 in (2, 3) and inside(0x80000000 | (w & 0x3FFFFFF) << 2):
+                errs.append(f"{name} +{o:x}: j/jal {w:08x} into a replaced span")
     return errs
 
 
@@ -96,8 +155,8 @@ def check_pacs(overlay, marker, qa):
             continue
         for p in old:
             name = f"{built.name}/{'_'.join(map(str, p))}"
-            # raw leaves may be zero-padded to their old size, so compare the original length only
-            if old[p] != new[p][:len(old[p])] and name not in allowed:
+            # raw leaves may be zero-padded to their old size: the original length must match, the rest be zero
+            if (old[p] != new[p][:len(old[p])] or any(new[p][len(old[p]):])) and name not in allowed:
                 errs.append(f"{name}: changed but is neither a text table nor a font")
     en = Table.load(ROOT / "tbl" / "en.tbl")
     for t in tables:
@@ -143,8 +202,21 @@ def check_disc(bin_path, overlay):
     return errs
 
 
+def check_overlay(overlay):
+    """The build changes only the EXE and DATA/*.PAC files."""
+    rels = [p.relative_to(overlay).as_posix() for p in Path(overlay).rglob("*") if p.is_file()]
+    return [f"overlay {r}: the build should not change this file" for r in rels
+            if r != "SLPS_033.53" and not (r.startswith("DATA/") and r.endswith(".PAC") and r.count("/") == 1)]
+
+
+def check_jpleft(overlay):
+    left, unknown = jpleft.scan(overlay)
+    return [f"jpleft: Japanese left {x}" for x in left] + [f"jpleft: unknown table {x}" for x in unknown]
+
+
 def verify(bin_path, overlay, marker=False, qa=None):
-    return check_exe(overlay) + check_pacs(overlay, marker, qa or {}) + check_disc(bin_path, overlay)
+    return (check_overlay(overlay) + check_exe(overlay) + check_pacs(overlay, marker, qa or {})
+            + check_jpleft(overlay) + check_disc(bin_path, overlay))
 
 
 def main():

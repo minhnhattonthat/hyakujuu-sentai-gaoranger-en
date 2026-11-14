@@ -70,12 +70,18 @@ de02      0       5010>5079,5008>5028  2  5028  9000  tools/routes/newgame.txt "
 de03      0       5010>5038  3     5038   9000   tools/routes/newgame.txt "chapter 3 ending"
 de04      0       5010>5048  4     5048   9000   tools/routes/newgame.txt "chapter 4 ending"
 de05      0       5010>5058  5     5058   9000   tools/routes/newgame.txt "chapter 5 ending"
+# de03-05 above stop on the ending's last picture; entered like de01 (from DE_ST07E's save load) they reach the
+# save prompt, which decodes the DE save table (lzsmap EXPECT)
+de03s     0       5010>5079,5008>5038  3  5038  9000  tools/routes/newgame.txt "chapter 3 ending (save prompt)"
+de04s     0       5010>5079,5008>5048  4  5048  9000  tools/routes/newgame.txt "chapter 4 ending (save prompt)"
+de05s     0       5010>5079,5008>5058  5  5058  9000  tools/routes/newgame.txt "chapter 5 ending (save prompt)"
 de07      0       5010>5078  7     5078   14000  tools/routes/newgame.txt "final ending and credits"
 de07e     0       5010>5079  7     5079   9000   tools/routes/newgame.txt "the end (おわり)"
 edsave    0       5010>5079  7     5008   8000   tools/routes/newgame.txt "end-of-game save screen (Y_EDSAVE, after DE_ST07E)"
 save      0       5010>5079,5008>5007  1  5007  8000  tools/routes/newgame.txt "save screen (Y_SAVE)"
 load      0       5010>5006  0     5006   8000   tools/routes/newgame.txt "load screen (Y_LOAD)"
 option    0       5010>5005  0     5005   8000   tools/routes/newgame.txt "option screen (Y_OPTION)"
+ytitle    0       5010>5000  0     -      8000  tools/routes/newgame.txt "Y_TITLE loaded as a story/menu file (no game path does this: card-table hunt, docs/re/pac.md)"
 tnew      0       -          0     -      3000   "1200 -;4 start;300 -;4 start;600 -;4 circle;300 -" "title: new game -> difficulty (かんたん/むずかしい)" nomash
 tcont     0       -          0     5006   3600   "1200 -;4 start;300 -;4 start;600 -;4 down;90 -;4 circle;400 -;4 circle;300 -" "title: continue -> load start, no data on card" nomash
 tload     0       -          0     5006   3600   "1200 -;4 start;300 -;4 start;600 -;4 down;90 -;4 down;90 -;4 circle;400 -;4 circle;300 -" "title: data load, no data on card" nomash

@@ -70,7 +70,7 @@
 |---|---|---|---|---|
 | story dialogue (layout 0) | ds01-07 | 2 | 232 (x 38..270; the ▼ arrow starts at ~276) | work/qa/width/w1, w2: 232 px line clears the arrow, 239 px touches it |
 | save / load / option messages | save, load, option | 2, or 3 where the jp has 3 (layout 1) | 232 (same x 38) | work/qa/mk/saveunf (3 lines), tcont, option |
-| memory-card messages | card | as save | 232 **guess** | no tour showed this table (Y_TITLE/21, CARDMS/0) |
+| memory-card messages | card | as save | 232 **guess** | no scene decodes this table (Y_TITLE/21, CARDMS/0; pac.md §Decode targets): unused, D11 |
 
 Glyph torture line (all ASCII glyphs, double spaces): work/qa/width/w1, w2 - every glyph drawn, no gaps or overlap.
 

@@ -46,3 +46,8 @@ One line each: the reference file it belongs in, then the fact.
   dump the built disc back to files (here tools/verify.py, run by build.py).
 - references/pipeline.md §Checks: text tables decoded from compressed blocks grow (+50% here); log the decoder's
   (src, dst, size) at runtime (tools/lua/lzslog.lua) and check nothing else lands in the grown tail.
+- references/pipeline.md §Checks: name a runtime decode by its first stream bytes matched against the built
+  archives, never by decoded size (identical sizes misnamed tables, and a run that decoded no grown table "passed");
+  give each traced scene the table it must decode, and cap each table's size in the build at what was traced.
+- references/emulator-qa.md: a read breakpoint on where a PAC sat at the title fires later on whatever file the
+  game loads to the same buffer (a false "card table decoded" hit); confirm a block by its content, not its address.

@@ -55,6 +55,12 @@ Updated at the end of every session. Keep it to what the next session needs; his
     leaves change), every string read back through every slot, built disc dumped back = tree + overlay. Mutation
     tests `tests/test_verify.py`. Runtime: decoded tables grew ~50% but blocks are placed back to back (heap-like),
     `tools/lzsmap.py` on lzslog traces: 0 overlaps. Lint covers widths, lines, control codes.
+  - Phase 7 harness review fixed (H:\translation\.harness\reviews\...-phase7.md): lzslog logs stream heads, lzsmap
+    names decodes by content, requires each scene's table (EXPECT), ignores next-scene heap reuse; regression set
+    `lzsmap.py --scenes` (33 runs, `work/qa/lzs_all`): every grown table decoded, 0 overlaps; new scenes de03s-05s
+    (ending save prompt), ytitle. Card table decoded by no scene (`tools/slotcalls.py`, D11). `insert.TRACED` caps
+    table sizes. verify: independent armips writes, PRG/word branch scan, leaf growth, overlay file set, jpleft.
+    Lint: blanks both ways, GUESSED budgets named. warp.py `--out` on another drive fixed.
 - **Next (phase 8):** QA tour of every text scene with visual-QA verdicts (`qa_gate.py`), graphics text (the bulk:
   menus, name plates, banners, game over, credits, chapter cards; translator brief + style reference first, D10),
   `inkbox.py` on choice/centred boxes, `textcover.py`. Story boxes beyond the first page of each ds scene were not

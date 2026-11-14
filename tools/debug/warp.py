@@ -116,7 +116,11 @@ def run(sc, cue, out, frames, state, mash, trace, skip=True, card=None, scripts=
         why = "swap op never found"
     elif sc["expect"] and "LOADED frame" not in log:
         why = f"file {sc['expect']:04x} never loaded"
-    print(f"{sc['name']:14s} {'OK  ' if why == 'ok' else 'FAIL'} {why}  {os.path.relpath(out, ROOT)}", flush=True)
+    try:
+        shown = os.path.relpath(out, ROOT)
+    except ValueError:  # --out on another drive
+        shown = out
+    print(f"{sc['name']:14s} {'OK  ' if why == 'ok' else 'FAIL'} {why}  {shown}", flush=True)
     return why == "ok"
 
 

@@ -4,7 +4,8 @@ Per translated string: encodes through tbl/en.tbl, no Japanese left, control cod
 jp (same order), lines <= the box's line budget, each line's pixel width (font.line_px) <= the box's budget, no
 ordinal suffix glued to a number, no stub last line, glossary.md terms (a JP term in jp needs its EN form in en,
 no Avoid spelling). Budgets per table: BUDGETS (measured in game, docs/re/text.md
-§Box budgets); a table with no measured budget is reported, not passed.
+§Box budgets); a table with no budget fails; one whose budget is a guess passes but is named in the summary
+line until a run measures it (waiver: docs/decisions.md).
 
     python -X utf8 tools/lint.py [--untranslated]   # exit 1 on any error; --untranslated also fails on empty en
 """
@@ -90,8 +91,9 @@ def lint(untranslated=False):
             lines = txt.split("{n}")
             if len(lines) > 1 and len(font.re_ctrl.sub("", lines[-1]).strip()) < 6:
                 errors.append(f"{sid}: stub last line {lines[-1]!r}")
-            if txt != txt.strip() and jp == jp.strip():
-                errors.append(f"{sid}: leading/trailing blanks the jp doesn't have")
+            for edge, f in (("leading", str.lstrip), ("trailing", str.rstrip)):
+                if (txt != f(txt)) != (jp != f(jp)):
+                    errors.append(f"{sid}: {edge} blank in {'en' if txt != f(txt) else 'jp'} only")
             if budget is None:
                 nobudget.add(p.stem)
                 continue
@@ -111,6 +113,8 @@ if __name__ == "__main__":
     errs, todo, nob = lint("--untranslated" in sys.argv)
     for e in errs:
         print(e)
+    guessed = sorted(t for t, b in BUDGETS.items() if b[2] == "guess")
     print(f"lint: {len(errs)} errors, {todo} strings untranslated"
-          + (f", no measured budget for {sorted(nob)}" if nob else ""))
+          + (f", no measured budget for {sorted(nob)}" if nob else "")
+          + (f", GUESSED budget (passes, not measured in game) for {guessed}" if guessed else ""))
     sys.exit(1 if errs or nob else 0)
