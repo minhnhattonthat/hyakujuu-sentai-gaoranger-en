@@ -31,8 +31,7 @@ model/other formats, no image found). Tour shots: `work/qa/tour1` (new game -> f
 Also seen in VRAM at the intermission (`work/qa/vd6000`): the same #131 and #136 sheets loaded together.
 
 ## Not yet covered
-- FMVs `XA/*.STR` (OP0 opening, RB*/RN* = robo/ranger sequences?): check for burned-in Japanese (jPSXdec or an
-  emulator tour) in phase 2/8.
+- FMVs: done, see fmv.md (three robot-name captions redrawn; logo and brush kanji kept).
 - Non-TIM image formats inside `41 00 00 00` / other leaves: the sweep only renders TIMs; the 43 skipped
   `10 00 00 00` leaves were checked by header only.
 - Stage-select / debug-menu screens and every stage's HUD: tour them once the debug tool exists (phase 2).

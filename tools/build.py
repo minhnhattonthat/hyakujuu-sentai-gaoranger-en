@@ -2,7 +2,7 @@
 
 Checks the dump (rom.sha1), unpacks the disc tree if missing, writes every changed file into build/overlay/
 (same paths as work/disc/tree): the EXE with the VWF hook (asm/vwf.asm), the PACs with the English font and text
-tables (insert.py). Then builds the image with mkdisc.py. With an empty overlay the .bin is byte-identical to the
+tables (insert.py), the FMVs with English name captions (fmvcap.py). Then builds the image with mkdisc.py. With an empty overlay the .bin is byte-identical to the
 original (tests/test_disc.py).
 
     python -X utf8 tools/build.py [--out build/gaoranger_en.bin] [--marker]
@@ -15,6 +15,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import check_rom  # noqa: E402
+import fmvcap  # noqa: E402
 import font  # noqa: E402
 import insert  # noqa: E402
 import mkdisc  # noqa: E402
@@ -77,6 +78,7 @@ def main():
     font.write_tbl()
     build_exe(overlay)
     insert.insert(overlay, marker=a.marker, qa=qa)
+    fmvcap.cached(overlay)
     out = mkdisc.build(a.out, overlay)
     import verify  # imports build: load it late
     errs = verify.verify(out, overlay, a.marker, qa)
