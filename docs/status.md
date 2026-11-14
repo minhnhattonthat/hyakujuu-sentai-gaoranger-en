@@ -2,8 +2,8 @@
 
 Updated at the end of every session. Keep it to what the next session needs; history is in git.
 
-- **Phase:** 8. QA in the emulator in progress: all graphics text English incl. credits (2026-11-14).
-  Last build: `build/gaoranger_en.bin` SHA-1 0661b64f040b..., build+verify exit 0, smoke ok, check.py green.
+- **Phase:** 8. QA in the emulator in progress: all graphics text English incl. credits and FMV captions (2026-11-14).
+  Last build: `build/gaoranger_en.bin` SHA-1 9c143a4aaa7c..., build+verify exit 0, smoke ok, check.py green.
   THE END seen in game on it (warp de07e, work/qa/p8/w6/de07e/f006000.png). **warp.py's default --cue is the
   original disc: always pass `--cue build/gaoranger_en.cue` for English shots.**
 - **Done:**
@@ -92,14 +92,18 @@ Updated at the end of every session. Keep it to what the next session needs; his
     JP refs work/qa/warp/de03s-05s; brief updated). `GFX_SKIP=sha,..` bisects graphics edits;
     `tools/lua/vdumpat.lua` dumps VRAM/RAM at frame AT. Full re-tour (build 7e1e4d1c) + codex round 2
     (work/qa/vqa2.log): 4 new issues, 2 fixed since (tload LOAD DATA), 2 = FMV caption (below).
+  - Phase 8 session 6 (D17, docs/re/fmv.md): FMVs surveyed (every STR); robot-name captions at the end of RB0/RB2/RB4
+    now GAOKING / GAOMUSCLE STRIKER / GAOICARUS, seen in game (work/qa/p8/fmv: bb01c ~f6150, bb04c ~f4350, bb06c
+    ~f4800). Own STR v2 codec `tools/strv.py` (jPSXdec jar refused by the permission check), `tools/fmvcap.py`
+    (build.py step, cached in build/fmvcache), verify.check_fmv, tests/test_strv.py, `tools/fmvmap.py` (scene ->
+    STR). Logo, brush kanji and the RN0 破邪百獣剣 flash kept. visual-qa brief updated for FMVs.
 - **Next (phase 8):**
-  1. `python -X utf8 tools/tour.py` on the current build (0661b64f; only tload/load/save re-toured so far, and the
-     manifest's build hash now differs), then delete the stale de01/de02/de03s-05s `issue` lines from
-     `work/qa/tour/verdicts/*.tsv` so those sheets go back to codex with the updated brief, then
-     `tools/vqa_codex.py work/qa/tour` until `qa_gate.py check work/qa/tour/manifest.tsv work/qa/tour/verdicts` exits 0.
-  2. **FMV burned-in captions** (codex: bb04c/bb05c f4350/f4800 show ガオマッスルストライカー under the robot, video
-     XA/RB*.STR): survey every STR (OP0, RB0-5, RN0-2) for burned-in Japanese, then replace frames (jPSXdec can
-     decode and re-encode STR frames into the same sector budget; check Java) or waive with a decision.
+  1. `python -X utf8 tools/tour.py --jobs 4` on build 9c143a4a. The session-6 run (`--jobs 8`) was killed by Claude
+     Code for low system memory part-way (work/qa/tour_run4.log): use fewer jobs, the manifest still names build
+     1020559e/0661b64f. Then delete the stale de01/de02/de03s-05s `issue` lines from `work/qa/tour/verdicts/*.tsv`
+     (save-screen junk = original, D16; brief says so) and run `tools/vqa_codex.py work/qa/tour` until
+     `qa_gate.py check work/qa/tour/manifest.tsv work/qa/tour/verdicts` exits 0.
+  2. In-game shots still missing (below): banners TIM 136, ORGETTE TIM 5, CHANCE! TIM 77.
   The tour's overb never reached game over (tour's HOLD=0 overrides the scene's HOLD=200: keeps fighting); its EN
   game over is in work/qa/p8/w5/overb. In-game shots still missing for banners (TIM 136: 12_17 groups g00-g05 in
   DS_ST01/04 and DE_ST03-05; the DS ones live in the story PACs' slot-12 script 12_18, which no traced path runs
@@ -116,6 +120,6 @@ Updated at the end of every session. Keep it to what the next session needs; his
   - Card table (Y_TITLE/21, CARDMS/0) never shown by any tour: its 232 px budget is a guess; find its screen in
     phase 8 (maybe no-card / minigame high-score flows).
   - Debug menu tables left Japanese (unreachable); they would draw as garbage now that hiragana cells hold English.
-- **Open bugs:** FMV caption ガオマッスルストライカー in bb04c/bb05c (Next 2). Visual-QA round 1's five bugs fixed.
+- **Open bugs:** none known. Visual-QA round 1's five bugs and the round-2 FMV caption fixed.
 - **Waiting on the user:** (non-blocking) D13: brush hit kanji (斬 etc.) kept as decoration; say if they should
   become English words.
