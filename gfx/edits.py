@@ -33,10 +33,15 @@ EDITS = {
     # tools/sprgroups.py ... --tpage-x 6), not the JP ink box: ink outside the sprite is never shown, and a label
     # centred on the ink box sits off centre or loses its last letter.
     "f7a61f4b4498": (0, [
-        {"rect": (24, 48, 112, 24), "text": "LOAD DATA", **BIG},
+        # sprite u 24-135, but the panel behind it ends near u 130: keep the JP ink's width and centre (u 25-128)
+        {"rect": (25, 48, 104, 24), "text": "LOAD DATA", **BIG},
+        {"rect": (24, 48, 1, 24), "clear": True},  # the sprite's side strips (after: label() samples its rect)
+        {"rect": (129, 48, 7, 24), "clear": True},
         {"rect": (16, 75, 40, 19), "text": "Yes", **SMALL},
         {"rect": (58, 75, 60, 19), "text": "No", **SMALL},
-        {"rect": (24, 96, 112, 24), "text": "SAVE DATA", **BIG},
+        {"rect": (25, 96, 104, 24), "text": "SAVE DATA", **BIG},
+        {"rect": (24, 96, 1, 24), "clear": True},
+        {"rect": (129, 96, 7, 24), "clear": True},
         {"rect": (24, 120, 88, 24), "text": "VIBRATION", **BIG, "xscale": 0.85},
         {"rect": (24, 144, 88, 24), "text": "SOUND", **BIG},
         {"rect": (15, 172, 65, 17), "text": "Stereo", **SMALL},

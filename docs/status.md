@@ -3,7 +3,7 @@
 Updated at the end of every session. Keep it to what the next session needs; history is in git.
 
 - **Phase:** 8. QA in the emulator in progress: all graphics text English incl. credits (2026-11-14).
-  Last build: `build/gaoranger_en.bin` SHA-1 1020559e095b..., build+verify exit 0, smoke ok, check.py green.
+  Last build: `build/gaoranger_en.bin` SHA-1 0661b64f040b..., build+verify exit 0, smoke ok, check.py green.
   THE END seen in game on it (warp de07e, work/qa/p8/w6/de07e/f006000.png). **warp.py's default --cue is the
   original disc: always pass `--cue build/gaoranger_en.cue` for English shots.**
 - **Done:**
@@ -84,9 +84,22 @@ Updated at the end of every session. Keep it to what the next session needs; his
     (EN margins 32/33, 36/37 vs JP 22/22, 39/40 etc.); game-over choices sit where the JP ones do (by eye: busy bg).
     Tour manifest `work/qa/tour/manifest.tsv` (432 sheets, build 1020559e); visual QA by codex
     (`tools/vqa_codex.py work/qa/tour`, brief docs/visual-qa-brief.md) -> `work/qa/tour/verdicts/`.
-- **Next (phase 8):** fix the visual-QA issues below (all 66 in `work/qa/vqa1.log`, verdict files in
-  `work/qa/tour/verdicts/`), rebuild, re-run `tools/tour.py SCENES` for the changed scenes + `tools/vqa_codex.py
-  work/qa/tour` (only sheets without a current verdict go out), until `qa_gate.py check work/qa/tour/manifest.tsv work/qa/tour/verdicts` exits 0.
+  - Phase 8 session 5 (D16): visual-QA round 1 fixed. Label rects now follow the sprite records (docs/re/graphics.md
+    §Redraw status): plates u 144-239 at one size (Sans Bold 10), START LOADING u 136-247, option titles u 24+,
+    title-wheel Vibration u 8-79 / Relaxed 80-151, LOAD/SAVE DATA kept to the panel (u 25-128). Pause menu
+    たたかい+つづける: `gfx/edits.py SPRITE_FIXES` (37 leaves) drops the first sprite, centres CONTINUE
+    (tests/test_sprite_fix.py). Post-ending save-screen junk proved original behaviour (VRAM dumps, docs/re/pac.md;
+    JP refs work/qa/warp/de03s-05s; brief updated). `GFX_SKIP=sha,..` bisects graphics edits;
+    `tools/lua/vdumpat.lua` dumps VRAM/RAM at frame AT. Full re-tour (build 7e1e4d1c) + codex round 2
+    (work/qa/vqa2.log): 4 new issues, 2 fixed since (tload LOAD DATA), 2 = FMV caption (below).
+- **Next (phase 8):**
+  1. `python -X utf8 tools/tour.py` on the current build (0661b64f; only tload/load/save re-toured so far, and the
+     manifest's build hash now differs), then delete the stale de01/de02/de03s-05s `issue` lines from
+     `work/qa/tour/verdicts/*.tsv` so those sheets go back to codex with the updated brief, then
+     `tools/vqa_codex.py work/qa/tour` until `qa_gate.py check work/qa/tour/manifest.tsv work/qa/tour/verdicts` exits 0.
+  2. **FMV burned-in captions** (codex: bb04c/bb05c f4350/f4800 show ガオマッスルストライカー under the robot, video
+     XA/RB*.STR): survey every STR (OP0, RB0-5, RN0-2) for burned-in Japanese, then replace frames (jPSXdec can
+     decode and re-encode STR frames into the same sector budget; check Java) or waive with a decision.
   The tour's overb never reached game over (tour's HOLD=0 overrides the scene's HOLD=200: keeps fighting); its EN
   game over is in work/qa/p8/w5/overb. In-game shots still missing for banners (TIM 136: 12_17 groups g00-g05 in
   DS_ST01/04 and DE_ST03-05; the DS ones live in the story PACs' slot-12 script 12_18, which no traced path runs
@@ -97,25 +110,12 @@ Updated at the end of every session. Keep it to what the next session needs; his
   - Action-stage game over not in the scene list: player HP not found (0x8007c6f8 is a sprite x, not HP; idle 15000
     frames barely dents the bar). It uses the same game-over texture as the robo one (scene overb). Find HP for
     GOD/kill if phase 8 needs the action layout.
-  - FMV burned-in Japanese not checked yet (`XA/*.STR`: OP0, RB0-5, RN0-2).
+  - ORGETTE (TIM 5) not seen: ofight/ex01 HUD shows only the counter digit at f3600/f6000 (label may need kills).
   - Title logo: keep Japanese unless an official English logo exists (D5) - check in phase 8.
   - Graphics are the bulk of the work (menus, name plates, banners, game over, credits); dialogue text is small.
   - Card table (Y_TITLE/21, CARDMS/0) never shown by any tour: its 232 px budget is a guess; find its screen in
     phase 8 (maybe no-card / minigame high-score flows).
   - Debug menu tables left Japanese (unreachable); they would draw as garbage now that hiragana cells hold English.
-- **Open bugs (codex visual QA, build 1020559e, tour work/qa/tour):**
-  1. **de01, de02, de03s-05s save prompt after the ending** (f5600+): orange/green garbage background, THE END
-     repeated across the screen and over "Save your game data?", choices missing (de05s); JP de01 shows blue sky.
-     Likely VRAM/TIM placement: check the DE PACs' TIM 154 (THE END) / 136 copies and Y_SAVE-in-DE textures vs
-     the original (`warp.py de01 de03s` on the original disc for the JP reference; work/qa/warp has no de03s-05s).
-  2. Sprite narrower than the English (TIM 131, gfx/edits.py): plates SAILING SHIP ORG, BULLDOZER ORG, KING ORG,
-     RASETSU lose their last letter (ds01/02/05/06, ba03, ytitle); START LOADING loses its G (load, tcont,
-     tcontdata, loadbad). Plate/label sprites cover only the JP ink width: measure each sprite's u/w (story 12_17 or
-     the menu's sprite table) and fit each label inside it.
-  3. Option title VIBRATION: orange JP remnant right of the N (clear the rest of the old rect, x 108-130);
-     SOUND title ~7 px right of the JP centre (its sprite isn't the rect's centre: align to the sprite).
-  4. Title wheel (TIM 159) "Vibration" ~8 px left of centre (all stage pause wheels too: a*, bb*, title, tcont).
-  5. Pause menus (pausea, pauseb) and ba01b: stray "GIVE U" left of CONTINUE (TIM 7/96: the CONTINUE sprite's
-     rect overlaps the GIVE UP lettering; clear/relayout).
+- **Open bugs:** FMV caption ガオマッスルストライカー in bb04c/bb05c (Next 2). Visual-QA round 1's five bugs fixed.
 - **Waiting on the user:** (non-blocking) D13: brush hit kanji (斬 etc.) kept as decoration; say if they should
   become English words.
