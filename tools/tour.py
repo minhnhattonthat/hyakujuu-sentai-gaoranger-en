@@ -37,12 +37,14 @@ def main():
     a = ap.parse_args()
     names = a.scenes or list(load_scenes())
     warp = [sys.executable, "-X", "utf8", os.path.join(ROOT, "tools", "debug", "warp.py"), "--cue", a.cue,
-            "--out", a.out, "--jobs", a.jobs, "--script", os.path.join(ROOT, "tools", "lua", "textptr.lua"),
+            "--jobs", a.jobs, "--script", os.path.join(ROOT, "tools", "lua", "textptr.lua"),
             "--var", "HOLD=0"]
     rc = 0
     for every, group in (("30", [n for n in names if text_scene(n)]), ("150", [n for n in names if not text_scene(n)])):
         if group and not a.sheets_only:
-            rc |= subprocess.call(warp + ["--shot-every", every] + group)
+            # warp.py: --out is the root for several scenes but the scene dir itself for one
+            out = os.path.join(a.out, group[0]) if len(group) == 1 else a.out
+            rc |= subprocess.call(warp + ["--out", out, "--shot-every", every] + group)
     for n in names:
         d = os.path.join(a.out, n)
         if os.path.isdir(d):

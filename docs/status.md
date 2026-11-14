@@ -2,11 +2,12 @@
 
 Updated at the end of every session. Keep it to what the next session needs; history is in git.
 
-- **Phase:** 9. Release: not started. Phase 8 done 2026-11-14 (visual-QA gate green, 447 sheets, build 9c143a4a;
-  every graphics-text row seen in game incl. the TIM 136 banners).
-  Last build: `build/gaoranger_en.bin` SHA-1 9c143a4aaa7c..., build+verify exit 0, smoke ok, check.py green.
-  THE END seen in game on it (warp de07e, work/qa/p8/w6/de07e/f006000.png). **warp.py's default --cue is the
-  original disc: always pass `--cue build/gaoranger_en.cue` for English shots.**
+- **Phase:** 9. Release: done 2026-11-14. Release zip built and verified: `release/GaoRanger_EN_v1.0.zip`
+  (GaoRanger_EN_v1.0.xdelta 2277708 bytes, SHA-1 1cc9a171...; + README.txt), `tools/release.py --version 1.0`
+  exit 0 (build, check 47 passed, smoke ok, jpleft 0, qa_gate story 8/8 + tour 447/447, textcov 0 unshown,
+  polish all ticked, README filled, no debug file, xdelta re-applied = build). Patched .bin SHA-1 22954f04b898...,
+  CRC32 5466d329. Not published: `gh release create` is the user's call (pipeline.md §Publish).
+  **warp.py's default --cue is the original disc: always pass `--cue build/gaoranger_en.cue` for English shots.**
 - **Done:**
   - Step 0: repo setup (PCSX-Redux nightly + SCPH-5500 BIOS in tools/, mkpsxiso 2.30, armips 0.11.0, pre-commit
     hook runs `tools/check.py`, guard hook verified, rom.sha1). Original boots: `work/qa/smoke-orig`.
@@ -111,23 +112,24 @@ Updated at the end of every session. Keep it to what the next session needs; his
     (script ops 1c/1d) is stepped only in D_SYS story-loop modes 0x15/0x16; the warp's opening entry left 0x13
     (docs/re/flow.md). warp.lua `MODE` var, scenes de03-05 set MODE=0x15. Re-toured de03-05, codex round 4
     (work/qa/vqa4.log): 18 sheets, 0 issues; `qa_gate.py check` exits 0, textcov 0 unshown, check.py green.
-- **Next (phase 9, `references/pipeline.md` §Release):**
-  1. Story pass per chapter (`references/translation.md` §Review; codex as the reviewer, no subagents) ->
-     work/qa/story/manifest.tsv verdicts.
-  2. docs/polish.md: 2 unticked lines (credits guessed readings, D14): settle or record as known limits.
-  3. `tools/release.py` (not written yet): qa_gate check on every manifest + textcov, jpleft on the release build,
-     debug tool off (warp is external Lua only: confirm nothing debug is patched in), xdelta vs the .bin,
-     re-apply + verify, zip = patch + README with base hashes; repo README placeholders filled.
+  - Phase 9 (D18-D20): story pass `tools/story.py --review` (chapter files ds01-07 + menus, codex read-only per
+    chapter, reports work/qa/story/reports): 8/8 ok, 0 Critical/Important; menus' 4 Minors were a prompt error
+    (3-line save box), waived in docs/polish.md. docs/synopsis.md + docs/style-reference.md written. Credits: 4
+    staff names fixed from other Natsume games' English credits (Ohta, Kazuhito Yamada, Shinpo, Hiroshi Inagaki),
+    seen in game (de07 f9750/f10200, work/qa/p9_names.png); the 18 unsourced readings waived as a README known
+    issue. tour.py fixed: a one-scene tour wrote into the tour root (warp.py's --out is the scene dir for one scene).
+    de07 re-toured on build 22954f04 (sheets unchanged: the staff pages sit past the sheet's 24 frames).
+    `tools/release.py` + `docs/release-readme.txt` (zip README with base/patched hashes); repo README filled.
+- **Next:** publishing is the user's call (pipeline.md §Publish: `gh release create v1.0 release/GaoRanger_EN_v1.0.zip`,
+  notes with base hashes + patch SHA-1). Optional: player bug reports (GitHub issues).
   Known gap (non-blocking): action-stage game over (TIM 7) never shown in game: player HP not found (ramsearch
   over work/qa/p8/hp dumps leaves ~6.5k candidates); TIM 7 uses the same rects/edit as TIM 96, seen in overb.
   The tour's overb never reached game over (tour's HOLD=0 overrides the scene's HOLD=200: keeps fighting); its EN
   game over is in work/qa/p8/w5/overb. Space = normal ASCII space (VWF glyph); never `{sp81}`.
 - **Open questions (non-blocking):**
-  - Title logo: keep Japanese unless an official English logo exists (D5) - check in phase 8.
-  - Graphics are the bulk of the work (menus, name plates, banners, game over, credits); dialogue text is small.
-  - Card table (Y_TITLE/21, CARDMS/0) never shown by any tour: its 232 px budget is a guess; find its screen in
-    phase 8 (maybe no-card / minigame high-score flows).
+  - Card table (Y_TITLE/21, CARDMS/0) never shown by any tour: its 232 px budget is a guess (D11).
   - Debug menu tables left Japanese (unreachable); they would draw as garbage now that hiragana cells hold English.
 - **Open bugs:** none known. Visual-QA round 1's five bugs and the round-2 FMV caption fixed.
 - **Waiting on the user:** (non-blocking) D13: brush hit kanji (斬 etc.) kept as decoration; say if they should
-  become English words.
+  become English words. (non-blocking) 18 staff-name readings in the credits are guesses (docs/polish.md D18).
+  Release v1.0 is built, not published: say when to publish.
